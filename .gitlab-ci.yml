@@ -30,7 +30,7 @@ build-ubuntu:       # This job runs in the build stage, which runs first.
   
 build-win:
   stage: build
-  image: mcr.microsoft.com/windows/server:ltsc2022
+  image: registry.gitlab.com/gitlab-org/windows-containers/gitlab-windows-runner:windowsserver2022
   script:
     - echo "Compiling the code..."
     - dir
