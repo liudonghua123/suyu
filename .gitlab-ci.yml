@@ -24,7 +24,7 @@ build-ubuntu:       # This job runs in the build stage, which runs first.
   image: ubuntu:latest
   before_script:
     - apt update --yes
-    - apt install --yes cmake
+    - apt install --yes cmake gcc g++
   script:
     - echo "Compiling the code..."
     - mkdir build || true && cd build
