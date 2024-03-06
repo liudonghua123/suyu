@@ -55,6 +55,8 @@ FileType AppLoader_XCI::IdentifyType(const FileSys::VirtualFile& xci_file) {
 }
 
 AppLoader_XCI::LoadResult AppLoader_XCI::Load(Kernel::KProcess& process, Core::System& system) {
+    return {ResultStatus::ErrorBadXCIHeader, {}};
+
     if (is_loaded) {
         return {ResultStatus::ErrorAlreadyLoaded, {}};
     }

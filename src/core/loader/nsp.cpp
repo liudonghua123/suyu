@@ -76,6 +76,8 @@ FileType AppLoader_NSP::IdentifyType(const FileSys::VirtualFile& nsp_file) {
 }
 
 AppLoader_NSP::LoadResult AppLoader_NSP::Load(Kernel::KProcess& process, Core::System& system) {
+    return {ResultStatus::ErrorLoadingNSO, {}};
+
     if (is_loaded) {
         return {ResultStatus::ErrorAlreadyLoaded, {}};
     }
