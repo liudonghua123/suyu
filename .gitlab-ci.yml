@@ -19,14 +19,19 @@
 stages:          # List of stages for jobs, and their order of execution
   - build
 
-image: ubuntu:latest
-
-build:       # This job runs in the build stage, which runs first.
+build-ubuntu:       # This job runs in the build stage, which runs first.
   stage: build
+  image: ubuntu:latest
   script:
     - echo "Compiling the code..."
     - pwd
     - ls -la
     - echo "Compile complete."
   
-
+build-win:
+  stage: build
+  image: mcr.microsoft.com/windows/server:ltsc2022
+  script:
+    - echo "Compiling the code..."
+    - dir
+    - echo "Compile complete."
