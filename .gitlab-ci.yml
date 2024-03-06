@@ -27,6 +27,7 @@ build-ubuntu:       # This job runs in the build stage, which runs first.
     - apt install --yes cmake gcc g++
   script:
     - echo "Compiling the code..."
+    - git submodule update --init --recursive
     - mkdir build || true && cd build
     - cmake ..
     - echo "Compile complete."
