@@ -3,9 +3,9 @@ SPDX-FileCopyrightText: 2024 suyu emulator project
 SPDX-License-Identifier: GPL v3
 -->
 
-**Note**: We do not support or condone piracy in any form. In order to use Suyu, you'll need keys from your real Switch system, and games which you have legally obtained and paid for. We do not intend to make money or profit from this project.
+**Note**: We do not support or condone piracy in any form. In order to use suyu, you'll need keys from your real Switch system, and games which you have legally obtained and paid for. We do not intend to make money or profit from this project.
 
-We're in need of developers. Please join our Discord server below if you can and want help out with the project!
+We're in need of developers. Please join our Discord server below if you want to contribute!
 This repo is based on Yuzu EA 4176.
 
 <hr />
@@ -18,7 +18,7 @@ This repo is based on Yuzu EA 4176.
   <br>
 </h1>
 
-<h4 align="center"><b>Suyu</b>, pronounced "sue-you" (wink wink) is the continuation of the world's most popular, open-source, Nintendo Switch emulator, yuzu.
+<h4 align="center"><b>suyu</b>, pronounced "sue-you" (wink wink) is the continuation of the world's most popular, open-source, Nintendo Switch emulator, yuzu.
 <br>
 It is written in C++ with portability in mind, and we actively maintain builds for Windows, Linux and Android.
 </h4>
@@ -38,20 +38,23 @@ It is written in C++ with portability in mind, and we actively maintain builds f
 
 Although we're able to make builds, we don't have a version ready for distribution yet. But we can always use more help! You can make a merge request if you'd like to see something changed, or you can [chat with other developers to find out what needs work](https://discord.gg/2gQRBp44KT).
 
-**Note**: While we try to update this README whenever we can, some links might be broken, and some information may be out of date or irrelevant.
+**Note**: We try to update this README whenever we can, but some links might be broken, and some information may be outdated or irrelevant.
 
 ## Development
 
-This project is completely free and open source, and anyone can contribute to it and help improve Suyu.
+This project is completely free and open source, and anyone can contribute to help improve suyu.
 
 Most of the development happens on GitLab. For development discussion, please join us on [Discord](https://discord.gg/2gQRBp44KT).
 
 If you want to contribute, please take a look at the [Contributor's Guide](https://gitlab.com/suyu-emu/suyu/-/wikis/Contributing) and [Developer Information](https://gitlab.com/suyu-emu/suyu/-/wikis/Developer-Information).
-You can also contact any of the developers on Discord to get information about the current state of the emulator.
+You can also contact any of the developers on Discord to learn more about the current state of suyu.
 
 ## Downloads
 
-We don't have any official builds yet! If any website or person is claiming to have a build for Suyu, take that with a grain of salt, because it might contain malware. Until we do have an official build, it might be a better idea to keep using the last version of yuzu.
+* __Windows__: WIP
+* __Linux__: WIP
+
+We don't have any official builds yet! If any website or person is claiming to have a build for suyu, take that with a grain of salt, because it might contain malware. Until we do have an official build, it might be a better idea to keep using the last version of yuzu.
 
 ## Building
 
@@ -67,4 +70,4 @@ If you have any questions, don't hesitate to ask us on [Discord](https://discord
 
 ## License
 
-Suyu is licensed under the free and open-source GPL v3 license.
+suyu is licensed under the free and open-source GPL v3 license.
