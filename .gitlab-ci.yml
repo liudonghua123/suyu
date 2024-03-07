@@ -6,6 +6,6 @@ build-linux:
   image: debian:trixie  # Maybe replace with image with more required dependencies
   before_script:
     - apt update --yes
-    - apt install --yes ccache cmake gcc g++ git ninja catch2
+    - apt install --yes ccache cmake gcc g++ git ninja-build catch2
   script:
     - bash .ci/scripts/linux/docker.sh
