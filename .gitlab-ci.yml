@@ -1,45 +1,83 @@
-# This file is a template, and might need editing before it works on your project.
-# This is a sample GitLab CI/CD configuration file that should run without any modifications.
-# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
-# it uses echo commands to simulate the pipeline execution.
-#
-# A pipeline is composed of independent jobs that run scripts, grouped into stages.
-# Stages run in sequential order, but jobs within stages run in parallel.
-#
-# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-#
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+variables:
+  PR_NUMBER: "pr$CI_MERGE_REQUEST_IID"
 
-stages:          # List of stages for jobs, and their order of execution
+stages:
+  - format
   - build
+  - build-mac
+  - build-msvc
+  - android
 
-build-ubuntu:       # This job runs in the build stage, which runs first.
-  stage: build
-  image: ubuntu:latest  # Maybe replace with image with more required dependencies
+format:
+  stage: format
+  image: ubuntu:latest
   before_script:
-    - apt update --yes
-    - apt install --yes cmake gcc g++ git
+    - echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy main" >> /etc/apt/sources.list
+    - apt-get update
+    - apt-get -y install git clang-format-15 clang-15 sdkmanager android-sdk bash openjdk-21-jdk openjdk-21-jre && clang-format-15 --version
+    - export ANDROID_HOME="/usr/lib/android-sdk/"
+    - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
   script:
-    - echo "Compiling the code..."
-    - git submodule update --init --recursive
-    - ls -la
-    # TODO: Add build instructions for linux
-    - echo "Compile complete."
-  
-build-win:
+    - bash -ex ./.ci/scripts/format/script.sh
+
+build:
   stage: build
-  tags:
-    - shared-windows
-    - windows
-    - windows-1809
+  image: ubuntu:latest
   script:
-    - echo "Compiling the code..."
-    - dir
-    # TODO: Add build instructions for windows
-    - echo "Compile complete."
+    - apt-get update -y
+    - DEBIAN_FRONTEND=noninteractive apt-get install -y openjdk-17-jdk ccache autoconf cmake git glslang-tools libasound2 libboost-context-dev libglu1-mesa-dev libhidapi-dev libpulse-dev libtool libudev-dev libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 libxext-dev libxkbcommon-x11-0 mesa-common-dev nasm ninja-build qtbase5-dev qtbase5-private-dev qtwebengine5-dev qtmultimedia5-dev libmbedtls-dev catch2 libfmt-dev liblz4-dev nlohmann-json3-dev libzstd-dev libssl-dev libavfilter-dev libavcodec-dev libswscale-dev g++-11 gcc-11
+    - /usr/sbin/update-ccache-symlinks
+    - ls -la /usr/lib/ccache/
+    - bash -c "export PR_NUMBER=$PR_NUMBER; ./.ci/scripts/linux/docker.sh"
+  artifacts:
+    name: "linux"
+    paths:
+      - artifacts/
+
+build-mac:
+  stage: build-mac
+  image: ubuntu:latest
+  script:
+    - apt-get update -y
+    - apt-get install -y autoconf automake boost ccache ffmpeg fmt glslang hidapi libtool libusb lz4 ninja-build nlohmann-json openssl pkg-config qt5-default libsdl2-dev speex zlib1g-dev zlib zstd
+    - mkdir build
+    - cd build
+    - export Qt5_DIR="/usr/local/Qt-5.x/lib/cmake"
+    - cmake .. -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DYUZU_USE_BUNDLED_VCPKG=OFF -DYUZU_TESTS=OFF -DENABLE_WEB_SERVICE=OFF -DENABLE_LIBUSB=OFF
+    - ninja
+  artifacts:
+    name: "macos"
+    paths:
+      - build/
+
+build-msvc:
+  stage: build-msvc
+  image: mcr.microsoft.com/windows/servercore:ltsc2019
+  script:
+    - Invoke-WebRequest -Uri "https://github.com/mbitsnbites/buildcache/releases/download/v0.28.4/buildcache-windows.zip" -OutFile "buildcache-windows.zip"
+    - Expand-Archive -Path "buildcache-windows.zip" -DestinationPath "C:\buildcache"
+    - echo "C:\buildcache\bin" | Out-File -FilePath $env:Path -Encoding utf8 -Append
+    - .\.ci\scripts\windows\install-vulkan-sdk.ps1
+    - .\CMakeModules\MSVCCache.cmake
+    - glslangValidator --version
+    - mkdir build
+    - cd build
+    - cmake .. -GNinja -DCMAKE_TOOLCHAIN_FILE="CMakeModules/MSVCCache.cmake" -DUSE_CCACHE=ON -DYUZU_USE_BUNDLED_QT=1 -DYUZU_USE_BUNDLED_SDL2=1 -DYUZU_USE_QT_WEB_ENGINE=ON -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON -DYUZU_ENABLE_COMPATIBILITY_REPORTING=ON -DUSE_DISCORD_PRESENCE=ON -DENABLE_QT_TRANSLATION=ON -DCMAKE_BUILD_TYPE=Release -DGIT_BRANCH=pr-verify -DYUZU_CRASH_DUMPS=ON
+    - cmake --build .
+  artifacts:
+    name: "msvc"
+    paths:
+      - build/
+
+android:
+  stage: android
+  image: openjdk:17
+  script:
+    - apt-get update -y
+    - apt-get install -y ccache apksigner glslang-dev glslang-tools
+    - bash -c "export PR_NUMBER=$PR_NUMBER; ./.ci/scripts/android/build.sh"
+  artifacts:
+    name: "android"
+    paths:
+      - artifacts/
+
