@@ -631,12 +631,6 @@ void GameList::AddGamePopup(QMenu& context_menu, u64 program_id, const std::stri
     connect(remove_cache_storage, &QAction::triggered, [this, program_id, path] {
         emit RemoveFileRequested(program_id, GameListRemoveTarget::CacheStorage, path);
     });
-    connect(dump_romfs, &QAction::triggered, [this, program_id, path]() {
-        emit DumpRomFSRequested(program_id, path, DumpRomFSTarget::Normal);
-    });
-    connect(dump_romfs_sdmc, &QAction::triggered, [this, program_id, path]() {
-        emit DumpRomFSRequested(program_id, path, DumpRomFSTarget::SDMC);
-    });
     connect(verify_integrity, &QAction::triggered,
             [this, path]() { emit VerifyIntegrityRequested(path); });
     connect(copy_tid, &QAction::triggered,
