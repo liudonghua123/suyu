@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Modified by KawaiiBunga on <2024/03/07> -->
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
@@ -45,7 +46,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -128,8 +129,8 @@
     <addaction name="menu_Reset_Window_Size"/>
     <addaction name="menu_View_Debugging"/>
    </widget>
-	<widget class="QMenu" name="menu_Multiplayer">
-    <property name="disabled">
+   <widget class="QMenu" name="menu_Multiplayer">
+    <property name="enabled">
      <bool>true</bool>
     </property>
     <property name="title">

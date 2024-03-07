@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2014 Citra Emulator Project
+// SPDX-FileCopyrightText: 2014 Citra Emulator Project  & 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 // Modified by KawaiiBunga on <2024/03/07>
@@ -54,12 +54,8 @@
 #include "yuzu/multiplayer/state.h"
 #include "yuzu/util/controller_navigation.h"
 
-// These are wrappers to avoid the calls to CreateDirectory and CreateFile because of the Windows
+// These are wrappers to avoid the calls to CreateFile because of the Windows
 // defines.
-static FileSys::VirtualDir VfsFilesystemCreateDirectoryWrapper(
-    const FileSys::VirtualFilesystem& vfs, const std::string& path, FileSys::OpenMode mode) {
-    return vfs->CreateDirectory(path, mode);
-}
 
 static FileSys::VirtualFile VfsDirectoryCreateFileWrapper(const FileSys::VirtualDir& dir,
                                                           const std::string& path) {
@@ -225,7 +221,7 @@ void GMainWindow::ShowTelemetryCallout() {
 const int GMainWindow::max_recent_files_item;
 
 static void RemoveCachedContents() {
-    const auto cache_dir = Common::FS::GetYuzuPath(Common::FS::YuzuPath::CacheDir);
+    const auto cache_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::CacheDir);
     const auto offline_fonts = cache_dir / "fonts";
     const auto offline_manual = cache_dir / "offline_web_applet_manual";
     const auto offline_legal_information = cache_dir / "offline_web_applet_legal_information";
@@ -1489,7 +1485,6 @@ void GMainWindow::ConnectWidgetEvents() {
     connect(game_list, &GameList::RemoveFileRequested, this, &GMainWindow::OnGameListRemoveFile);
     connect(game_list, &GameList::RemovePlayTimeRequested, this,
             &GMainWindow::OnGameListRemovePlayTimeData);
-    connect(game_list, &GameList::DumpRomFSRequested, this, &GMainWindow::OnGameListDumpRomFS);
     connect(game_list, &GameList::VerifyIntegrityRequested, this,
             &GMainWindow::OnGameListVerifyIntegrity);
     connect(game_list, &GameList::CopyTIDRequested, this, &GMainWindow::OnGameListCopyTID);
@@ -1836,7 +1831,7 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
                    "This is usually caused by outdated GPU drivers, including integrated ones. "
                    "Please see the log for more details. "
                    "For more information on accessing the log, please see the following page: "
-                   "<a href='https://gitlab.com/suyu-emu/suyu/-/wikis/home'>"
+                   "<a href='https://gitlab.com/suyu-emu/suyu/-/wikis/wiki/Quickstart'>"
                    "How to Upload the Log File</a>. "));
             break;
         default:
@@ -2289,7 +2284,7 @@ void GMainWindow::OnGameListOpenFolder(u64 program_id, GameListOpenTarget target
     switch (target) {
     case GameListOpenTarget::SaveData: {
         open_target = tr("Save Data");
-        const auto nand_dir = Common::FS::GetYuzuPath(Common::FS::YuzuPath::NANDDir);
+        const auto nand_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::NANDDir);
         auto vfs_nand_dir =
             vfs->OpenDirectory(Common::FS::PathToUTF8String(nand_dir), FileSys::OpenMode::Read);
 
@@ -2345,7 +2340,7 @@ void GMainWindow::OnGameListOpenFolder(u64 program_id, GameListOpenTarget target
     }
     case GameListOpenTarget::ModData: {
         open_target = tr("Mod Data");
-        path = Common::FS::GetYuzuPath(Common::FS::YuzuPath::LoadDir) /
+        path = Common::FS::GetSuyuPath(Common::FS::SuyuPath::LoadDir) /
                fmt::format("{:016X}", program_id);
         break;
     }
@@ -2367,7 +2362,7 @@ void GMainWindow::OnGameListOpenFolder(u64 program_id, GameListOpenTarget target
 }
 
 void GMainWindow::OnTransferableShaderCacheOpenFile(u64 program_id) {
-    const auto shader_cache_dir = Common::FS::GetYuzuPath(Common::FS::YuzuPath::ShaderDir);
+    const auto shader_cache_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::ShaderDir);
     const auto shader_cache_folder_path{shader_cache_dir / fmt::format("{:016x}", program_id)};
     if (!Common::FS::CreateDirs(shader_cache_folder_path)) {
         QMessageBox::warning(this, tr("Error Opening Transferable Shader Cache"),
@@ -2486,7 +2481,7 @@ void GMainWindow::OnGameListRemoveInstalledEntry(u64 program_id, InstalledEntryT
         RemoveAddOnContent(program_id, type);
         break;
     }
-    Common::FS::RemoveDirRecursively(Common::FS::GetYuzuPath(Common::FS::YuzuPath::CacheDir) /
+    Common::FS::RemoveDirRecursively(Common::FS::GetSuyuPath(Common::FS::SuyuPath::CacheDir) /
                                      "game_list");
     game_list->PopulateAsync(UISettings::values.game_dirs);
 }
@@ -2592,7 +2587,7 @@ void GMainWindow::RemoveTransferableShaderCache(u64 program_id, GameListRemoveTa
             return "";
         }
     }();
-    const auto shader_cache_dir = Common::FS::GetYuzuPath(Common::FS::YuzuPath::ShaderDir);
+    const auto shader_cache_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::ShaderDir);
     const auto shader_cache_folder_path = shader_cache_dir / fmt::format("{:016x}", program_id);
     const auto target_file = shader_cache_folder_path / target_file_name;
 
@@ -2613,7 +2608,7 @@ void GMainWindow::RemoveTransferableShaderCache(u64 program_id, GameListRemoveTa
 void GMainWindow::RemoveVulkanDriverPipelineCache(u64 program_id) {
     static constexpr std::string_view target_file_name = "vulkan_pipelines.bin";
 
-    const auto shader_cache_dir = Common::FS::GetYuzuPath(Common::FS::YuzuPath::ShaderDir);
+    const auto shader_cache_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::ShaderDir);
     const auto shader_cache_folder_path = shader_cache_dir / fmt::format("{:016x}", program_id);
     const auto target_file = shader_cache_folder_path / target_file_name;
 
@@ -2627,7 +2622,7 @@ void GMainWindow::RemoveVulkanDriverPipelineCache(u64 program_id) {
 }
 
 void GMainWindow::RemoveAllTransferableShaderCaches(u64 program_id) {
-    const auto shader_cache_dir = Common::FS::GetYuzuPath(Common::FS::YuzuPath::ShaderDir);
+    const auto shader_cache_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::ShaderDir);
     const auto program_shader_cache_dir = shader_cache_dir / fmt::format("{:016x}", program_id);
 
     if (!Common::FS::Exists(program_shader_cache_dir)) {
@@ -2650,7 +2645,7 @@ void GMainWindow::RemoveCustomConfiguration(u64 program_id, const std::string& g
         program_id == 0 ? Common::FS::PathToUTF8String(file_path.filename()).append(".ini")
                         : fmt::format("{:016X}.ini", program_id);
     const auto custom_config_file_path =
-        Common::FS::GetYuzuPath(Common::FS::YuzuPath::ConfigDir) / "custom" / config_file_name;
+        Common::FS::GetSuyuPath(Common::FS::SuyuPath::ConfigDir) / "custom" / config_file_name;
 
     if (!Common::FS::Exists(custom_config_file_path)) {
         QMessageBox::warning(this, tr("Error Removing Custom Configuration"),
@@ -2668,7 +2663,7 @@ void GMainWindow::RemoveCustomConfiguration(u64 program_id, const std::string& g
 }
 
 void GMainWindow::RemoveCacheStorage(u64 program_id) {
-    const auto nand_dir = Common::FS::GetYuzuPath(Common::FS::YuzuPath::NANDDir);
+    const auto nand_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::NANDDir);
     auto vfs_nand_dir =
         vfs->OpenDirectory(Common::FS::PathToUTF8String(nand_dir), FileSys::OpenMode::Read);
 
@@ -2680,121 +2675,6 @@ void GMainWindow::RemoveCacheStorage(u64 program_id) {
 
     // Not an error if it wasn't cleared.
     Common::FS::RemoveDirRecursively(path);
-}
-
-void GMainWindow::OnGameListDumpRomFS(u64 program_id, const std::string& game_path,
-                                      DumpRomFSTarget target) {
-    const auto failed = [this] {
-        QMessageBox::warning(this, tr("RomFS Extraction Failed!"),
-                             tr("There was an error copying the RomFS files or the user "
-                                "cancelled the operation."));
-    };
-
-    const auto loader =
-        Loader::GetLoader(*system, vfs->OpenFile(game_path, FileSys::OpenMode::Read));
-    if (loader == nullptr) {
-        failed();
-        return;
-    }
-
-    FileSys::VirtualFile packed_update_raw{};
-    loader->ReadUpdateRaw(packed_update_raw);
-
-    const auto& installed = system->GetContentProvider();
-
-    u64 title_id{};
-    u8 raw_type{};
-    if (!SelectRomFSDumpTarget(installed, program_id, &title_id, &raw_type)) {
-        failed();
-        return;
-    }
-
-    const auto type = static_cast<FileSys::ContentRecordType>(raw_type);
-    const auto base_nca = installed.GetEntry(title_id, type);
-    if (!base_nca) {
-        failed();
-        return;
-    }
-
-    const FileSys::NCA update_nca{packed_update_raw, nullptr};
-    if (type != FileSys::ContentRecordType::Program ||
-        update_nca.GetStatus() != Loader::ResultStatus::ErrorMissingBKTRBaseRomFS ||
-        update_nca.GetTitleId() != FileSys::GetUpdateTitleID(title_id)) {
-        packed_update_raw = {};
-    }
-
-    const auto base_romfs = base_nca->GetRomFS();
-    const auto dump_dir =
-        target == DumpRomFSTarget::Normal
-            ? Common::FS::GetYuzuPath(Common::FS::YuzuPath::DumpDir)
-            : Common::FS::GetYuzuPath(Common::FS::YuzuPath::SDMCDir) / "atmosphere" / "contents";
-    const auto romfs_dir = fmt::format("{:016X}/romfs", title_id);
-
-    const auto path = Common::FS::PathToUTF8String(dump_dir / romfs_dir);
-
-    const FileSys::PatchManager pm{title_id, system->GetFileSystemController(), installed};
-    auto romfs = pm.PatchRomFS(base_nca.get(), base_romfs, type, packed_update_raw, false);
-
-    const auto out = VfsFilesystemCreateDirectoryWrapper(vfs, path, FileSys::OpenMode::ReadWrite);
-
-    if (out == nullptr) {
-        failed();
-        vfs->DeleteDirectory(path);
-        return;
-    }
-
-    bool ok = false;
-    const QStringList selections{tr("Full"), tr("Skeleton")};
-    const auto res = QInputDialog::getItem(
-        this, tr("Select RomFS Dump Mode"),
-        tr("Please select the how you would like the RomFS dumped.<br>Full will copy all of the "
-           "files into the new directory while <br>skeleton will only create the directory "
-           "structure."),
-        selections, 0, false, &ok);
-    if (!ok) {
-        failed();
-        vfs->DeleteDirectory(path);
-        return;
-    }
-
-    const auto extracted = FileSys::ExtractRomFS(romfs);
-    if (extracted == nullptr) {
-        failed();
-        return;
-    }
-
-    const auto full = res == selections.constFirst();
-
-    // The expected required space is the size of the RomFS + 1 GiB
-    const auto minimum_free_space = romfs->GetSize() + 0x40000000;
-
-    if (full && Common::FS::GetFreeSpaceSize(path) < minimum_free_space) {
-        QMessageBox::warning(this, tr("RomFS Extraction Failed!"),
-                             tr("There is not enough free space at %1 to extract the RomFS. Please "
-                                "free up space or select a different dump directory at "
-                                "Emulation > Configure > System > Filesystem > Dump Root")
-                                 .arg(QString::fromStdString(path)));
-        return;
-    }
-
-    QProgressDialog progress(tr("Extracting RomFS..."), tr("Cancel"), 0, 100, this);
-    progress.setWindowModality(Qt::WindowModal);
-    progress.setMinimumDuration(100);
-    progress.setAutoClose(false);
-    progress.setAutoReset(false);
-
-    size_t read_size = 0;
-
-    if (RomFSRawCopy(romfs->GetSize(), read_size, progress, extracted, out, full)) {
-        progress.close();
-        QMessageBox::information(this, tr("RomFS Extraction Succeeded!"),
-                                 tr("The operation completed successfully."));
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromStdString(path)));
-    } else {
-        progress.close();
-        failed();
-        vfs->DeleteDirectory(path);
-    }
 }
 
 void GMainWindow::OnGameListVerifyIntegrity(const std::string& game_path) {
@@ -2982,10 +2862,10 @@ bool GMainWindow::CreateShortcutMessagesGUI(QWidget* parent, int imsg, const QSt
 
 bool GMainWindow::MakeShortcutIcoPath(const u64 program_id, const std::string_view game_file_name,
                                       std::filesystem::path& out_icon_path) {
-    // Get path to Suyu icons directory & icon extension
+    // Get path to suyu icons directory & icon extension
     std::string ico_extension = "png";
 #if defined(_WIN32)
-    out_icon_path = Common::FS::GetYuzuPath(Common::FS::YuzuPath::IconsDir);
+    out_icon_path = Common::FS::GetSuyuPath(Common::FS::SuyuPath::IconsDir);
     ico_extension = "ico";
 #elif defined(__linux__) || defined(__FreeBSD__)
     out_icon_path = Common::FS::GetDataDirectory("XDG_DATA_HOME") / "icons/hicolor/256x256";
@@ -3108,13 +2988,13 @@ void GMainWindow::OnGameListOpenDirectory(const QString& directory) {
     std::filesystem::path fs_path;
     if (directory == QStringLiteral("SDMC")) {
         fs_path =
-            Common::FS::GetYuzuPath(Common::FS::YuzuPath::SDMCDir) / "Nintendo/Contents/registered";
+            Common::FS::GetSuyuPath(Common::FS::SuyuPath::SDMCDir) / "Nintendo/Contents/registered";
     } else if (directory == QStringLiteral("UserNAND")) {
         fs_path =
-            Common::FS::GetYuzuPath(Common::FS::YuzuPath::NANDDir) / "user/Contents/registered";
+            Common::FS::GetSuyuPath(Common::FS::SuyuPath::NANDDir) / "user/Contents/registered";
     } else if (directory == QStringLiteral("SysNAND")) {
         fs_path =
-            Common::FS::GetYuzuPath(Common::FS::YuzuPath::NANDDir) / "system/Contents/registered";
+            Common::FS::GetSuyuPath(Common::FS::SuyuPath::NANDDir) / "system/Contents/registered";
     } else {
         fs_path = directory.toStdString();
     }
@@ -3340,7 +3220,7 @@ void GMainWindow::OnMenuInstallToNAND() {
                                 : tr("%n file(s) failed to install\n", "", failed_files.size()));
 
     QMessageBox::information(this, tr("Install Results"), install_results);
-    Common::FS::RemoveDirRecursively(Common::FS::GetYuzuPath(Common::FS::YuzuPath::CacheDir) /
+    Common::FS::RemoveDirRecursively(Common::FS::GetSuyuPath(Common::FS::SuyuPath::CacheDir) /
                                      "game_list");
     game_list->PopulateAsync(UISettings::values.game_dirs);
     ui->action_Install_File_NAND->setEnabled(true);
@@ -3582,7 +3462,7 @@ void GMainWindow::OpenURL(const QUrl& url) {
 }
 
 void GMainWindow::OnOpenModsPage() {
-    OpenURL(QUrl(QStringLiteral("https://gitlab.com/suyu-emu/suyu/wiki/Switch-Mods")));
+    OpenURL(QUrl(QStringLiteral("https://suyu.dev")));
 }
 
 void GMainWindow::OnOpenQuickstartGuide() {
@@ -3761,11 +3641,11 @@ void GMainWindow::OnConfigure() {
             LOG_WARNING(Frontend, "Failed to remove configuration file");
         }
         if (!Common::FS::RemoveDirContentsRecursively(
-                Common::FS::GetYuzuPath(Common::FS::YuzuPath::ConfigDir) / "custom")) {
+                Common::FS::GetSuyuPath(Common::FS::SuyuPath::ConfigDir) / "custom")) {
             LOG_WARNING(Frontend, "Failed to remove custom configuration files");
         }
         if (!Common::FS::RemoveDirRecursively(
-                Common::FS::GetYuzuPath(Common::FS::YuzuPath::CacheDir) / "game_list")) {
+                Common::FS::GetSuyuPath(Common::FS::SuyuPath::CacheDir) / "game_list")) {
             LOG_WARNING(Frontend, "Failed to remove game metadata cache files");
         }
 
@@ -4123,7 +4003,7 @@ void GMainWindow::LoadAmiibo(const QString& filename) {
 
 void GMainWindow::OnOpenYuzuFolder() {
     QDesktopServices::openUrl(QUrl::fromLocalFile(
-        QString::fromStdString(Common::FS::GetYuzuPathString(Common::FS::YuzuPath::YuzuDir))));
+        QString::fromStdString(Common::FS::GetSuyuPathString(Common::FS::SuyuPath::SuyuDir))));
 }
 
 void GMainWindow::OnVerifyInstalledContents() {
@@ -4338,7 +4218,7 @@ void GMainWindow::OnInstallDecryptionKeys() {
         return;
     }
 
-    const auto yuzu_keys_dir = Common::FS::GetYuzuPath(Common::FS::YuzuPath::KeysDir);
+    const auto yuzu_keys_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::KeysDir);
     for (auto key_file : source_key_files) {
         std::filesystem::path destination_key_file = yuzu_keys_dir / key_file.filename();
         if (!std::filesystem::copy_file(key_file, destination_key_file,
@@ -4491,7 +4371,7 @@ void GMainWindow::OnCaptureScreenshot() {
 
     const u64 title_id = system->GetApplicationProcessProgramID();
     const auto screenshot_path =
-        QString::fromStdString(Common::FS::GetYuzuPathString(Common::FS::YuzuPath::ScreenshotsDir));
+        QString::fromStdString(Common::FS::GetSuyuPathString(Common::FS::SuyuPath::ScreenshotsDir));
     const auto date =
         QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz"));
     QString filename = QStringLiteral("%1/%2_%3.png")
@@ -4519,7 +4399,7 @@ void GMainWindow::OnCaptureScreenshot() {
 
 // TODO: Written 2020-10-01: Remove per-game config migration code when it is irrelevant
 void GMainWindow::MigrateConfigFiles() {
-    const auto config_dir_fs_path = Common::FS::GetYuzuPath(Common::FS::YuzuPath::ConfigDir);
+    const auto config_dir_fs_path = Common::FS::GetSuyuPath(Common::FS::SuyuPath::ConfigDir);
     const QDir config_dir =
         QDir(QString::fromStdString(Common::FS::PathToUTF8String(config_dir_fs_path)));
     const QStringList config_dir_list = config_dir.entryList(QStringList(QStringLiteral("*.ini")));
@@ -4836,66 +4716,6 @@ void GMainWindow::SetFirmwareVersion() {
 
     firmware_label->setText(QString::fromStdString(display_version));
     firmware_label->setToolTip(QString::fromStdString(display_title));
-}
-
-bool GMainWindow::SelectRomFSDumpTarget(const FileSys::ContentProvider& installed, u64 program_id,
-                                        u64* selected_title_id, u8* selected_content_record_type) {
-    using ContentInfo = std::tuple<u64, FileSys::TitleType, FileSys::ContentRecordType>;
-    boost::container::flat_set<ContentInfo> available_title_ids;
-
-    const auto RetrieveEntries = [&](FileSys::TitleType title_type,
-                                     FileSys::ContentRecordType record_type) {
-        const auto entries = installed.ListEntriesFilter(title_type, record_type);
-        for (const auto& entry : entries) {
-            if (FileSys::GetBaseTitleID(entry.title_id) == program_id &&
-                installed.GetEntry(entry)->GetStatus() == Loader::ResultStatus::Success) {
-                available_title_ids.insert({entry.title_id, title_type, record_type});
-            }
-        }
-    };
-
-    RetrieveEntries(FileSys::TitleType::Application, FileSys::ContentRecordType::Program);
-    RetrieveEntries(FileSys::TitleType::Application, FileSys::ContentRecordType::HtmlDocument);
-    RetrieveEntries(FileSys::TitleType::Application, FileSys::ContentRecordType::LegalInformation);
-    RetrieveEntries(FileSys::TitleType::AOC, FileSys::ContentRecordType::Data);
-
-    if (available_title_ids.empty()) {
-        return false;
-    }
-
-    size_t title_index = 0;
-
-    if (available_title_ids.size() > 1) {
-        QStringList list;
-        for (auto& [title_id, title_type, record_type] : available_title_ids) {
-            const auto hex_title_id = QString::fromStdString(fmt::format("{:X}", title_id));
-            if (record_type == FileSys::ContentRecordType::Program) {
-                list.push_back(QStringLiteral("Program [%1]").arg(hex_title_id));
-            } else if (record_type == FileSys::ContentRecordType::HtmlDocument) {
-                list.push_back(QStringLiteral("HTML document [%1]").arg(hex_title_id));
-            } else if (record_type == FileSys::ContentRecordType::LegalInformation) {
-                list.push_back(QStringLiteral("Legal information [%1]").arg(hex_title_id));
-            } else {
-                list.push_back(
-                    QStringLiteral("DLC %1 [%2]").arg(title_id & 0x7FF).arg(hex_title_id));
-            }
-        }
-
-        bool ok;
-        const auto res = QInputDialog::getItem(
-            this, tr("Select RomFS Dump Target"),
-            tr("Please select which RomFS you would like to dump."), list, 0, false, &ok);
-        if (!ok) {
-            return false;
-        }
-
-        title_index = list.indexOf(res);
-    }
-
-    const auto& [title_id, title_type, record_type] = *available_title_ids.nth(title_index);
-    *selected_title_id = title_id;
-    *selected_content_record_type = static_cast<u8>(record_type);
-    return true;
 }
 
 bool GMainWindow::ConfirmClose() {
