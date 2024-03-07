@@ -3,8 +3,6 @@
 # SPDX-FileCopyrightText: 2019 yuzu Emulator Project
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-# Modified by JuanCStar on 2024/03/06
-
 . .ci/scripts/common/pre-upload.sh
 
 APPIMAGE_NAME="yuzu-${RELEASE_NAME}-${GITDATE}-${GITREV}.AppImage"
@@ -29,7 +27,7 @@ fi
 # Build an AppImage
 cd build
 
-wget -nc https://github.com/yuzu-emu/ext-linux-bin/raw/main/appimage/appimagetool-x86_64.AppImage
+wget -nc https://gitlab.com/suyu-emu/ext-linux-bin/-/raw/main/appimage/appimagetool-x86_64.AppImage
 chmod 755 appimagetool-x86_64.AppImage
 
 # if FUSE is not available, then fallback to extract and run
