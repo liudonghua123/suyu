@@ -4,6 +4,7 @@ stages:
 build-linux:
   stage: build
   image: debian:trixie  # Maybe replace with image with more required dependencies
+  resource_group: linux-ci
   variables:
     RELEASE_NAME: mainline
   before_script:
