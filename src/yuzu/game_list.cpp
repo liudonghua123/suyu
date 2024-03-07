@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2015 Citra Emulator Project & 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+// Modified by palfaiate on <2024/03/07>
+
 #include <regex>
 #include <QApplication>
 #include <QDir>
