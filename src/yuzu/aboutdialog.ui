@@ -1,6 +1,5 @@
-<!--Modified by King K. Kool on 2024/03/07-->
-
 <?xml version="1.0" encoding="UTF-8"?>
+<!--Modified by King K. Kool on 2024/03/07-->
 <ui version="4.0">
  <class>AboutDialog</class>
  <widget class="QDialog" name="AboutDialog">
