@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2014 Citra Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-// Modified by KawaiiBunga on <2024/03/06>
+// Modified by KawaiiBunga on <2024/03/07>
 
 #include <cinttypes>
 #include <clocale>
@@ -213,7 +213,7 @@ void GMainWindow::ShowTelemetryCallout() {
     UISettings::values.callout_flags =
         UISettings::values.callout_flags.GetValue() | static_cast<uint32_t>(CalloutFlag::Telemetry);
     const QString telemetry_message =
-        tr("<a href='https://suyu-emu.org/help/feature/telemetry/'>Anonymous "
+        tr("<a href='https://suyu.dev'>Anonymous "
            "data is collected</a> to help improve suyu. "
            "<br/><br/>Would you like to share your usage data with us?");
     if (!question(this, tr("Telemetry"), telemetry_message)) {
@@ -448,7 +448,7 @@ GMainWindow::GMainWindow(std::unique_ptr<QtConfig> config_, bool has_broken_vulk
 
         QMessageBox::warning(this, tr("Broken Vulkan Installation Detected"),
                              tr("Vulkan initialization failed during boot.<br><br>Click <a "
-                                "href='https://suyu-emu.org/wiki/faq/"
+                                "href='https://gitlab.com/suyu-emu/suyu/-/wikis/wiki/FAQ"
                                 "#yuzu-starts-with-the-error-broken-vulkan-installation-detected'>"
                                 "here for instructions to fix the issue</a>."));
 
@@ -1818,7 +1818,7 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
                "outdated format that has been superseded by others such as NCA, NAX, XCI, or "
                "NSP. Deconstructed ROM directories lack icons, metadata, and update "
                "support.<br><br>For an explanation of the various Switch formats suyu supports, <a "
-               "href='https://suyu-emu.org/wiki/overview-of-switch-game-formats'>check out our "
+               "href='https://gitlab.com/suyu-emu/suyu/-/wikis/wiki/Overview-of-Switch-Game-Formats'>check out our "
                "wiki</a>. This message will not be shown again."));
     }
 
@@ -1836,7 +1836,7 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
                    "This is usually caused by outdated GPU drivers, including integrated ones. "
                    "Please see the log for more details. "
                    "For more information on accessing the log, please see the following page: "
-                   "<a href='https://suyu-emu.org/help/reference/log-files/'>"
+                   "<a href='https://gitlab.com/suyu-emu/suyu/-/wikis/home'>"
                    "How to Upload the Log File</a>. "));
             break;
         default:
@@ -1850,7 +1850,7 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
                     tr("Error while loading ROM! %1", "%1 signifies a numeric error code.")
                         .arg(QString::fromStdString(error_code));
                 const auto description =
-                    tr("%1<br>Please follow <a href='https://suyu-emu.org/help/quickstart/'>the "
+                    tr("%1<br>Please follow <a href='https://gitlab.com/suyu-emu/suyu/-/wikis/wiki/Quickstart'>the "
                        "suyu quickstart guide</a> to redump your files.<br>You can refer "
                        "to the suyu wiki</a> or the suyu Discord</a> for help.",
                        "%1 signifies an error string.")
@@ -2844,7 +2844,7 @@ void GMainWindow::OnGameListNavigateToGamedbEntry(u64 program_id,
         directory = it->second.second;
     }
 
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://suyu-emu.org/game/") + directory));
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://suyu.dev/game/") + directory));
 }
 
 bool GMainWindow::CreateShortcutLink(const std::filesystem::path& shortcut_path,
@@ -3586,11 +3586,11 @@ void GMainWindow::OnOpenModsPage() {
 }
 
 void GMainWindow::OnOpenQuickstartGuide() {
-    OpenURL(QUrl(QStringLiteral("https://suyu-emu.org/help/quickstart/")));
+    OpenURL(QUrl(QStringLiteral("https://gitlab.com/suyu-emu/suyu/-/wikis/wiki/Quickstart")));
 }
 
 void GMainWindow::OnOpenFAQ() {
-    OpenURL(QUrl(QStringLiteral("https://suyu-emu.org/wiki/faq/")));
+    OpenURL(QUrl(QStringLiteral("https://gitlab.com/suyu-emu/suyu/-/wikis/wiki/FAQ")));
 }
 
 void GMainWindow::ToggleFullscreen() {
@@ -4792,7 +4792,7 @@ void GMainWindow::OnCheckFirmwareDecryption() {
         QMessageBox::warning(
             this, tr("Derivation Components Missing"),
             tr("Encryption keys are missing. "
-               "<br>Please follow <a href='https://suyu-emu.org/help/quickstart/'>the suyu "
+               "<br>Please follow <a href='https://gitlab.com/suyu-emu/suyu/-/wikis/wiki/Quickstart'>the suyu "
                "quickstart guide</a> to get all your keys, firmware and "
                "games."));
     }
