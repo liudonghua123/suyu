@@ -1,27 +1,11 @@
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - build
 
-build-ubuntu:       # This job runs in the build stage, which runs first.
+build-linux:
   stage: build
-  image: ubuntu:latest  # Maybe replace with image with more required dependencies
+  image: debian:trixie  # Maybe replace with image with more required dependencies
   before_script:
     - apt update --yes
-    - apt install --yes cmake gcc g++ git
+    - apt install --yes ccache cmake gcc g++ git ninja catch2
   script:
-    - echo "Compiling the code..."
-    - git submodule update --init --recursive
-    - ls -la
-    # TODO: Add build instructions for linux
-    - echo "Compile complete."
-  
-build-win:
-  stage: build
-  tags:
-    - shared-windows
-    - windows
-    - windows-1809
-  script:
-    - echo "Compiling the code..."
-    - dir
-    # TODO: Add build instructions for windows
-    - echo "Compile complete."
+    - bash .ci/scripts/linux/docker.sh
