@@ -51,7 +51,7 @@ rm -vf AppDir/usr/bin/yuzu-cmd AppDir/usr/bin/yuzu-tester
 # Download tools needed to build an AppImage
 wget -nc https://gitlab.com/suyu-emu/ext-linux-bin/-/raw/main/appimage/deploy-linux.sh
 wget -nc https://gitlab.com/suyu-emu/ext-linux-bin/-/raw/main/appimage/exec-x86_64.so
-#wget -nc https://raw.githubusercontent.com/yuzu-emu/AppImageKit-checkrt/old/AppRun.sh  TODO
+wget -nc https://gitlab.com/suyu-emu/AppImageKit-checkrt/-/raw/old/AppRun.sh
 
 # Set executable bit
 chmod 755 \
