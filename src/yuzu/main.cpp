@@ -3582,7 +3582,7 @@ void GMainWindow::OpenURL(const QUrl& url) {
 }
 
 void GMainWindow::OnOpenModsPage() {
-    OpenURL(QUrl(QStringLiteral("https://gitlabs.com/suyu-emu/suyu/wiki/Switch-Mods")));
+    OpenURL(QUrl(QStringLiteral("https://gitlab.com/suyu-emu/suyu/wiki/Switch-Mods")));
 }
 
 void GMainWindow::OnOpenQuickstartGuide() {
