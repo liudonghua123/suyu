@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2014 Citra Emulator Project
+// SPDX-FileCopyrightText: 2014 Citra Emulator Project & 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #pragma once
@@ -49,7 +49,6 @@ class WaitTreeWidget;
 enum class GameListOpenTarget;
 enum class GameListRemoveTarget;
 enum class GameListShortcutTarget;
-enum class DumpRomFSTarget;
 enum class InstalledEntryType;
 class GameListPlaceholder;
 
@@ -348,7 +347,6 @@ private slots:
     void OnGameListRemoveFile(u64 program_id, GameListRemoveTarget target,
                               const std::string& game_path);
     void OnGameListRemovePlayTimeData(u64 program_id);
-    void OnGameListDumpRomFS(u64 program_id, const std::string& game_path, DumpRomFSTarget target);
     void OnGameListVerifyIntegrity(const std::string& game_path);
     void OnGameListCopyTID(u64 program_id);
     void OnGameListNavigateToGamedbEntry(u64 program_id,
