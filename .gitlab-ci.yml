@@ -10,3 +10,4 @@ build-linux:
   script:
     - git submodule update --init --depth 1 --recursive
     - bash .ci/scripts/linux/docker.sh
+    - bash .ci/scripts/linux/upload.sh
