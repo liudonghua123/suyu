@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2014 Citra Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-// Modified by JuanCStar on 2024/03/06
+// Modified by KawaiiBunga on <2024/03/06>
 
 #include <cinttypes>
 #include <clocale>
@@ -213,8 +213,8 @@ void GMainWindow::ShowTelemetryCallout() {
     UISettings::values.callout_flags =
         UISettings::values.callout_flags.GetValue() | static_cast<uint32_t>(CalloutFlag::Telemetry);
     const QString telemetry_message =
-        tr("<a href='https://yuzu-emu.org/help/feature/telemetry/'>Anonymous "
-           "data is collected</a> to help improve yuzu. "
+        tr("<a href='https://suyu-emu.org/help/feature/telemetry/'>Anonymous "
+           "data is collected</a> to help improve suyu. "
            "<br/><br/>Would you like to share your usage data with us?");
     if (!question(this, tr("Telemetry"), telemetry_message)) {
         Settings::values.enable_telemetry = false;
@@ -372,13 +372,13 @@ GMainWindow::GMainWindow(std::unique_ptr<QtConfig> config_, bool has_broken_vulk
     const auto description = std::string(Common::g_scm_desc);
     const auto build_id = std::string(Common::g_build_id);
 
-    const auto yuzu_build = fmt::format("Suyu Development Build | {}-{}", branch_name, description);
+    const auto suyu_build = fmt::format("suyu Development Build | {}-{}", branch_name, description);
     const auto override_build =
         fmt::format(fmt::runtime(std::string(Common::g_title_bar_format_idle)), build_id);
-    const auto yuzu_build_version = override_build.empty() ? yuzu_build : override_build;
+    const auto suyu_build_version = override_build.empty() ? suyu_build : override_build;
     const auto processor_count = std::thread::hardware_concurrency();
 
-    LOG_INFO(Frontend, "Suyu Version: {}", yuzu_build_version);
+    LOG_INFO(Frontend, "suyu Version: {}", suyu_build_version);
     LogRuntimes();
 #ifdef ARCHITECTURE_x86_64
     const auto& caps = Common::GetCPUCaps();
@@ -448,7 +448,7 @@ GMainWindow::GMainWindow(std::unique_ptr<QtConfig> config_, bool has_broken_vulk
 
         QMessageBox::warning(this, tr("Broken Vulkan Installation Detected"),
                              tr("Vulkan initialization failed during boot.<br><br>Click <a "
-                                "href='https://yuzu-emu.org/wiki/faq/"
+                                "href='https://suyu-emu.org/wiki/faq/"
                                 "#yuzu-starts-with-the-error-broken-vulkan-installation-detected'>"
                                 "here for instructions to fix the issue</a>."));
 
@@ -470,7 +470,7 @@ GMainWindow::GMainWindow(std::unique_ptr<QtConfig> config_, bool has_broken_vulk
 
     // Set a screensaver inhibition reason string. Currently passed to DBus by SDL and visible to
     // the user through their desktop environment.
-    //: TRANSLATORS: This string is shown to the user to explain why yuzu needs to prevent the
+    //: TRANSLATORS: This string is shown to the user to explain why suyu needs to prevent the
     //: computer from sleeping
     QByteArray wakelock_reason = tr("Running a game").toUtf8();
     SDL_SetHint(SDL_HINT_SCREENSAVER_INHIBIT_ACTIVITY_NAME, wakelock_reason.data());
@@ -1338,7 +1338,7 @@ void GMainWindow::InitializeHotkeys() {
 
     LinkActionShortcut(ui->action_Load_File, QStringLiteral("Load File"));
     LinkActionShortcut(ui->action_Load_Amiibo, QStringLiteral("Load/Remove Amiibo"));
-    LinkActionShortcut(ui->action_Exit, QStringLiteral("Exit yuzu"));
+    LinkActionShortcut(ui->action_Exit, QStringLiteral("Exit suyu"));
     LinkActionShortcut(ui->action_Restart, QStringLiteral("Restart Emulation"));
     LinkActionShortcut(ui->action_Pause, QStringLiteral("Continue/Pause Emulation"));
     LinkActionShortcut(ui->action_Stop, QStringLiteral("Stop Emulation"));
@@ -1817,8 +1817,8 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
             tr("You are using the deconstructed ROM directory format for this game, which is an "
                "outdated format that has been superseded by others such as NCA, NAX, XCI, or "
                "NSP. Deconstructed ROM directories lack icons, metadata, and update "
-               "support.<br><br>For an explanation of the various Switch formats yuzu supports, <a "
-               "href='https://yuzu-emu.org/wiki/overview-of-switch-game-formats'>check out our "
+               "support.<br><br>For an explanation of the various Switch formats suyu supports, <a "
+               "href='https://suyu-emu.org/wiki/overview-of-switch-game-formats'>check out our "
                "wiki</a>. This message will not be shown again."));
     }
 
@@ -1832,11 +1832,11 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
         case Core::SystemResultStatus::ErrorVideoCore:
             QMessageBox::critical(
                 this, tr("An error occurred initializing the video core."),
-                tr("yuzu has encountered an error while running the video core. "
+                tr("suyu has encountered an error while running the video core. "
                    "This is usually caused by outdated GPU drivers, including integrated ones. "
                    "Please see the log for more details. "
                    "For more information on accessing the log, please see the following page: "
-                   "<a href='https://yuzu-emu.org/help/reference/log-files/'>"
+                   "<a href='https://suyu-emu.org/help/reference/log-files/'>"
                    "How to Upload the Log File</a>. "));
             break;
         default:
@@ -1850,9 +1850,9 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
                     tr("Error while loading ROM! %1", "%1 signifies a numeric error code.")
                         .arg(QString::fromStdString(error_code));
                 const auto description =
-                    tr("%1<br>Please follow <a href='https://yuzu-emu.org/help/quickstart/'>the "
-                       "yuzu quickstart guide</a> to redump your files.<br>You can refer "
-                       "to the yuzu wiki</a> or the yuzu Discord</a> for help.",
+                    tr("%1<br>Please follow <a href='https://suyu-emu.org/help/quickstart/'>the "
+                       "suyu quickstart guide</a> to redump your files.<br>You can refer "
+                       "to the suyu wiki</a> or the suyu Discord</a> for help.",
                        "%1 signifies an error string.")
                         .arg(QString::fromStdString(
                             GetResultStatusString(static_cast<Loader::ResultStatus>(error_id))));
@@ -1927,7 +1927,7 @@ void GMainWindow::ConfigureFilesystemProvider(const std::string& filepath) {
 
 void GMainWindow::BootGame(const QString& filename, Service::AM::FrontendAppletParameters params,
                            StartGameType type) {
-    LOG_INFO(Frontend, "yuzu starting...");
+    LOG_INFO(Frontend, "suyu starting...");
 
     if (params.program_id == 0 ||
         params.program_id > static_cast<u64>(Service::AM::AppletProgramId::MaxProgramId)) {
@@ -2844,7 +2844,7 @@ void GMainWindow::OnGameListNavigateToGamedbEntry(u64 program_id,
         directory = it->second.second;
     }
 
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://yuzu-emu.org/game/") + directory));
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://suyu-emu.org/game/") + directory));
 }
 
 bool GMainWindow::CreateShortcutLink(const std::filesystem::path& shortcut_path,
@@ -2982,7 +2982,7 @@ bool GMainWindow::CreateShortcutMessagesGUI(QWidget* parent, int imsg, const QSt
 
 bool GMainWindow::MakeShortcutIcoPath(const u64 program_id, const std::string_view game_file_name,
                                       std::filesystem::path& out_icon_path) {
-    // Get path to Yuzu icons directory & icon extension
+    // Get path to Suyu icons directory & icon extension
     std::string ico_extension = "png";
 #if defined(_WIN32)
     out_icon_path = Common::FS::GetYuzuPath(Common::FS::YuzuPath::IconsDir);
@@ -3009,7 +3009,7 @@ bool GMainWindow::MakeShortcutIcoPath(const u64 program_id, const std::string_vi
 
 void GMainWindow::OnGameListCreateShortcut(u64 program_id, const std::string& game_path,
                                            GameListShortcutTarget target) {
-    // Get path to yuzu executable
+    // Get path to suyu executable
     const QStringList args = QApplication::arguments();
     std::filesystem::path yuzu_command = args[0].toStdString();
     // If relative path, make it an absolute path
@@ -3090,7 +3090,7 @@ void GMainWindow::OnGameListCreateShortcut(u64 program_id, const std::string& ga
             this, GMainWindow::CREATE_SHORTCUT_MSGBOX_FULLSCREEN_YES, qt_game_title)) {
         arguments = "-f " + arguments;
     }
-    const std::string comment = fmt::format("Start {:s} with the yuzu Emulator", game_title);
+    const std::string comment = fmt::format("Start {:s} with the suyu Emulator", game_title);
     const std::string categories = "Game;Emulator;Qt;";
     const std::string keywords = "Switch;Nintendo;";
 
@@ -3560,9 +3560,9 @@ void GMainWindow::OnMenuReportCompatibility() {
         compatdb.exec();
     } else {
         QMessageBox::critical(
-            this, tr("Missing yuzu Account"),
-            tr("In order to submit a game compatibility test case, you must link your yuzu "
-               "account.<br><br/>To link your yuzu account, go to Emulation &gt; Configuration "
+            this, tr("Missing suyu Account"),
+            tr("In order to submit a game compatibility test case, you must link your suyu "
+               "account.<br><br/>To link your suyu account, go to Emulation &gt; Configuration "
                "&gt; "
                "Web."));
     }
@@ -3582,15 +3582,15 @@ void GMainWindow::OpenURL(const QUrl& url) {
 }
 
 void GMainWindow::OnOpenModsPage() {
-    OpenURL(QUrl(QStringLiteral("https://github.com/yuzu-emu/yuzu/wiki/Switch-Mods")));
+    OpenURL(QUrl(QStringLiteral("https://gitlabs.com/suyu-emu/suyu/wiki/Switch-Mods")));
 }
 
 void GMainWindow::OnOpenQuickstartGuide() {
-    OpenURL(QUrl(QStringLiteral("https://yuzu-emu.org/help/quickstart/")));
+    OpenURL(QUrl(QStringLiteral("https://suyu-emu.org/help/quickstart/")));
 }
 
 void GMainWindow::OnOpenFAQ() {
-    OpenURL(QUrl(QStringLiteral("https://yuzu-emu.org/wiki/faq/")));
+    OpenURL(QUrl(QStringLiteral("https://suyu-emu.org/wiki/faq/")));
 }
 
 void GMainWindow::ToggleFullscreen() {
@@ -4166,7 +4166,7 @@ void GMainWindow::OnInstallFirmware() {
     if (!ContentManager::AreKeysPresent()) {
         QMessageBox::information(
             this, tr("Keys not installed"),
-            tr("Install decryption keys and restart yuzu before attempting to install firmware."));
+            tr("Install decryption keys and restart suyu before attempting to install firmware."));
         return;
     }
 
@@ -4256,7 +4256,7 @@ void GMainWindow::OnInstallFirmware() {
             QMessageBox::warning(
                 this, tr("Firmware install failed"),
                 tr("Firmware installation cancelled, firmware may be in bad state, "
-                   "restart yuzu or re-install firmware."));
+                   "restart suyu or re-install firmware."));
             return;
         }
     }
@@ -4792,7 +4792,7 @@ void GMainWindow::OnCheckFirmwareDecryption() {
         QMessageBox::warning(
             this, tr("Derivation Components Missing"),
             tr("Encryption keys are missing. "
-               "<br>Please follow <a href='https://yuzu-emu.org/help/quickstart/'>the yuzu "
+               "<br>Please follow <a href='https://suyu-emu.org/help/quickstart/'>the suyu "
                "quickstart guide</a> to get all your keys, firmware and "
                "games."));
     }
@@ -4907,8 +4907,8 @@ bool GMainWindow::ConfirmClose() {
         UISettings::values.confirm_before_stopping.GetValue() == ConfirmStop::Ask_Based_On_Game) {
         return true;
     }
-    const auto text = tr("Are you sure you want to close yuzu?");
-    return question(this, tr("yuzu"), text);
+    const auto text = tr("Are you sure you want to close suyu?");
+    return question(this, tr("suyu"), text);
 }
 
 void GMainWindow::closeEvent(QCloseEvent* event) {
@@ -4988,7 +4988,7 @@ bool GMainWindow::ConfirmChangeGame() {
 
     // Use custom question to link controller navigation
     return question(
-        this, tr("yuzu"),
+        this, tr("suyu"),
         tr("Are you sure you want to stop the emulation? Any unsaved progress will be lost."),
         QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 }
@@ -4997,10 +4997,10 @@ bool GMainWindow::ConfirmForceLockedExit() {
     if (emu_thread == nullptr) {
         return true;
     }
-    const auto text = tr("The currently running application has requested yuzu to not exit.\n\n"
+    const auto text = tr("The currently running application has requested suyu to not exit.\n\n"
                          "Would you like to bypass this and exit anyway?");
 
-    return question(this, tr("yuzu"), text);
+    return question(this, tr("suyu"), text);
 }
 
 void GMainWindow::RequestGameExit() {
@@ -5277,8 +5277,8 @@ int main(int argc, char* argv[]) {
     Common::ConfigureNvidiaEnvironmentFlags();
 
     // Init settings params
-    QCoreApplication::setOrganizationName(QStringLiteral("yuzu team"));
-    QCoreApplication::setApplicationName(QStringLiteral("yuzu"));
+    QCoreApplication::setOrganizationName(QStringLiteral("suyu team"));
+    QCoreApplication::setApplicationName(QStringLiteral("suyu"));
 
 #ifdef _WIN32
     // Increases the maximum open file limit to 8192
