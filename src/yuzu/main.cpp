@@ -54,14 +54,6 @@
 #include "yuzu/multiplayer/state.h"
 #include "yuzu/util/controller_navigation.h"
 
-// These are wrappers to avoid the calls to CreateFile because of the Windows
-// defines.
-
-static FileSys::VirtualFile VfsDirectoryCreateFileWrapper(const FileSys::VirtualDir& dir,
-                                                          const std::string& path) {
-    return dir->CreateFile(path);
-}
-
 #include <fmt/ostream.h>
 #include <glad/glad.h>
 
