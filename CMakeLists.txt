@@ -32,7 +32,7 @@ CMAKE_DEPENDENT_OPTION(YUZU_USE_BUNDLED_QT "Download bundled Qt binaries" "${MSV
 
 option(ENABLE_WEB_SERVICE "Enable web services (telemetry, etc.)" OFF)
 
-option(YUZU_USE_BUNDLED_FFMPEG "Download/Build bundled FFmpeg" "${WIN32}")
+option(YUZU_USE_BUNDLED_FFMPEG "Download/Build bundled FFmpeg" ON)
 
 option(YUZU_USE_EXTERNAL_VULKAN_HEADERS "Use Vulkan-Headers from externals" ON)
 
@@ -319,7 +319,7 @@ if (ENABLE_LIBUSB)
 endif()
 
 if (ARCHITECTURE_x86 OR ARCHITECTURE_x86_64)
-    find_package(xbyak 6 CONFIG)
+    find_package(xbyak 7 CONFIG)
 endif()
 
 if (ARCHITECTURE_arm64)
