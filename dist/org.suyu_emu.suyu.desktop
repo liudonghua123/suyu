@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2018 yuzu Emulator Project & 2024 suyu Emulator Project
+# SPDX-FileCopyrightText: 2018 suyu Emulator Project & 2024 suyu Emulator Project
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 [Desktop Entry]
@@ -8,8 +8,8 @@ Name=suyu
 GenericName=Switch Emulator
 Comment=Nintendo Switch video game console emulator
 Icon=org.suyu_emu.suyu
-TryExec=yuzu
-Exec=yuzu %f
+TryExec=suyu
+Exec=suyu %f
 Categories=Game;Emulator;Qt;
 MimeType=application/x-nx-nro;application/x-nx-nso;application/x-nx-nsp;application/x-nx-xci;
 Keywords=Nintendo;Switch;
