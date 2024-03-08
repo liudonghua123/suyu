@@ -15,7 +15,7 @@ def check_individual(labels):
     return False
 
 def do_page(page):
-    url = f"https://api.gitlab.com/repos/suyu-emu/suyu/pulls?page={page}"
+    url = f"https://gitlab.com/suyu-emu/suyu/-/merge_requests?page={page}"
     response = requests.get(url)
     response.raise_for_status()
     if (response.ok):

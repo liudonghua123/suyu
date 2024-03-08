@@ -7,7 +7,7 @@
 import requests, json, sys
 
 try:
-    url = 'https://api.gitlab.com/repos/suyu-emu/suyu/issues/%s' % sys.argv[1]
+    url = 'https://gitlab.com/suyu-emu/suyu/-/issues/%s' % sys.argv[1]
     response = requests.get(url)
     if (response.ok):
         j = json.loads(response.content)
