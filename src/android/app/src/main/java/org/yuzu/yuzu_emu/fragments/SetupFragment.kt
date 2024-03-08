@@ -100,7 +100,7 @@ class SetupFragment : Fragment() {
         pages.apply {
             add(
                 SetupPage(
-                    R.drawable.ic_yuzu_title,
+                    R.drawable.ic_suyu_title,
                     R.string.welcome,
                     R.string.welcome_description,
                     0,
