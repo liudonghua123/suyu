@@ -10,7 +10,7 @@ cd "${0%/*}"
 ## Check command availability
 check_command() {
     if ! command -v "$1" &> /dev/null; then
-        echo "Error: '$1' command not found. Please install $2."
+        read -s -n 1 -p "Error: '$1' command not found. Please install $2."
         exit 1
     fi
 }
@@ -18,7 +18,7 @@ check_command() {
 ## Convert image with error handling
 convert_image() {
     convert -background none -resize "$2" "$1" "$3" || {
-        echo "Error: Conversion failed for $1"
+        read -s -n 1 -p "Error: Conversion failed for $1"
         exit 1
     }
 }
@@ -29,7 +29,7 @@ check_command "iconutil" "macOS"
 
 # Create the iconset directory
 mkdir suyu.iconset || {
-    echo "Error: Unable to create suyu.iconset directory."
+    read -s -n 1 -p "Error: Unable to create suyu.iconset directory."
     exit 1
 }
 
@@ -47,13 +47,13 @@ convert_image suyu.svg 1024x1024 suyu.iconset/icon_512x512@2x.png
 
 # Create the ICNS file
 iconutil -c icns suyu.iconset || {
-    echo "Error: Failed to create ICNS file."
+    read -s -n 1 -p "Error: Failed to create ICNS file."
     exit 1
 }
 
 # Remove the temporary iconset directory
 rm -rf suyu.iconset || {
-    echo "Error: Unable to remove suyu.iconset directory."
+    read -s -n 1 -p "Error: Unable to remove suyu.iconset directory."
     exit 1
 }
 
