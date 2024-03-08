@@ -22,7 +22,7 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavutil/opt.h>
 #ifndef ANDROID
-#include <libavcodec/codec_internal.h>
+#include <libavcodec/codec.h>
 #endif
 
 #if defined(__GNUC__) || defined(__clang__)

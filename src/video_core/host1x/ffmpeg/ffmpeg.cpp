@@ -227,10 +227,8 @@ bool DecoderContext::SendPacket(const Packet& packet) {
 #ifndef ANDROID
     if (!m_codec_context->hw_device_ctx && m_codec_context->codec_id == AV_CODEC_ID_H264) {
         m_decode_order = true;
-        auto* codec{ffcodec(m_decoder.GetCodec())};
-        if (const int ret = codec->cb.decode(m_codec_context, m_temp_frame->GetFrame(),
-                                             &m_got_frame, packet.GetPacket());
-            ret < 0) {
+        const int ret = avcodec_send_frame(m_codec_context, m_temp_frame->GetFrame());
+        if (ret < 0) {
             LOG_DEBUG(Service_NVDRV, "avcodec_send_packet error {}", AVError(ret));
             return false;
         }
@@ -252,7 +250,6 @@ std::shared_ptr<Frame> DecoderContext::ReceiveFrame() {
 #ifndef ANDROID
     if (!m_codec_context->hw_device_ctx && m_codec_context->codec_id == AV_CODEC_ID_H264) {
         m_decode_order = true;
-        auto* codec{ffcodec(m_decoder.GetCodec())};
         int ret{0};
 
         if (m_got_frame == 0) {
@@ -260,7 +257,7 @@ std::shared_ptr<Frame> DecoderContext::ReceiveFrame() {
             auto* pkt = packet.GetPacket();
             pkt->data = nullptr;
             pkt->size = 0;
-            ret = codec->cb.decode(m_codec_context, m_temp_frame->GetFrame(), &m_got_frame, pkt);
+            ret = avcodec_receive_packet(m_codec_context, pkt);
             m_codec_context->has_b_frames = 0;
         }
 
