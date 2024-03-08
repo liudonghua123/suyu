@@ -124,11 +124,6 @@
 #include "input_common/drivers/tas_input.h"
 #include "input_common/drivers/virtual_amiibo.h"
 #include "input_common/main.h"
-#include "ui_main.h"
-#include "util/overlay_dialog.h"
-#include "video_core/gpu.h"
-#include "video_core/renderer_base.h"
-#include "video_core/shader_notify.h"
 #include "suyu/about_dialog.h"
 #include "suyu/bootmanager.h"
 #include "suyu/compatdb.h"
@@ -152,6 +147,11 @@
 #include "suyu/uisettings.h"
 #include "suyu/util/clickable_label.h"
 #include "suyu/vk_device_info.h"
+#include "ui_main.h"
+#include "util/overlay_dialog.h"
+#include "video_core/gpu.h"
+#include "video_core/renderer_base.h"
+#include "video_core/shader_notify.h"
 
 #ifdef SUYU_CRASH_DUMPS
 #include "suyu/breakpad.h"
@@ -1448,7 +1448,6 @@ void GMainWindow::OnAppFocusStateChanged(Qt::ApplicationState state) {
             OnPauseGame();
         } else if (!emu_thread->IsRunning() && auto_paused && state == Qt::ApplicationActive) {
             auto_paused = false;
-            RequestGameResume();
             OnStartGame();
         }
     }
@@ -1688,7 +1687,6 @@ void GMainWindow::OnPrepareForSleep(bool prepare_sleep) {
     } else {
         if (!emu_thread->IsRunning() && auto_paused) {
             auto_paused = false;
-            RequestGameResume();
             OnStartGame();
         }
     }
@@ -3266,7 +3264,6 @@ void GMainWindow::OnPauseContinueGame() {
         if (emu_thread->IsRunning()) {
             OnPauseGame();
         } else {
-            RequestGameResume();
             OnStartGame();
         }
     }
@@ -4760,10 +4757,6 @@ void GMainWindow::RequestGameExit() {
 
     system->SetExitRequested(true);
     system->GetAppletManager().RequestExit();
-}
-
-void GMainWindow::RequestGameResume() {
-    system->GetAppletManager().RequestResume();
 }
 
 void GMainWindow::filterBarSetChecked(bool state) {

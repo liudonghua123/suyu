@@ -1,5 +1,15 @@
 stages:
+  - format
   - build
+
+clang-format:
+  stage: format
+  image: suyuemu/cibuild:latest
+  variables:
+    RELEASE_NAME: mainline
+  script:
+    - git submodule update --init --depth 1 --recursive
+    - bash .ci/scripts/format/script.sh
 
 build-linux:
   stage: build
