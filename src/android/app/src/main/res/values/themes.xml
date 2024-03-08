@@ -3,7 +3,7 @@
 
     <style name="Theme.Yuzu.Splash.Main" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/yuzu_surface</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_yuzu</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_suyu</item>
         <item name="postSplashScreenTheme">@style/Theme.Yuzu.Main</item>
     </style>
 
