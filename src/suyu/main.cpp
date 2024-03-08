@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2014 Citra Emulator Project  & 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-// Modified by palfaiate on <2024/03/07>
+// Modified by KawaiiBunga on <2024/03/07>
 
 #include <cinttypes>
 #include <clocale>
@@ -1805,6 +1805,7 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
                "outdated format that has been superseded by others such as NCA, NAX, XCI, or "
                "NSP. Deconstructed ROM directories lack icons, metadata, and update "
                "support.<br><br>For an explanation of the various Switch formats suyu supports, <a "
+               "href='https://gitlab.com/suyu-emu/suyu/-/wikis/wiki/Overview-of-Switch-Game-Formats'>check out our "
                "href='https://suyu.dev/wiki/overview-of-switch-game-formats'>check out our "
                "wiki</a>. This message will not be shown again."));
     }
@@ -2792,7 +2793,7 @@ bool GMainWindow::CreateShortcutMessagesGUI(QWidget* parent, int imsg, const QSt
 
 bool GMainWindow::MakeShortcutIcoPath(const u64 program_id, const std::string_view game_file_name,
                                       std::filesystem::path& out_icon_path) {
-    // Get path to Suyu icons directory & icon extension
+    // Get path to suyu icons directory & icon extension
     std::string ico_extension = "png";
 #if defined(_WIN32)
     out_icon_path = Common::FS::GetSuyuPath(Common::FS::SuyuPath::IconsDir);
@@ -3401,6 +3402,7 @@ void GMainWindow::OnOpenQuickstartGuide() {
 
 void GMainWindow::OnOpenFAQ() {
     OpenURL(QUrl(QStringLiteral("https://suyu.dev/wiki/faq/")));
+>>>>>>> 3d241d6c48d375252fd6d068d57dce7cebddf165:src/suyu/main.cpp
 }
 
 void GMainWindow::ToggleFullscreen() {
