@@ -1,14 +1,61 @@
-mkdir suyu.iconset
-convert  -background none -resize 16x16 suyu.svg suyu.iconset/icon_16x16.png;
-convert  -background none -resize 32x32 suyu.svg suyu.iconset/icon_16x16@2x.png;
-convert  -background none -resize 32x32 suyu.svg suyu.iconset/icon_32x32.png;
-convert  -background none -resize 64x64 suyu.svg suyu.iconset/icon_32x32@2x.png;
-convert  -background none -resize 128x128 suyu.svg suyu.iconset/icon_128x128.png;
-convert  -background none -resize 256x256 suyu.svg suyu.iconset/icon_256x256.png;
-convert  -background none -resize 256x256 suyu.svg suyu.iconset/icon_128x128@2x.png;
-convert  -background none -resize 512x512 suyu.svg suyu.iconset/icon_256x256@2x.png;
-convert  -background none -resize 512x512 suyu.svg suyu.iconset/icon_512x512.png;
-convert  -background none -resize 1024x1024 suyu.svg suyu.iconset/icon_512x512@2x.png;
+#!/bin/bash
+# icns_generator.sh    GNU GPLv3 License
+# Run this script when a new logo is made and the suyu.svg file inside.
+# You should install Imagemagick to make the conversions: $brew install imagemagick
 
-iconutil -c icns suyu.iconset
-rm -rf suyu.iconset
+# Change working dir to where this script is located.
+cd "${0%/*}"
+
+# Error Handling Stuff: 
+## Check command availability
+check_command() {
+    if ! command -v "$1" &> /dev/null; then
+        echo "Error: '$1' command not found. Please install $2."
+        exit 1
+    fi
+}
+
+## Convert image with error handling
+convert_image() {
+    convert -background none -resize "$2" "$1" "$3" || {
+        echo "Error: Conversion failed for $1"
+        exit 1
+    }
+}
+
+# Check required commands
+check_command "convert" "ImageMagick"
+check_command "iconutil" "macOS"
+
+# Create the iconset directory
+mkdir suyu.iconset || {
+    echo "Error: Unable to create suyu.iconset directory."
+    exit 1
+}
+
+# Convert images
+convert_image suyu.svg 16x16 suyu.iconset/icon_16x16.png
+convert_image suyu.svg 32x32 suyu.iconset/icon_16x16@2x.png
+convert_image suyu.svg 32x32 suyu.iconset/icon_32x32.png
+convert_image suyu.svg 64x64 suyu.iconset/icon_32x32@2x.png
+convert_image suyu.svg 128x128 suyu.iconset/icon_128x128.png
+convert_image suyu.svg 256x256 suyu.iconset/icon_256x256.png
+convert_image suyu.svg 256x256 suyu.iconset/icon_128x128@2x.png
+convert_image suyu.svg 512x512 suyu.iconset/icon_256x256@2x.png
+convert_image suyu.svg 512x512 suyu.iconset/icon_512x512.png
+convert_image suyu.svg 1024x1024 suyu.iconset/icon_512x512@2x.png
+
+# Create the ICNS file
+iconutil -c icns suyu.iconset || {
+    echo "Error: Failed to create ICNS file."
+    exit 1
+}
+
+# Remove the temporary iconset directory
+rm -rf suyu.iconset || {
+    echo "Error: Unable to remove suyu.iconset directory."
+    exit 1
+}
+
+read -s -n 1 -p "Icon generation completed successfully."
+echo ""
