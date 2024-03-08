@@ -17,8 +17,8 @@ cmake .. \
       -DCMAKE_C_COMPILER=/usr/lib/ccache/gcc \
       -DCMAKE_INSTALL_PREFIX="/usr" \
       -DDISPLAY_VERSION=$1 \
-      -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON \
-      -DENABLE_QT_TRANSLATION=ON \
+      -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF \
+      -DENABLE_QT_TRANSLATION=OFF \
       -DUSE_DISCORD_PRESENCE=ON \
       -DSUYU_ENABLE_COMPATIBILITY_REPORTING=${ENABLE_COMPATIBILITY_REPORTING:-"OFF"} \
       -DSUYU_USE_BUNDLED_FFMPEG=ON \
@@ -49,9 +49,10 @@ DESTDIR="$PWD/AppDir" ninja install
 rm -vf AppDir/usr/bin/suyu-cmd AppDir/usr/bin/suyu-tester
 
 # Download tools needed to build an AppImage
-wget -nc https://gitlab.com/suyu-emu/ext-linux-bin/main/appimage/deploy-linux.sh
-wget -nc https://gitlab.com/suyu-emu/AppImageKit-checkrt/old/AppRun.sh
-wget -nc https://gitlab.com/suyu-emu/ext-linux-bin/raw/main/appimage/exec-x86_64.so
+wget -nc https://gitlab.com/suyu-emu/ext-linux-bin/-/raw/main/appimage/deploy-linux.sh
+wget -nc https://gitlab.com/suyu-emu/ext-linux-bin/-/raw/main/appimage/exec-x86_64.so
+wget -nc https://gitlab.com/suyu-emu/AppImageKit-checkrt/-/raw/old/AppRun.sh
+
 # Set executable bit
 chmod 755 \
     deploy-linux.sh \
