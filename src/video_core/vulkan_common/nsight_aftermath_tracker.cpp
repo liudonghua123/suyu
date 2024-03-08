@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: Copyright 2020 yuzu Emulator Project & 2024 suyu Emulator Project
+// SPDX-FileCopyrightText: Copyright 2020 suyu Emulator Project & 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #ifdef HAS_NSIGHT_AFTERMATH
@@ -186,7 +186,7 @@ void NsightAftermathTracker::OnShaderDebugInfoCallback(const void* shader_debug_
 
 void NsightAftermathTracker::OnCrashDumpDescriptionCallback(
     PFN_GFSDK_Aftermath_AddGpuCrashDumpDescription add_description) {
-    add_description(GFSDK_Aftermath_GpuCrashDumpDescriptionKey_ApplicationName, "yuzu");
+    add_description(GFSDK_Aftermath_GpuCrashDumpDescriptionKey_ApplicationName, "suyu");
 }
 
 void NsightAftermathTracker::GpuCrashDumpCallback(const void* gpu_crash_dump,

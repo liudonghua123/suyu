@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: Copyright 2018 yuzu Emulator Project & 2024 suyu Emulator Project
+// SPDX-FileCopyrightText: Copyright 2018 suyu Emulator Project & 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include <cstring>
@@ -46,7 +46,7 @@ ProfileManager::ProfileManager() {
 
     // Create an user if none are present
     if (user_count == 0) {
-        CreateNewUser(UUID::MakeRandom(), "yuzu");
+        CreateNewUser(UUID::MakeRandom(), "suyu");
         WriteUserSaveFile();
     }
 
@@ -383,14 +383,14 @@ void ProfileManager::ParseUserSaveFile() {
 
     if (!save.IsOpen()) {
         LOG_WARNING(Service_ACC, "Failed to load profile data from save data... Generating new "
-                                 "user 'yuzu' with random UUID.");
+                                 "user 'suyu' with random UUID.");
         return;
     }
 
     ProfileDataRaw data;
     if (!save.ReadObject(data)) {
         LOG_WARNING(Service_ACC, "profiles.dat is smaller than expected... Generating new user "
-                                 "'yuzu' with random UUID.");
+                                 "'suyu' with random UUID.");
         return;
     }
 
