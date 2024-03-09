@@ -124,11 +124,6 @@
 #include "input_common/drivers/tas_input.h"
 #include "input_common/drivers/virtual_amiibo.h"
 #include "input_common/main.h"
-#include "ui_main.h"
-#include "util/overlay_dialog.h"
-#include "video_core/gpu.h"
-#include "video_core/renderer_base.h"
-#include "video_core/shader_notify.h"
 #include "suyu/about_dialog.h"
 #include "suyu/bootmanager.h"
 #include "suyu/compatdb.h"
@@ -152,6 +147,11 @@
 #include "suyu/uisettings.h"
 #include "suyu/util/clickable_label.h"
 #include "suyu/vk_device_info.h"
+#include "ui_main.h"
+#include "util/overlay_dialog.h"
+#include "video_core/gpu.h"
+#include "video_core/renderer_base.h"
+#include "video_core/shader_notify.h"
 
 #ifdef SUYU_CRASH_DUMPS
 #include "suyu/breakpad.h"
@@ -1448,7 +1448,6 @@ void GMainWindow::OnAppFocusStateChanged(Qt::ApplicationState state) {
             OnPauseGame();
         } else if (!emu_thread->IsRunning() && auto_paused && state == Qt::ApplicationActive) {
             auto_paused = false;
-            RequestGameResume();
             OnStartGame();
         }
     }
@@ -1578,6 +1577,7 @@ void GMainWindow::ConnectMenuEvents() {
                  [this]() { OnCabinet(Service::NFP::CabinetMode::StartFormatter); });
     connect_menu(ui->action_Load_Mii_Edit, &GMainWindow::OnMiiEdit);
     connect_menu(ui->action_Open_Controller_Menu, &GMainWindow::OnOpenControllerMenu);
+    connect_menu(ui->action_Load_Home_Menu, &GMainWindow::OnHomeMenu);
     connect_menu(ui->action_Capture_Screenshot, &GMainWindow::OnCaptureScreenshot);
 
     // TAS
@@ -1688,7 +1688,6 @@ void GMainWindow::OnPrepareForSleep(bool prepare_sleep) {
     } else {
         if (!emu_thread->IsRunning() && auto_paused) {
             auto_paused = false;
-            RequestGameResume();
             OnStartGame();
         }
     }
@@ -3266,7 +3265,6 @@ void GMainWindow::OnPauseContinueGame() {
         if (emu_thread->IsRunning()) {
             OnPauseGame();
         } else {
-            RequestGameResume();
             OnStartGame();
         }
     }
@@ -4294,6 +4292,29 @@ void GMainWindow::OnOpenControllerMenu() {
              LibraryAppletParameters(ControllerAppletId, Service::AM::AppletId::Controller));
 }
 
+void GMainWindow::OnHomeMenu() {
+    constexpr u64 QLaunchId = static_cast<u64>(Service::AM::AppletProgramId::QLaunch);
+    auto bis_system = system->GetFileSystemController().GetSystemNANDContents();
+    if (!bis_system) {
+        QMessageBox::warning(this, tr("No firmware available"),
+                             tr("Please install the firmware to use the Home Menu."));
+        return;
+    }
+
+    auto qlaunch_applet_nca = bis_system->GetEntry(QLaunchId, FileSys::ContentRecordType::Program);
+    if (!qlaunch_applet_nca) {
+        QMessageBox::warning(this, tr("Home Menu Applet"),
+                             tr("Home Menu is not available. Please reinstall firmware."));
+        return;
+    }
+
+    system->GetFrontendAppletHolder().SetCurrentAppletId(Service::AM::AppletId::QLaunch);
+
+    const auto filename = QString::fromStdString((qlaunch_applet_nca->GetFullPath()));
+    UISettings::values.roms_path = QFileInfo(filename).path().toStdString();
+    BootGame(filename, LibraryAppletParameters(QLaunchId, Service::AM::AppletId::QLaunch));
+}
+
 void GMainWindow::OnCaptureScreenshot() {
     if (emu_thread == nullptr || !emu_thread->IsRunning()) {
         return;
@@ -4760,10 +4781,6 @@ void GMainWindow::RequestGameExit() {
 
     system->SetExitRequested(true);
     system->GetAppletManager().RequestExit();
-}
-
-void GMainWindow::RequestGameResume() {
-    system->GetAppletManager().RequestResume();
 }
 
 void GMainWindow::filterBarSetChecked(bool state) {

@@ -311,7 +311,6 @@ private:
     bool ConfirmChangeGame();
     bool ConfirmForceLockedExit();
     void RequestGameExit();
-    void RequestGameResume();
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
 
@@ -400,6 +399,7 @@ private slots:
     void OnCabinet(Service::NFP::CabinetMode mode);
     void OnMiiEdit();
     void OnOpenControllerMenu();
+    void OnHomeMenu();
     void OnCaptureScreenshot();
     void OnCheckFirmwareDecryption();
     void OnLanguageChanged(const QString& locale);
