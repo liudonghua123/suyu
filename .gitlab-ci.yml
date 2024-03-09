@@ -11,16 +11,15 @@ clang-format:
     - git submodule update --init --depth 1 --recursive
     - bash .ci/scripts/format/script.sh
 
-cache:
-  paths:
-    - ccache/
-
 build-linux:
   stage: build
   image: suyuemu/cibuild:linux-x64
   resource_group: linux-ci
   variables:
     RELEASE_NAME: mainline
+  cache:
+    paths:
+      - ccache/
   before_script:
     - mkdir -p ccache
     - export CCACHE_BASEDIR=${PWD}
