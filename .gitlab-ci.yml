@@ -11,12 +11,20 @@ clang-format:
     - git submodule update --init --depth 1 --recursive
     - bash .ci/scripts/format/script.sh
 
+cache:
+  paths:
+    - ccache/
+
 build-linux:
   stage: build
   image: suyuemu/cibuild:linux-x64
   resource_group: linux-ci
   variables:
     RELEASE_NAME: mainline
+  before_script:
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
   script:
     - git submodule update --init --depth 1 --recursive
     - bash .ci/scripts/linux/docker.sh
