@@ -8,19 +8,6 @@ stages:
   - build-msvc
   - android
 
-format:
-  stage: format
-  image: ubuntu:latest
-  before_script:
-    - echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy main" >> /etc/apt/sources.list
-    - apt-get update
-    - apt-get -y install git clang-format-15 clang-15 sdkmanager android-sdk bash openjdk-21-jdk openjdk-21-jre && clang-format-15 --version
-    - export ANDROID_HOME="/usr/lib/android-sdk/"
-    - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
-  script:
-    - bash -ex ./.ci/scripts/format/script.sh
-
-
 clang-format:
   stage: format
   image: suyuemu/cibuild:latest
