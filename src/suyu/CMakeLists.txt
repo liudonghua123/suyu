@@ -17,6 +17,9 @@ add_executable(suyu
     about_dialog.cpp
     about_dialog.h
     aboutdialog.ui
+    cheats_dialog.cpp
+    cheats_dialog.h
+    cheatsdialog.ui
     applets/qt_amiibo_settings.cpp
     applets/qt_amiibo_settings.h
     applets/qt_amiibo_settings.ui

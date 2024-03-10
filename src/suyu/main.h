@@ -358,6 +358,7 @@ private slots:
     void OnGameListAddDirectory();
     void OnGameListShowList(bool show);
     void OnGameListOpenPerGameProperties(const std::string& file);
+    void OnGameListOpenPerGameCheats(const std::string& file);
     void OnMenuLoadFile();
     void OnMenuLoadFolder();
     void IncrementInstallProgress();
