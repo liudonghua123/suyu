@@ -33,11 +33,10 @@ build-linux:
 
 build-mac:
   stage: build-mac
-  image: ubuntu:latest
+  image: suyuemu/cibuild:latest
   script:
-    - apt-get update -y
-    - apt-get install -y autoconf automake boost ccache ffmpeg fmt glslang hidapi libtool libusb lz4 ninja-build nlohmann-json openssl pkg-config qt5-default libsdl2-dev speex zlib1g-dev zlib zstd
-    - mkdir build
+    - git submodule update --init --depth 1 --recursive
+    - mkdir -p build
     - cd build
     - export Qt5_DIR="/usr/local/Qt-5.x/lib/cmake"
     - cmake .. -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DYUZU_USE_BUNDLED_VCPKG=OFF -DYUZU_TESTS=OFF -DENABLE_WEB_SERVICE=OFF -DENABLE_LIBUSB=OFF
