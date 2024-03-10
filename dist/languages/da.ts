@@ -6291,6 +6291,7 @@ Would you like to bypass this and exit anyway?</source>
         <source>Missing Firmware.</source>
         <translation>Missing Firmware.</translation>
     </message>
+    <message>
         <location filename="../../src/suyu/configuration/shared_translation.h" line="27"/>
         <source>None</source>
         <translation>Ingen</translation>
