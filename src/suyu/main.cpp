@@ -492,12 +492,12 @@ GMainWindow::GMainWindow(std::unique_ptr<QtConfig> config_, bool has_broken_vulk
 
         // Launch game in fullscreen mode
         if (args[i] == QStringLiteral("-f")) {
-            is_qlaunch = true;
+            is_fullscreen = true;
             continue;
         }
         // Use QLaunch at startup
         if (args[i] == QStringLiteral("-ql")) {
-            is_fullscreen = true;
+            is_qlaunch = true;
             continue;
         }
         // Launch game with a specific user
