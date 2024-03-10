@@ -1769,7 +1769,7 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
     if (!CheckFirmwarePresence()) {
         QMessageBox::critical(
             this, tr("Component Missing"),
-            tr("Missing firmware."));
+            tr("Missing Firmware."));
         return false;
     }
 
