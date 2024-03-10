@@ -39,12 +39,12 @@ build-mac:
     - mkdir -p build
     - cd build
     - export Qt5_DIR="/usr/local/Qt-5.x/lib/cmake"
-    - cmake .. -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DYUZU_USE_BUNDLED_VCPKG=OFF -DYUZU_TESTS=OFF -DENABLE_WEB_SERVICE=OFF -DENABLE_LIBUSB=OFF
+    - cmake .. -GNinja -DCMAKE_BUILD_TYPE=debug -DYUZU_USE_BUNDLED_VCPKG=OFF -DYUZU_TESTS=OFF -DENABLE_WEB_SERVICE=OFF -DENABLE_LIBUSB=OFF -DCLANG_FORMAT=ON -DSDL2_DISABLE_INSTALL=ON -DSDL_ALTIVEC=ON
     - ninja
   artifacts:
     name: "macos"
     paths:
-      - build/
+      - artifacts/*
 
 build-msvc:
   stage: build-msvc
@@ -63,7 +63,7 @@ build-msvc:
   artifacts:
     name: "msvc"
     paths:
-      - build/
+      - artifacts/*
 
 android:
   stage: android
@@ -75,6 +75,6 @@ android:
   artifacts:
     name: "android"
     paths:
-      - artifacts/
+      - artifacts/*
 
 
