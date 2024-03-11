@@ -29,40 +29,6 @@ build-linux:
     paths:
       - artifacts/*
 
-build-mac:
-  stage: build-mac
-  image: suyuemu/cibuild:linux-x64
-  script:
-    - git submodule update --init --depth 1 --recursive
-    - mkdir -p build
-    - cd build
-    - export Qt5_DIR="/usr/local/Qt-5.x/lib/cmake"
-    - cmake .. -GNinja -DCMAKE_BUILD_TYPE=debug -DYUZU_USE_BUNDLED_VCPKG=OFF -DYUZU_TESTS=OFF -DENABLE_WEB_SERVICE=OFF -DENABLE_LIBUSB=OFF -DCLANG_FORMAT=ON -DSDL2_DISABLE_INSTALL=ON -DSDL_ALTIVEC=ON
-    - ninja
-  artifacts:
-    name: "macos"
-    paths:
-      - artifacts/*
-
-build-msvc:
-  stage: build-msvc
-  image: mcr.microsoft.com/windows/servercore:ltsc2019
-  script:
-    - Invoke-WebRequest -Uri "https://github.com/mbitsnbites/buildcache/releases/download/v0.28.4/buildcache-windows.zip" -OutFile "buildcache-windows.zip"
-    - Expand-Archive -Path "buildcache-windows.zip" -DestinationPath "C:\buildcache"
-    - echo "C:\buildcache\bin" | Out-File -FilePath $env:Path -Encoding utf8 -Append
-    - .\.ci\scripts\windows\install-vulkan-sdk.ps1
-    - .\CMakeModules\MSVCCache.cmake
-    - glslangValidator --version
-    - mkdir build
-    - cd build
-    - cmake .. -GNinja -DCMAKE_TOOLCHAIN_FILE="CMakeModules/MSVCCache.cmake" -DUSE_CCACHE=ON -DYUZU_USE_BUNDLED_QT=1 -DYUZU_USE_BUNDLED_SDL2=1 -DYUZU_USE_QT_WEB_ENGINE=ON -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON -DYUZU_ENABLE_COMPATIBILITY_REPORTING=ON -DUSE_DISCORD_PRESENCE=ON -DENABLE_QT_TRANSLATION=ON -DCMAKE_BUILD_TYPE=Release -DGIT_BRANCH=pr-verify -DYUZU_CRASH_DUMPS=ON
-    - cmake --build .
-  artifacts:
-    name: "msvc"
-    paths:
-      - artifacts/*
-
 android:
   stage: android
   image: openjdk:17
