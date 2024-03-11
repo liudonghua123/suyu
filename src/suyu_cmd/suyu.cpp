@@ -73,8 +73,6 @@ __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 static void PrintHelp(const char* argv0) {
     std::cout << "Usage: " << argv0
               << " [options] <filename>\n"
-                 "-l, --applet-params=\"u64,u32,s32,s32,s32,s32\" Parameters for launching an "
-                 "applet. if the second parameter is set, then it will launch the applet\n"
                  "-c, --config          Load the specified configuration file\n"
                  "-f, --fullscreen      Start in fullscreen mode\n"
                  "-g, --game            File path of the game to load\n"
@@ -83,7 +81,9 @@ static void PrintHelp(const char* argv0) {
                  " Nickname, password, address and port for multiplayer\n"
                  "-p, --program         Pass following string as arguments to executable\n"
                  "-u, --user            Select a specific user profile from 0 to 7\n"
-                 "-v, --version         Output version information and exit\n";
+                 "-v, --version         Output version information and exit\n"
+                 "-l, --applet-params=\"program_id,applet_id,applet_type,launch_type,prog_index,prev_prog_index\"\n"
+                 "                      Parameters for launching an applet. If applet_id is not 0, applet will launch.\n";
 }
 
 static void PrintVersion() {
