@@ -34,7 +34,7 @@ android:
   image: ibmjava:latest
   script:
     - apt-get update -y
-    - apt-get install -y ccache apksigner glslang-dev glslang-tools
+    - apt-get install -y openjdk-17-jdk ccache apksigner glslang-dev glslang-tools
     - bash -c "export PR_NUMBER=$PR_NUMBER; ./.ci/scripts/android/build.sh"
   artifacts:
     name: "android"
