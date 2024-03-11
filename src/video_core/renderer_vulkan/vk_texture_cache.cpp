@@ -85,7 +85,8 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
     return CheckImageType(info, ImageType::Buffer);
 }
 
-[[nodiscard]] VkImageType ConvertImageType(const ImageType type) {
+[[nodiscard]] VkImageType ConvertImageType(const ImageInfo& info) {
+    const type = info.type;
     switch (type) {
     case ImageType::e1D:
         return VK_IMAGE_TYPE_1D;
@@ -162,7 +163,7 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
         .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
         .pNext = nullptr,
         .flags = flags,
-        .imageType = ConvertImageType(info.type),
+        .imageType = ConvertImageType(info),
         .format = format_info.format,
         .extent{
             .width = info.size.width >> samples_x,
