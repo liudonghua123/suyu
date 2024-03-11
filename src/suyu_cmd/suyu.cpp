@@ -23,6 +23,8 @@
 #include "core/core_timing.h"
 #include "core/cpu_manager.h"
 #include "core/crypto/key_manager.h"
+#include "core/file_sys/content_archive.h"
+#include "core/file_sys/nca_metadata.h"
 #include "core/file_sys/registered_cache.h"
 #include "core/file_sys/vfs/vfs_real.h"
 #include "core/hle/service/am/applet_manager.h"
@@ -76,6 +78,7 @@ static void PrintHelp(const char* argv0) {
                  "-m, --multiplayer=nick:password@address:port"
                  " Nickname, password, address and port for multiplayer\n"
                  "-p, --program         Pass following string as arguments to executable\n"
+                 "-q, --qlaunch         Start in Home Menu, requires firmware >= 17.0.0\n"
                  "-u, --user            Select a specific user profile from 0 to 7\n"
                  "-v, --version         Output version information and exit\n";
 }
@@ -212,6 +215,7 @@ int main(int argc, char** argv) {
 
     bool use_multiplayer = false;
     bool fullscreen = false;
+    bool qlaunch = false;
     std::string nickname{};
     std::string password{};
     std::string address{};
@@ -225,6 +229,7 @@ int main(int argc, char** argv) {
         {"game", required_argument, 0, 'g'},
         {"multiplayer", required_argument, 0, 'm'},
         {"program", optional_argument, 0, 'p'},
+        {"qlaunch", no_argument, 0, 'q'},
         {"user", required_argument, 0, 'u'},
         {"version", no_argument, 0, 'v'},
         {0, 0, 0, 0},
@@ -232,7 +237,7 @@ int main(int argc, char** argv) {
     };
 
     while (optind < argc) {
-        int arg = getopt_long(argc, argv, "g:fhvp::c:u:", long_options, &option_index);
+        int arg = getopt_long(argc, argv, "g:fhvpq::c:u:", long_options, &option_index);
         if (arg != -1) {
             switch (static_cast<char>(arg)) {
             case 'c':
@@ -287,6 +292,9 @@ int main(int argc, char** argv) {
                 program_args = argv[optind];
                 ++optind;
                 break;
+            case 'q':
+                qlaunch = true;
+                break;
             case 'u':
                 selected_user = atoi(optarg);
                 break;
@@ -331,7 +339,7 @@ int main(int argc, char** argv) {
 
     Common::ConfigureNvidiaEnvironmentFlags();
 
-    if (filepath.empty()) {
+    if (filepath.empty() && !qlaunch) {
         LOG_CRITICAL(Frontend, "Failed to load ROM: No ROM specified");
         return -1;
     }
@@ -367,9 +375,27 @@ int main(int argc, char** argv) {
     system.GetFileSystemController().CreateFactories(*system.GetFilesystem());
     system.GetUserChannel().clear();
 
-    Service::AM::FrontendAppletParameters load_parameters{
-        .applet_id = Service::AM::AppletId::Application,
-    };
+    Service::AM::FrontendAppletParameters load_parameters{};
+    if (qlaunch) {
+        // code below based off of suyu/main.cpp : GMainWindow::OnHomeMenu()
+        constexpr u64 QLaunchID = static_cast<u64>(Service::AM::AppletProgramId::QLaunch);
+        load_parameters.applet_id = Service::AM::AppletId::QLaunch;
+        auto sysnand = system.GetFileSystemController().GetSystemNANDContents();
+        if (!sysnand) {
+            LOG_CRITICAL(Frontend, "Failed to load QLaunch: Firmware not installed.");
+            return -1;
+        }
+
+        auto qlaunch_applet_nca = sysnand->GetEntry(QLaunchID, FileSys::ContentRecordType::Program);
+        if (!qlaunch_applet_nca) {
+            LOG_CRITICAL(Frontend, "Failed to load QLaunch: applet cannot be found.");
+            return -1;
+        }
+        filepath = qlaunch_applet_nca->GetFullPath();
+
+    } else {
+        load_parameters.applet_id = Service::AM::AppletId::Application;
+    }
     const Core::SystemResultStatus load_result{system.Load(*emu_window, filepath, load_parameters)};
 
     switch (load_result) {
