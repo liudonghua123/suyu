@@ -146,8 +146,8 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
 }
 
 [[nodiscard]] VkImageCreateInfo MakeImageCreateInfo(const Device& device, const ImageInfo& info) {
-    const is_2d = Is2D(info);
-    const is_3d = Is3D(info);
+    const bool is_2d = Is2D(info);
+    const bool is_3d = Is3D(info);
     const auto format_info =
         MaxwellToVK::SurfaceFormat(device, FormatType::Optimal, false, info.format);
     VkImageCreateFlags flags{};
@@ -184,7 +184,7 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
 
 [[nodiscard]] vk::Image MakeImage(const Device& device, const MemoryAllocator& allocator,
                                   const ImageInfo& info, std::span<const VkFormat> view_formats) {
-    const is_buffer = IsBuffer(info);
+    const bool is_buffer = IsBuffer(info);
     if (is_buffer) {
         return vk::Image{};
     }
@@ -1579,7 +1579,7 @@ bool Image::IsRescaled() const noexcept {
 }
 
 bool Image::ScaleUp(bool ignore) {
-    const is_linear = IsLinear(info);
+    const bool is_linear = IsLinear(info);
     const auto& resolution = runtime->resolution;
     if (!resolution.active) {
         return false;
@@ -1617,7 +1617,7 @@ bool Image::ScaleUp(bool ignore) {
 }
 
 bool Image::ScaleDown(bool ignore) {
-    const is_linear = IsLinear(info);
+    const bool is_linear = IsLinear(info);
     const auto& resolution = runtime->resolution;
     if (!resolution.active) {
         return false;
