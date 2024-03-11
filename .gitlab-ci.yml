@@ -4,9 +4,7 @@ variables:
 stages:
   - format
   - build
-  - build-mac
   - android
-  - build-msvc
 
 clang-format:
   stage: format
