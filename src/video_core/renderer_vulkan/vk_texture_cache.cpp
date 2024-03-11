@@ -43,14 +43,12 @@ namespace Vulkan {
     using VideoCore::Surface::SurfaceType;
 
     namespace {
-        constexpr VkBorderColor
-
-        ConvertBorderColor(const std::array<float, 4> &color) {
-            if (color == std::array < float, 4 > {0, 0, 0, 0}) {
+        constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
+            if (color == std::array<float, 4>{0, 0, 0, 0}) {
                 return VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
-            } else if (color == std::array < float, 4 > {0, 0, 0, 1}) {
+            } else if (color == std::array<float, 4>{0, 0, 0, 1}) {
                 return VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK;
-            } else if (color == std::array < float, 4 > {1, 1, 1, 1}) {
+            } else if (color == std::array<float, 4>{1, 1, 1, 1}) {
                 return VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
             }
             if (color[0] + color[1] + color[2] > 1.35f) {
@@ -63,27 +61,27 @@ namespace Vulkan {
             }
         }
 
-        [[nodiscard]] bool CheckImageType(const ImageInfo &info, const ImageType type) {
+        [[nodiscard]] bool CheckImageType(const ImageInfo& info, const ImageType type) {
             return (info.type == type);
         }
 
-        [[nodiscard]] bool Is1D(const ImageInfo &info) {
+        [[nodiscard]] bool Is1D(const ImageInfo& info) {
             return CheckImageType(info, ImageType::e1D);
         }
 
-        [[nodiscard]] bool Is2D(const ImageInfo &info) {
+        [[nodiscard]] bool Is2D(const ImageInfo& info) {
             return CheckImageType(info, ImageType::e2D);
         }
 
-        [[nodiscard]] bool Is3D(const ImageInfo &info) {
+        [[nodiscard]] bool Is3D(const ImageInfo& info) {
             return CheckImageType(info, ImageType::e3D);
         }
 
-        [[nodiscard]] bool IsLinear(const ImageInfo &info) {
+        [[nodiscard]] bool IsLinear(const ImageInfo& info) {
             return CheckImageType(info, ImageType::Linear);
         }
 
-        [[nodiscard]] bool IsBuffer(const ImageInfo &info) {
+        [[nodiscard]] bool IsBuffer(const ImageInfo& info) {
             return CheckImageType(info, ImageType::Buffer);
         }
 
@@ -121,7 +119,7 @@ namespace Vulkan {
             }
         }
 
-        [[nodiscard]] VkImageUsageFlags ImageUsageFlags(const MaxwellToVK::FormatInfo &info,
+        [[nodiscard]] VkImageUsageFlags ImageUsageFlags(const MaxwellToVK::FormatInfo& info,
                                                         PixelFormat format) {
             VkImageUsageFlags usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
                                       VK_IMAGE_USAGE_SAMPLED_BIT;
@@ -146,14 +144,14 @@ namespace Vulkan {
             return usage;
         }
 
-        [[nodiscard]] VkImageCreateInfo MakeImageCreateInfo(const Device &device, const ImageInfo &info) {
+        [[nodiscard]] VkImageCreateInfo MakeImageCreateInfo(const Device& device, const ImageInfo& info) {
             const bool is_2d = Is2D(info);
-            const bool is_3d = Is3d(info);
+            const bool is_3d = Is3D(info);
             const auto format_info =
                     MaxwellToVK::SurfaceFormat(device, FormatType::Optimal, false, info.format);
             VkImageCreateFlags flags{};
-            if (is_2d && info.resources.layers >= 6 &&
-                info.size.width == info.size.height && !device.HasBrokenCubeImageCompatibility()) {
+            if (is_2d && info.resources.layers >= 6 && info.size.width == info.size.height &&
+                !device.HasBrokenCubeImageCompatibility()) {
                 flags |= VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
             }
 
@@ -188,8 +186,8 @@ namespace Vulkan {
             };
         }
 
-        [[nodiscard]] vk::Image MakeImage(const Device &device, const MemoryAllocator &allocator,
-                                          const ImageInfo &info, std::span<const VkFormat> view_formats) {
+        [[nodiscard]] vk::Image MakeImage(const Device& device, const MemoryAllocator& allocator,
+                                          const ImageInfo& info, std::span<const VkFormat> view_formats) {
             const bool is_buffer = IsBuffer(info);
             if (is_buffer) {
                 return vk::Image{};
@@ -210,10 +208,9 @@ namespace Vulkan {
             return allocator.CreateImage(image_ci);
         }
 
-        [[nodiscard]] vk::ImageView MakeStorageView(const vk::Device &device, u32 level, VkImage image,
+        [[nodiscard]] vk::ImageView MakeStorageView(const vk::Device& device, u32 level, VkImage image,
                                                     VkFormat format) {
-            static constexpr VkImageViewUsageCreateInfo
-            storage_image_view_usage_create_info{
+            static constexpr VkImageViewUsageCreateInfo storage_image_view_usage_create_info{
                     .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO,
                     .pNext = nullptr,
                     .usage = VK_IMAGE_USAGE_STORAGE_BIT,
@@ -257,7 +254,7 @@ namespace Vulkan {
             }
         }
 
-        [[nodiscard]] VkImageAspectFlags ImageViewAspectMask(const VideoCommon::ImageViewInfo &info) {
+        [[nodiscard]] VkImageAspectFlags ImageViewAspectMask(const VideoCommon::ImageViewInfo& info) {
             if (info.IsRenderTarget()) {
                 return ImageAspectMask(info.format);
             }
@@ -378,42 +375,27 @@ namespace Vulkan {
             };
         }
 
-        [[nodiscard]] VkImageCopy MakeImageCopy(const VideoCommon::ImageCopy &copy,
-                                                VkImageAspectFlags aspect_mask)
-
-        noexcept {
-        return VkImageCopy {
-        .
-        srcSubresource = MakeImageSubresourceLayers(copy.src_subresource, aspect_mask),
-        .
-        srcOffset = MakeOffset3D(copy.src_offset),
-        .
-        dstSubresource = MakeImageSubresourceLayers(copy.dst_subresource, aspect_mask),
-        .
-        dstOffset = MakeOffset3D(copy.dst_offset),
-        .
-        extent = MakeExtent3D(copy.extent),
+        [[nodiscard]] VkImageCopy MakeImageCopy(const VideoCommon::ImageCopy& copy,
+                                                VkImageAspectFlags aspect_mask) noexcept {
+        return VkImageCopy{
+        .srcSubresource = MakeImageSubresourceLayers(copy.src_subresource, aspect_mask),
+        .srcOffset = MakeOffset3D(copy.src_offset),
+        .dstSubresource = MakeImageSubresourceLayers(copy.dst_subresource, aspect_mask),
+        .dstOffset = MakeOffset3D(copy.dst_offset),
+        .extent = MakeExtent3D(copy.extent),
     };
 }
 
-[[nodiscard]] VkBufferImageCopy MakeBufferImageCopy(const VideoCommon::ImageCopy &copy, bool is_src,
-                                                    VkImageAspectFlags aspect_mask)
-
-noexcept {
+[[nodiscard]] VkBufferImageCopy MakeBufferImageCopy(const VideoCommon::ImageCopy& copy, bool is_src,
+                                                    VkImageAspectFlags aspect_mask) noexcept {
 return VkBufferImageCopy{
-.
-bufferOffset = 0,
-.
-bufferRowLength = 0,
-.
-bufferImageHeight = 0,
-.
-imageSubresource = MakeImageSubresourceLayers(
+.bufferOffset = 0,
+.bufferRowLength = 0,
+.bufferImageHeight = 0,
+.imageSubresource = MakeImageSubresourceLayers(
         is_src ? copy.src_subresource : copy.dst_subresource, aspect_mask),
-.
-imageOffset = MakeOffset3D(is_src ? copy.src_offset : copy.dst_offset),
-.
-imageExtent = MakeExtent3D(copy.extent),
+.imageOffset = MakeOffset3D(is_src ? copy.src_offset : copy.dst_offset),
+.imageExtent = MakeExtent3D(copy.extent),
 };
 }
 
@@ -421,7 +403,7 @@ imageExtent = MakeExtent3D(copy.extent),
 TransformBufferCopies(std::span<const VideoCommon::BufferCopy> copies, size_t buffer_offset) {
     boost::container::small_vector<VkBufferCopy, 16> result(copies.size());
     std::ranges::transform(
-            copies, result.begin(), [buffer_offset](const VideoCommon::BufferCopy &copy) {
+            copies, result.begin(), [buffer_offset](const VideoCommon::BufferCopy& copy) {
                 return VkBufferCopy{
                         .srcOffset = static_cast<VkDeviceSize>(copy.src_offset + buffer_offset),
                         .dstOffset = static_cast<VkDeviceSize>(copy.dst_offset),
@@ -434,7 +416,7 @@ TransformBufferCopies(std::span<const VideoCommon::BufferCopy> copies, size_t bu
 [[nodiscard]] boost::container::small_vector<VkBufferImageCopy, 16> TransformBufferImageCopies(
         std::span<const BufferImageCopy> copies, size_t buffer_offset, VkImageAspectFlags aspect_mask) {
     struct Maker {
-        VkBufferImageCopy operator()(const BufferImageCopy &copy) const {
+        VkBufferImageCopy operator()(const BufferImageCopy& copy) const {
             return VkBufferImageCopy{
                     .bufferOffset = copy.buffer_offset + buffer_offset,
                     .bufferRowLength = copy.buffer_row_length,
@@ -460,7 +442,6 @@ TransformBufferCopies(std::span<const VideoCommon::BufferCopy> copies, size_t bu
                             },
             };
         }
-
         size_t buffer_offset;
         VkImageAspectFlags aspect_mask;
     };
@@ -479,7 +460,7 @@ TransformBufferCopies(std::span<const VideoCommon::BufferCopy> copies, size_t bu
 }
 
 [[nodiscard]] VkImageSubresourceRange MakeSubresourceRange(VkImageAspectFlags aspect_mask,
-                                                           const SubresourceRange &range) {
+                                                           const SubresourceRange& range) {
     return VkImageSubresourceRange{
             .aspectMask = aspect_mask,
             .baseMipLevel = static_cast<u32>(range.base.level),
@@ -489,7 +470,7 @@ TransformBufferCopies(std::span<const VideoCommon::BufferCopy> copies, size_t bu
     };
 }
 
-[[nodiscard]] VkImageSubresourceRange MakeSubresourceRange(const ImageView *image_view) {
+[[nodiscard]] VkImageSubresourceRange MakeSubresourceRange(const ImageView* image_view) {
     SubresourceRange range = image_view->range;
     if (True(image_view->flags & VideoCommon::ImageViewFlagBits::Slice)) {
         // Slice image views always affect a single layer, but their subresource range corresponds
@@ -500,7 +481,7 @@ TransformBufferCopies(std::span<const VideoCommon::BufferCopy> copies, size_t bu
     return MakeSubresourceRange(ImageAspectMask(image_view->format), range);
 }
 
-[[nodiscard]] VkImageSubresourceLayers MakeSubresourceLayers(const ImageView *image_view) {
+[[nodiscard]] VkImageSubresourceLayers MakeSubresourceLayers(const ImageView* image_view) {
     return VkImageSubresourceLayers{
             .aspectMask = ImageAspectMask(image_view->format),
             .mipLevel = static_cast<u32>(image_view->range.base.level),
@@ -558,14 +539,12 @@ TransformBufferCopies(std::span<const VideoCommon::BufferCopy> copies, size_t bu
 void CopyBufferToImage(vk::CommandBuffer cmdbuf, VkBuffer src_buffer, VkImage image,
                        VkImageAspectFlags aspect_mask, bool is_initialized,
                        std::span<const VkBufferImageCopy> copies) {
-    static constexpr VkAccessFlags
-    WRITE_ACCESS_FLAGS =
-            VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-    static constexpr VkAccessFlags
-    READ_ACCESS_FLAGS = VK_ACCESS_SHADER_READ_BIT |
-                        VK_ACCESS_COLOR_ATTACHMENT_READ_BIT |
-                        VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+    static constexpr VkAccessFlags WRITE_ACCESS_FLAGS =
+                                           VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                                           VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+    static constexpr VkAccessFlags READ_ACCESS_FLAGS = VK_ACCESS_SHADER_READ_BIT |
+                                                       VK_ACCESS_COLOR_ATTACHMENT_READ_BIT |
+                                                       VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
     const VkImageMemoryBarrier read_barrier{
             .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
             .pNext = nullptr,
@@ -610,9 +589,9 @@ void CopyBufferToImage(vk::CommandBuffer cmdbuf, VkBuffer src_buffer, VkImage im
                            write_barrier);
 }
 
-[[nodiscard]] VkImageBlit MakeImageBlit(const Region2D &dst_region, const Region2D &src_region,
-                                        const VkImageSubresourceLayers &dst_layers,
-                                        const VkImageSubresourceLayers &src_layers) {
+[[nodiscard]] VkImageBlit MakeImageBlit(const Region2D& dst_region, const Region2D& src_region,
+                                        const VkImageSubresourceLayers& dst_layers,
+                                        const VkImageSubresourceLayers& src_layers) {
     return VkImageBlit{
             .srcSubresource = src_layers,
             .srcOffsets =
@@ -645,10 +624,10 @@ void CopyBufferToImage(vk::CommandBuffer cmdbuf, VkBuffer src_buffer, VkImage im
     };
 }
 
-[[nodiscard]] VkImageResolve MakeImageResolve(const Region2D &dst_region,
-                                              const Region2D &src_region,
-                                              const VkImageSubresourceLayers &dst_layers,
-                                              const VkImageSubresourceLayers &src_layers) {
+[[nodiscard]] VkImageResolve MakeImageResolve(const Region2D& dst_region,
+                                              const Region2D& src_region,
+                                              const VkImageSubresourceLayers& dst_layers,
+                                              const VkImageSubresourceLayers& src_layers) {
     return VkImageResolve{
             .srcSubresource = src_layers,
             .srcOffset =
@@ -673,7 +652,7 @@ void CopyBufferToImage(vk::CommandBuffer cmdbuf, VkBuffer src_buffer, VkImage im
     };
 }
 
-void TryTransformSwizzleIfNeeded(PixelFormat format, std::array<SwizzleSource, 4> &swizzle,
+void TryTransformSwizzleIfNeeded(PixelFormat format, std::array<SwizzleSource, 4>& swizzle,
                                  bool emulate_bgr565, bool emulate_a4b4g4r4) {
     switch (format) {
         case PixelFormat::A1B5G5R5_UNORM:
@@ -706,16 +685,14 @@ struct RangedBarrierRange {
     u32 min_layer = std::numeric_limits<u32>::max();
     u32 max_layer = std::numeric_limits<u32>::min();
 
-    void AddLayers(const VkImageSubresourceLayers &layers) {
+    void AddLayers(const VkImageSubresourceLayers& layers) {
         min_mip = std::min(min_mip, layers.mipLevel);
         max_mip = std::max(max_mip, layers.mipLevel + 1);
         min_layer = std::min(min_layer, layers.baseArrayLayer);
         max_layer = std::max(max_layer, layers.baseArrayLayer + layers.layerCount);
     }
 
-    VkImageSubresourceRange SubresourceRange(VkImageAspectFlags aspect_mask) const
-
-    noexcept {
+    VkImageSubresourceRange SubresourceRange(VkImageAspectFlags aspect_mask) const noexcept {
         return VkImageSubresourceRange{
                 .aspectMask = aspect_mask,
                 .baseMipLevel = min_mip,
@@ -749,8 +726,8 @@ struct RangedBarrierRange {
     return VK_FORMAT_R32_UINT;
 }
 
-void BlitScale(Scheduler &scheduler, VkImage src_image, VkImage dst_image, const ImageInfo &info,
-               VkImageAspectFlags aspect_mask, const Settings::ResolutionScalingInfo &resolution,
+void BlitScale(Scheduler& scheduler, VkImage src_image, VkImage dst_image, const ImageInfo& info,
+               VkImageAspectFlags aspect_mask, const Settings::ResolutionScalingInfo& resolution,
                bool up_scaling = true) {
     const bool is_2d = Is2D(info);
     const auto resources = info.resources;
@@ -887,16 +864,15 @@ void BlitScale(Scheduler &scheduler, VkImage src_image, VkImage dst_image, const
                                0, nullptr, nullptr, write_barriers);
     });
 }
-
 } // Anonymous namespace
 
-TextureCacheRuntime::TextureCacheRuntime(const Device &device_, Scheduler &scheduler_,
-                                         MemoryAllocator &memory_allocator_,
-                                         StagingBufferPool &staging_buffer_pool_,
-                                         BlitImageHelper &blit_image_helper_,
-                                         RenderPassCache &render_pass_cache_,
-                                         DescriptorPool &descriptor_pool,
-                                         ComputePassDescriptorQueue &compute_pass_descriptor_queue)
+TextureCacheRuntime::TextureCacheRuntime(const Device& device_, Scheduler& scheduler_,
+                                         MemoryAllocator& memory_allocator_,
+                                         StagingBufferPool& staging_buffer_pool_,
+                                         BlitImageHelper& blit_image_helper_,
+                                         RenderPassCache& render_pass_cache_,
+                                         DescriptorPool& descriptor_pool,
+                                         ComputePassDescriptorQueue& compute_pass_descriptor_queue)
         : device{device_}, scheduler{scheduler_}, memory_allocator{memory_allocator_},
           staging_buffer_pool{staging_buffer_pool_}, blit_image_helper{blit_image_helper_},
           render_pass_cache{render_pass_cache_}, resolution{Settings::values.resolution_info} {
@@ -939,11 +915,11 @@ StagingBufferRef TextureCacheRuntime::DownloadStagingBuffer(size_t size, bool de
     return staging_buffer_pool.Request(size, MemoryUsage::Download, deferred);
 }
 
-void TextureCacheRuntime::FreeDeferredStagingBuffer(StagingBufferRef &ref) {
+void TextureCacheRuntime::FreeDeferredStagingBuffer(StagingBufferRef& ref) {
     staging_buffer_pool.FreeDeferred(ref);
 }
 
-bool TextureCacheRuntime::ShouldReinterpret(Image &dst, Image &src) {
+bool TextureCacheRuntime::ShouldReinterpret(Image& dst, Image& src) {
     if (VideoCore::Surface::GetFormatType(dst.info.format) ==
         VideoCore::Surface::SurfaceType::DepthStencil &&
         !device.IsExtShaderStencilExportSupported()) {
@@ -962,10 +938,9 @@ VkBuffer TextureCacheRuntime::GetTemporaryBuffer(size_t needed_size) {
         return *buffers[level];
     }
     const auto new_size = Common::NextPow2(needed_size);
-    static constexpr VkBufferUsageFlags
-    flags =
-            VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-            VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
+    static constexpr VkBufferUsageFlags flags =
+                                                VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                                                VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
     const VkBufferCreateInfo temp_ci = {
             .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
             .pNext = nullptr,
@@ -984,7 +959,7 @@ void TextureCacheRuntime::BarrierFeedbackLoop() {
     scheduler.RequestOutsideRenderPassOperationContext();
 }
 
-void TextureCacheRuntime::ReinterpretImage(Image &dst, Image &src,
+void TextureCacheRuntime::ReinterpretImage(Image& dst, Image& src,
                                            std::span<const VideoCommon::ImageCopy> copies) {
     boost::container::small_vector<VkBufferImageCopy, 16> vk_in_copies(copies.size());
     boost::container::small_vector<VkBufferImageCopy, 16> vk_out_copies(copies.size());
@@ -994,18 +969,18 @@ void TextureCacheRuntime::ReinterpretImage(Image &dst, Image &src,
     const auto bpp_in = BytesPerBlock(src.info.format) / DefaultBlockWidth(src.info.format);
     const auto bpp_out = BytesPerBlock(dst.info.format) / DefaultBlockWidth(dst.info.format);
     std::ranges::transform(copies, vk_in_copies.begin(),
-                           [src_aspect_mask, bpp_in, bpp_out](const auto &copy) {
+                           [src_aspect_mask, bpp_in, bpp_out](const auto& copy) {
                                auto copy2 = copy;
                                copy2.src_offset.x = (bpp_out * copy.src_offset.x) / bpp_in;
                                copy2.extent.width = (bpp_out * copy.extent.width) / bpp_in;
                                return MakeBufferImageCopy(copy2, true, src_aspect_mask);
                            });
-    std::ranges::transform(copies, vk_out_copies.begin(), [dst_aspect_mask](const auto &copy) {
+    std::ranges::transform(copies, vk_out_copies.begin(), [dst_aspect_mask](const auto& copy) {
         return MakeBufferImageCopy(copy, false, dst_aspect_mask);
     });
     const u32 img_bpp = BytesPerBlock(dst.info.format);
     size_t total_size = 0;
-    for (const auto &copy: copies) {
+    for (const auto& copy : copies) {
         total_size += copy.extent.width * copy.extent.height * copy.extent.depth * img_bpp;
     }
     const VkBuffer copy_buffer = GetTemporaryBuffer(total_size);
@@ -1016,26 +991,24 @@ void TextureCacheRuntime::ReinterpretImage(Image &dst, Image &src,
                              vk_in_copies, vk_out_copies](vk::CommandBuffer cmdbuf) {
         RangedBarrierRange dst_range;
         RangedBarrierRange src_range;
-        for (const VkBufferImageCopy &copy: vk_in_copies) {
+        for (const VkBufferImageCopy& copy : vk_in_copies) {
             src_range.AddLayers(copy.imageSubresource);
         }
-        for (const VkBufferImageCopy &copy: vk_out_copies) {
+        for (const VkBufferImageCopy& copy : vk_out_copies) {
             dst_range.AddLayers(copy.imageSubresource);
         }
-        static constexpr VkMemoryBarrier
-        READ_BARRIER{
-                .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
-                .pNext = nullptr,
-                .srcAccessMask = VK_ACCESS_MEMORY_WRITE_BIT,
-                .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT,
-        };
-        static constexpr VkMemoryBarrier
-        WRITE_BARRIER{
-                .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
-                .pNext = nullptr,
-                .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
-                .dstAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT,
-        };
+        static constexpr VkMemoryBarrier READ_BARRIER{
+            .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+            .pNext = nullptr,
+            .srcAccessMask = VK_ACCESS_MEMORY_WRITE_BIT,
+            .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT,
+    };
+        static constexpr VkMemoryBarrier WRITE_BARRIER{
+            .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+            .pNext = nullptr,
+            .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+            .dstAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT,
+    };
         const std::array pre_barriers{
                 VkImageMemoryBarrier{
                         .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
@@ -1117,8 +1090,8 @@ void TextureCacheRuntime::ReinterpretImage(Image &dst, Image &src,
     });
 }
 
-void TextureCacheRuntime::BlitImage(Framebuffer *dst_framebuffer, ImageView &dst, ImageView &src,
-                                    const Region2D &dst_region, const Region2D &src_region,
+void TextureCacheRuntime::BlitImage(Framebuffer* dst_framebuffer, ImageView& dst, ImageView& src,
+                                    const Region2D& dst_region, const Region2D& src_region,
                                     Tegra::Engines::Fermi2D::Filter filter,
                                     Tegra::Engines::Fermi2D::Operation operation) {
     const VkImageAspectFlags aspect_mask = ImageAspectMask(src.format);
@@ -1246,7 +1219,7 @@ void TextureCacheRuntime::BlitImage(Framebuffer *dst_framebuffer, ImageView &dst
     });
 }
 
-void TextureCacheRuntime::ConvertImage(Framebuffer *dst, ImageView &dst_view, ImageView &src_view) {
+void TextureCacheRuntime::ConvertImage(Framebuffer* dst, ImageView& dst_view, ImageView& src_view) {
     switch (dst_view.format) {
         case PixelFormat::R16_UNORM:
             if (src_view.format == PixelFormat::D16_UNORM) {
@@ -1312,13 +1285,13 @@ void TextureCacheRuntime::ConvertImage(Framebuffer *dst, ImageView &dst_view, Im
     UNIMPLEMENTED_MSG("Unimplemented format copy from {} to {}", src_view.format, dst_view.format);
 }
 
-void TextureCacheRuntime::CopyImage(Image &dst, Image &src,
+void TextureCacheRuntime::CopyImage(Image& dst, Image& src,
                                     std::span<const VideoCommon::ImageCopy> copies) {
     boost::container::small_vector<VkImageCopy, 16> vk_copies(copies.size());
     const VkImageAspectFlags aspect_mask = dst.AspectMask();
     ASSERT(aspect_mask == src.AspectMask());
 
-    std::ranges::transform(copies, vk_copies.begin(), [aspect_mask](const auto &copy) {
+    std::ranges::transform(copies, vk_copies.begin(), [aspect_mask](const auto& copy) {
         return MakeImageCopy(copy, aspect_mask);
     });
     const VkImage dst_image = dst.Handle();
@@ -1327,7 +1300,7 @@ void TextureCacheRuntime::CopyImage(Image &dst, Image &src,
     scheduler.Record([dst_image, src_image, aspect_mask, vk_copies](vk::CommandBuffer cmdbuf) {
         RangedBarrierRange dst_range;
         RangedBarrierRange src_range;
-        for (const VkImageCopy &copy: vk_copies) {
+        for (const VkImageCopy& copy : vk_copies) {
             dst_range.AddLayers(copy.dstSubresource);
             src_range.AddLayers(copy.srcSubresource);
         }
@@ -1401,7 +1374,7 @@ void TextureCacheRuntime::CopyImage(Image &dst, Image &src,
     });
 }
 
-void TextureCacheRuntime::CopyImageMSAA(Image &dst, Image &src,
+void TextureCacheRuntime::CopyImageMSAA(Image& dst, Image& src,
                                         std::span<const VideoCommon::ImageCopy> copies) {
     const bool msaa_to_non_msaa = src.info.num_samples > 1 && dst.info.num_samples == 1;
     if (msaa_copy_pass) {
@@ -1424,7 +1397,7 @@ bool TextureCacheRuntime::CanReportMemoryUsage() const {
 
 void TextureCacheRuntime::TickFrame() {}
 
-Image::Image(TextureCacheRuntime &runtime_, const ImageInfo &info_, GPUVAddr gpu_addr_,
+Image::Image(TextureCacheRuntime& runtime_, const ImageInfo& info_, GPUVAddr gpu_addr_,
              VAddr cpu_addr_)
         : VideoCommon::ImageBase(info_, gpu_addr_, cpu_addr_), scheduler{&runtime_.scheduler},
           runtime{&runtime_}, original_image(MakeImage(runtime_.device, runtime_.memory_allocator, info,
@@ -1460,7 +1433,7 @@ Image::Image(TextureCacheRuntime &runtime_, const ImageInfo &info_, GPUVAddr gpu
     if (IsPixelFormatASTC(info.format) && !runtime->device.IsOptimalAstcSupported() &&
         Settings::values.astc_recompression.GetValue() ==
         Settings::AstcRecompression::Uncompressed) {
-        const auto &device = runtime->device.GetLogical();
+        const auto& device = runtime->device.GetLogical();
         for (s32 level = 0; level < info.resources.levels; ++level) {
             storage_image_views[level] =
                     MakeStorageView(device, level, *original_image, VK_FORMAT_A8B8G8R8_UNORM_PACK32);
@@ -1468,7 +1441,7 @@ Image::Image(TextureCacheRuntime &runtime_, const ImageInfo &info_, GPUVAddr gpu
     }
 }
 
-Image::Image(const VideoCommon::NullImageParams &params) : VideoCommon::ImageBase{params} {}
+Image::Image(const VideoCommon::NullImageParams& params) : VideoCommon::ImageBase{params} {}
 
 Image::~Image() = default;
 
@@ -1494,7 +1467,7 @@ void Image::UploadMemory(VkBuffer buffer, VkDeviceSize offset,
     }
 }
 
-void Image::UploadMemory(const StagingBufferRef &map, std::span<const BufferImageCopy> copies) {
+void Image::UploadMemory(const StagingBufferRef& map, std::span<const BufferImageCopy> copies) {
     UploadMemory(map.buffer, map.offset, copies);
 }
 
@@ -1509,7 +1482,7 @@ void Image::DownloadMemory(VkBuffer buffer, size_t offset,
     DownloadMemory(buffer_handles, buffer_offsets, copies);
 }
 
-void Image::DownloadMemory(std::span <VkBuffer> buffers_span, std::span <size_t> offsets_span,
+void Image::DownloadMemory(std::span<VkBuffer> buffers_span, std::span<size_t> offsets_span,
                            std::span<const VideoCommon::BufferImageCopy> copies) {
     const bool is_rescaled = True(flags & ImageFlagBits::Rescaled);
     if (is_rescaled) {
@@ -1584,7 +1557,7 @@ void Image::DownloadMemory(std::span <VkBuffer> buffers_span, std::span <size_t>
     }
 }
 
-void Image::DownloadMemory(const StagingBufferRef &map, std::span<const BufferImageCopy> copies) {
+void Image::DownloadMemory(const StagingBufferRef& map, std::span<const BufferImageCopy> copies) {
     std::array buffers{
             map.buffer,
     };
@@ -1594,30 +1567,23 @@ void Image::DownloadMemory(const StagingBufferRef &map, std::span<const BufferIm
     DownloadMemory(buffers, offsets, copies);
 }
 
-VkImageView Image::StorageImageView(s32 level)
-
-noexcept {
-auto &view = storage_image_views[level];
+VkImageView Image::StorageImageView(s32 level) noexcept {
+auto& view = storage_image_views[level];
 if (!view) {
 const auto format_info =
         MaxwellToVK::SurfaceFormat(runtime->device, FormatType::Optimal, true, info.format);
 view =
 MakeStorageView(runtime->device.GetLogical(), level, current_image, format_info.format);
 }
-return *
-view;
+return *view;
 }
 
-bool Image::IsRescaled() const
-
-noexcept {
-return
-True(flags
-& ImageFlagBits::Rescaled);
+bool Image::IsRescaled() const noexcept {
+return True(flags & ImageFlagBits::Rescaled);
 }
 
 bool Image::ScaleUp(bool ignore) {
-    const auto &resolution = runtime->resolution;
+    const auto& resolution = runtime->resolution;
     if (!resolution.active) {
         return false;
     }
@@ -1654,7 +1620,7 @@ bool Image::ScaleUp(bool ignore) {
 }
 
 bool Image::ScaleDown(bool ignore) {
-    const auto &resolution = runtime->resolution;
+    const auto& resolution = runtime->resolution;
     if (!resolution.active) {
         return false;
     }
@@ -1687,11 +1653,11 @@ bool Image::BlitScaleHelper(bool scale_up) {
                                        : Tegra::Engines::Fermi2D::Filter::Point;
 
     const bool is_2d = Is2D(info);
-    const auto &resolution = runtime->resolution;
+    const auto& resolution = runtime->resolution;
     const u32 scaled_width = resolution.ScaleUp(info.size.width);
     const u32 scaled_height = is_2d ? resolution.ScaleUp(info.size.height) : info.size.height;
-    std::unique_ptr <ImageView> &blit_view = scale_up ? scale_view : normal_view;
-    std::unique_ptr <Framebuffer> &blit_framebuffer =
+    std::unique_ptr<ImageView>& blit_view = scale_up ? scale_view : normal_view;
+    std::unique_ptr<Framebuffer>& blit_framebuffer =
             scale_up ? scale_framebuffer : normal_framebuffer;
     if (!blit_view) {
         const auto view_info = ImageViewInfo(ImageViewType::e2D, info.format);
@@ -1715,7 +1681,7 @@ bool Image::BlitScaleHelper(bool scale_up) {
             .height = std::max(scaled_height, info.size.height),
     };
 
-    auto *view_ptr = blit_view.get();
+    auto* view_ptr = blit_view.get();
     if (aspect_mask == VK_IMAGE_ASPECT_COLOR_BIT) {
         if (!blit_framebuffer) {
             blit_framebuffer =
@@ -1743,7 +1709,7 @@ bool Image::BlitScaleHelper(bool scale_up) {
 }
 
 bool Image::NeedsScaleHelper() const {
-    const auto &device = runtime->device;
+    const auto& device = runtime->device;
     const bool needs_msaa_helper = info.num_samples > 1 && device.CantBlitMSAA();
     if (needs_msaa_helper) {
         return true;
@@ -1756,8 +1722,8 @@ bool Image::NeedsScaleHelper() const {
     return needs_blit_helper;
 }
 
-ImageView::ImageView(TextureCacheRuntime &runtime, const VideoCommon::ImageViewInfo &info,
-                     ImageId image_id_, Image &image)
+ImageView::ImageView(TextureCacheRuntime& runtime, const VideoCommon::ImageViewInfo& info,
+                     ImageId image_id_, Image& image)
         : VideoCommon::ImageViewBase{info, image.info, image_id_, image.gpu_addr},
           device{&runtime.device}, image_handle{image.Handle()},
           samples(ConvertSampleCount(image.info.num_samples)) {
@@ -1799,7 +1765,7 @@ ImageView::ImageView(TextureCacheRuntime &runtime, const VideoCommon::ImageViewI
             },
             .subresourceRange = MakeSubresourceRange(aspect_mask, info.range),
     };
-    const auto create = [&](TextureType tex_type, std::optional <u32> num_layers) {
+    const auto create = [&](TextureType tex_type, std::optional<u32> num_layers) {
         VkImageViewCreateInfo ci{create_info};
         ci.viewType = ImageViewType(tex_type);
         if (num_layers) {
@@ -1840,18 +1806,18 @@ ImageView::ImageView(TextureCacheRuntime &runtime, const VideoCommon::ImageViewI
     }
 }
 
-ImageView::ImageView(TextureCacheRuntime &runtime, const VideoCommon::ImageViewInfo &info,
-                     ImageId image_id_, Image &image, const SlotVector <Image> &slot_imgs)
+ImageView::ImageView(TextureCacheRuntime& runtime, const VideoCommon::ImageViewInfo& info,
+                     ImageId image_id_, Image& image, const SlotVector<Image>& slot_imgs)
         : ImageView{runtime, info, image_id_, image} {
     slot_images = &slot_imgs;
 }
 
-ImageView::ImageView(TextureCacheRuntime &, const VideoCommon::ImageInfo &info,
-                     const VideoCommon::ImageViewInfo &view_info, GPUVAddr gpu_addr_)
+ImageView::ImageView(TextureCacheRuntime&, const VideoCommon::ImageInfo& info,
+                     const VideoCommon::ImageViewInfo& view_info, GPUVAddr gpu_addr_)
         : VideoCommon::ImageViewBase{info, view_info, gpu_addr_},
           buffer_size{VideoCommon::CalculateGuestSizeInBytes(info)} {}
 
-ImageView::ImageView(TextureCacheRuntime &runtime, const VideoCommon::NullImageViewParams &params)
+ImageView::ImageView(TextureCacheRuntime& runtime, const VideoCommon::NullImageViewParams& params)
         : VideoCommon::ImageViewBase{params}, device{&runtime.device} {
     if (device->HasNullDescriptor()) {
         return;
@@ -1877,7 +1843,7 @@ VkImageView ImageView::DepthView() {
     if (depth_view) {
         return *depth_view;
     }
-    const auto &info = MaxwellToVK::SurfaceFormat(*device, FormatType::Optimal, true, format);
+    const auto& info = MaxwellToVK::SurfaceFormat(*device, FormatType::Optimal, true, format);
     depth_view = MakeView(info.format, VK_IMAGE_ASPECT_DEPTH_BIT);
     return *depth_view;
 }
@@ -1889,7 +1855,7 @@ VkImageView ImageView::StencilView() {
     if (stencil_view) {
         return *stencil_view;
     }
-    const auto &info = MaxwellToVK::SurfaceFormat(*device, FormatType::Optimal, true, format);
+    const auto& info = MaxwellToVK::SurfaceFormat(*device, FormatType::Optimal, true, format);
     stencil_view = MakeView(info.format, VK_IMAGE_ASPECT_STENCIL_BIT);
     return *stencil_view;
 }
@@ -1918,8 +1884,8 @@ VkImageView ImageView::StorageView(Shader::TextureType texture_type,
     if (!storage_views) {
         storage_views = std::make_unique<StorageViews>();
     }
-    auto &views{is_signed ? storage_views->signeds : storage_views->unsigneds};
-    auto &view{views[static_cast<size_t>(texture_type)]};
+    auto& views{is_signed ? storage_views->signeds : storage_views->unsigneds};
+    auto& view{views[static_cast<size_t>(texture_type)]};
     if (view) {
         return *view;
     }
@@ -1927,18 +1893,13 @@ VkImageView ImageView::StorageView(Shader::TextureType texture_type,
     return *view;
 }
 
-bool ImageView::IsRescaled() const
-
-noexcept {
+bool ImageView::IsRescaled() const noexcept {
 if (!slot_images) {
 return false;
 }
-const auto &slots = *slot_images;
-const auto &src_image = slots[image_id];
-return src_image.
-
-IsRescaled();
-
+const auto& slots = *slot_images;
+const auto& src_image = slots[image_id];
+return src_image.IsRescaled();
 }
 
 vk::ImageView ImageView::MakeView(VkFormat vk_format, VkImageAspectFlags aspect_mask) {
@@ -1959,8 +1920,8 @@ vk::ImageView ImageView::MakeView(VkFormat vk_format, VkImageAspectFlags aspect_
                                                 });
 }
 
-Sampler::Sampler(TextureCacheRuntime &runtime, const Tegra::Texture::TSCEntry &tsc) {
-    const auto &device = runtime.device;
+Sampler::Sampler(TextureCacheRuntime& runtime, const Tegra::Texture::TSCEntry& tsc) {
+    const auto& device = runtime.device;
     const bool arbitrary_borders = runtime.device.IsExtCustomBorderColorSupported();
     const auto color = tsc.BorderColor();
 
@@ -1971,7 +1932,7 @@ Sampler::Sampler(TextureCacheRuntime &runtime, const Tegra::Texture::TSCEntry &t
             .customBorderColor = Common::BitCast<VkClearColorValue>(color),
             .format = VK_FORMAT_UNDEFINED,
     };
-    const void *pnext = nullptr;
+    const void* pnext = nullptr;
     if (arbitrary_borders) {
         pnext = &border_ci;
     }
@@ -2020,8 +1981,8 @@ Sampler::Sampler(TextureCacheRuntime &runtime, const Tegra::Texture::TSCEntry &t
     }
 }
 
-Framebuffer::Framebuffer(TextureCacheRuntime &runtime, std::span<ImageView *, NUM_RT> color_buffers,
-                         ImageView *depth_buffer, const VideoCommon::RenderTargets &key)
+Framebuffer::Framebuffer(TextureCacheRuntime& runtime, std::span<ImageView*, NUM_RT> color_buffers,
+                         ImageView* depth_buffer, const VideoCommon::RenderTargets& key)
         : render_area{VkExtent2D{
         .width = key.size.width,
         .height = key.size.height,
@@ -2032,29 +1993,29 @@ Framebuffer::Framebuffer(TextureCacheRuntime &runtime, std::span<ImageView *, NU
     }
 }
 
-Framebuffer::Framebuffer(TextureCacheRuntime &runtime, ImageView *color_buffer,
-                         ImageView *depth_buffer, VkExtent2D extent, bool is_rescaled_)
+Framebuffer::Framebuffer(TextureCacheRuntime& runtime, ImageView* color_buffer,
+                         ImageView* depth_buffer, VkExtent2D extent, bool is_rescaled_)
         : render_area{extent} {
-    std::array < ImageView * , NUM_RT > color_buffers{color_buffer};
+    std::array<ImageView*, NUM_RT> color_buffers{color_buffer};
     CreateFramebuffer(runtime, color_buffers, depth_buffer, is_rescaled_);
 }
 
 Framebuffer::~Framebuffer() = default;
 
-void Framebuffer::CreateFramebuffer(TextureCacheRuntime &runtime,
-                                    std::span<ImageView *, NUM_RT> color_buffers,
-                                    ImageView *depth_buffer, bool is_rescaled_) {
-    boost::container::small_vector < VkImageView, NUM_RT + 1 > attachments;
+void Framebuffer::CreateFramebuffer(TextureCacheRuntime& runtime,
+                                    std::span<ImageView*, NUM_RT> color_buffers,
+                                    ImageView* depth_buffer, bool is_rescaled_) {
+    boost::container::small_vector<VkImageView, NUM_RT + 1> attachments;
     RenderPassKey renderpass_key{};
     s32 num_layers = 1;
 
     is_rescaled = is_rescaled_;
-    const auto &resolution = runtime.resolution;
+    const auto& resolution = runtime.resolution;
 
     u32 width = std::numeric_limits<u32>::max();
     u32 height = std::numeric_limits<u32>::max();
     for (size_t index = 0; index < NUM_RT; ++index) {
-        const ImageView *const color_buffer = color_buffers[index];
+        const ImageView* const color_buffer = color_buffers[index];
         if (!color_buffer) {
             renderpass_key.color_formats[index] = PixelFormat::Invalid;
             continue;
@@ -2107,13 +2068,12 @@ void Framebuffer::CreateFramebuffer(TextureCacheRuntime &runtime,
                                                                         .pAttachments = attachments.data(),
                                                                         .width = render_area.width,
                                                                         .height = render_area.height,
-                                                                        .layers = static_cast<u32>(std::max(num_layers,
-                                                                                                            1)),
+                                                                        .layers = static_cast<u32>(std::max(num_layers, 1)),
                                                                 });
 }
 
 void TextureCacheRuntime::AccelerateImageUpload(
-        Image &image, const StagingBufferRef &map,
+        Image& image, const StagingBufferRef& map,
         std::span<const VideoCommon::SwizzleParameters> swizzles) {
     if (IsPixelFormatASTC(image.info.format)) {
         return astc_decoder_pass->Assemble(image, map, swizzles);
@@ -2121,7 +2081,7 @@ void TextureCacheRuntime::AccelerateImageUpload(
     ASSERT(false);
 }
 
-void TextureCacheRuntime::TransitionImageLayout(Image &image) {
+void TextureCacheRuntime::TransitionImageLayout(Image& image) {
     if (!image.ExchangeInitialization()) {
         VkImageMemoryBarrier barrier{
                 .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
