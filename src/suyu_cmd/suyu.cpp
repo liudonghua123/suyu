@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <regex>
+#include <sstream>
 #include <string>
 #include <thread>
 
@@ -72,6 +73,8 @@ __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 static void PrintHelp(const char* argv0) {
     std::cout << "Usage: " << argv0
               << " [options] <filename>\n"
+                 "-l, --applet-params=\"u64,u32,s32,s32,s32,s32\" Parameters for launching an "
+                 "applet. if the second parameter is set, then it will launch the applet\n"
                  "-c, --config          Load the specified configuration file\n"
                  "-f, --fullscreen      Start in fullscreen mode\n"
                  "-g, --game            File path of the game to load\n"
@@ -79,7 +82,6 @@ static void PrintHelp(const char* argv0) {
                  "-m, --multiplayer=nick:password@address:port"
                  " Nickname, password, address and port for multiplayer\n"
                  "-p, --program         Pass following string as arguments to executable\n"
-                 "-q, --qlaunch         Start in Home Menu, requires firmware >= 17.0.0\n"
                  "-u, --user            Select a specific user profile from 0 to 7\n"
                  "-v, --version         Output version information and exit\n";
 }
@@ -216,7 +218,7 @@ int main(int argc, char** argv) {
 
     bool use_multiplayer = false;
     bool fullscreen = false;
-    u32 applet_id = static_cast<u32>(Service::AM::AppletId::None);
+    Service::AM::FrontendAppletParameters load_parameters{};
     std::string nickname{};
     std::string password{};
     std::string address{};
@@ -224,11 +226,11 @@ int main(int argc, char** argv) {
 
     static struct option long_options[] = {
         // clang-format off
-        {"applet", required_argument, 0, 'a'},
         {"config", required_argument, 0, 'c'},
         {"fullscreen", no_argument, 0, 'f'},
         {"help", no_argument, 0, 'h'},
         {"game", required_argument, 0, 'g'},
+        {"applet-params", required_argument, 0, 'l'},
         {"multiplayer", required_argument, 0, 'm'},
         {"program", optional_argument, 0, 'p'},
         {"user", required_argument, 0, 'u'},
@@ -238,14 +240,9 @@ int main(int argc, char** argv) {
     };
 
     while (optind < argc) {
-        int arg = getopt_long(argc, argv, "g:fhvp::c:u:a:", long_options, &option_index);
+        int arg = getopt_long(argc, argv, "g:fhvp::c:u:l:", long_options, &option_index);
         if (arg != -1) {
             switch (static_cast<char>(arg)) {
-            case 'a': {
-                const std::string str_arg(optarg);
-                applet_id = atoi(str_arg.c_str());
-                break;
-            }
             case 'c':
                 config_path = optarg;
                 break;
@@ -259,6 +256,23 @@ int main(int argc, char** argv) {
             case 'g': {
                 const std::string str_arg(optarg);
                 filepath = str_arg;
+                break;
+            }
+            case 'l': {
+                std::stringstream str_arg(optarg);
+                std::string sub;
+                std::getline(str_arg, sub, ',');
+                load_parameters.program_id = std::stoull(sub);
+                std::getline(str_arg, sub, ',');
+                load_parameters.applet_id = static_cast<Service::AM::AppletId>(std::stoul(sub));
+                std::getline(str_arg, sub, ',');
+                load_parameters.applet_type = static_cast<Service::AM::AppletType>(std::stoi(sub));
+                std::getline(str_arg, sub, ',');
+                load_parameters.launch_type = static_cast<Service::AM::LaunchType>(std::stoi(sub));
+                std::getline(str_arg, sub, ',');
+                load_parameters.program_index = std::stoi(sub);
+                std::getline(str_arg, sub, ',');
+                load_parameters.previous_program_index = std::stoi(sub);
                 break;
             }
             case 'm': {
@@ -342,7 +356,7 @@ int main(int argc, char** argv) {
 
     Common::ConfigureNvidiaEnvironmentFlags();
 
-    if (filepath.empty() && !applet_id) {
+    if (filepath.empty() && !(u32)load_parameters.applet_id) {
         LOG_CRITICAL(Frontend, "Failed to load ROM: No ROM specified");
         return -1;
     }
@@ -378,12 +392,10 @@ int main(int argc, char** argv) {
     system.GetFileSystemController().CreateFactories(*system.GetFilesystem());
     system.GetUserChannel().clear();
 
-    Service::AM::FrontendAppletParameters load_parameters{};
-    if (applet_id) {
+    if ((u32)load_parameters.applet_id) {
         // code below based off of suyu/main.cpp : GMainWindow::OnHomeMenu()
         // constexpr u64 QLaunchID = static_cast<u64>(Service::AM::AppletProgramId::QLaunch);
         // load_parameters.applet_id = Service::AM::AppletId::QLaunch;
-        load_parameters.applet_id = static_cast<Service::AM::AppletId>(applet_id);
         Service::AM::AppletProgramId applet_prog_id =
             Service::AM::AppletIdToProgramId(load_parameters.applet_id);
         auto sysnand = system.GetFileSystemController().GetSystemNANDContents();
