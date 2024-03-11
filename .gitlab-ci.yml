@@ -5,8 +5,8 @@ stages:
   - format
   - build
   - build-mac
-  - build-msvc
   - android
+  - build-msvc
 
 clang-format:
   stage: format
@@ -19,7 +19,7 @@ clang-format:
 
 build-linux:
   stage: build
-  image: suyuemu/cibuild:latest
+  image: suyuemu/cibuild:linux-x64
   resource_group: linux-ci
   variables:
     RELEASE_NAME: mainline
@@ -33,7 +33,7 @@ build-linux:
 
 build-mac:
   stage: build-mac
-  image: suyuemu/cibuild:latest
+  image: suyuemu/cibuild:linux-x64
   script:
     - git submodule update --init --depth 1 --recursive
     - mkdir -p build
@@ -76,5 +76,3 @@ android:
     name: "android"
     paths:
       - artifacts/*
-
-
