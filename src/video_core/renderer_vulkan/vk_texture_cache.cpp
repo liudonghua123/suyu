@@ -725,7 +725,7 @@ struct RangedBarrierRange {
 void BlitScale(Scheduler& scheduler, VkImage src_image, VkImage dst_image, const ImageInfo& info,
                VkImageAspectFlags aspect_mask, const Settings::ResolutionScalingInfo& resolution,
                bool up_scaling = true) {
-    const bool is_2d = is2D(info);
+    const bool is_2d = Is2D(info);
     const auto resources = info.resources;
     const VkExtent2D extent{
         .width = info.size.width,
@@ -1591,7 +1591,7 @@ bool Image::ScaleUp(bool ignore) {
     flags |= ImageFlagBits::Rescaled;
     has_scaled = true;
     if (!scaled_image) {
-        const bool is_2d = is2D(info);
+        const bool is_2d = Is2D(info);
         const u32 scaled_width = resolution.ScaleUp(info.size.width);
         const u32 scaled_height = is_2d ? resolution.ScaleUp(info.size.height) : info.size.height;
         auto scaled_info = info;
@@ -1650,7 +1650,7 @@ bool Image::BlitScaleHelper(bool scale_up) {
     const auto operation = is_bilinear ? Tegra::Engines::Fermi2D::Filter::Bilinear
                                        : Tegra::Engines::Fermi2D::Filter::Point;
 
-    const bool is_2d = is2D(info);
+    const bool is_2d = Is2D(info);
     const auto& resolution = runtime->resolution;
     const u32 scaled_width = resolution.ScaleUp(info.size.width);
     const u32 scaled_height = is_2d ? resolution.ScaleUp(info.size.height) : info.size.height;
