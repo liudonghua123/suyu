@@ -1566,8 +1566,8 @@ bool Image::ScaleUp(bool ignore) {
     if (True(flags & ImageFlagBits::Rescaled)) {
         return false;
     }
-    const bool is_linear = (info.type == ImageType::Linear)
-    ASSERT(!(is_linear));
+    const bool isLinear = (info.type == ImageType::Linear)
+    ASSERT(!(isLinear));
     flags |= ImageFlagBits::Rescaled;
     has_scaled = true;
     if (!scaled_image) {
@@ -1604,8 +1604,8 @@ bool Image::ScaleDown(bool ignore) {
     if (False(flags & ImageFlagBits::Rescaled)) {
         return false;
     }
-    const bool is_linear = (info.type == ImageType::Linear)
-    ASSERT(!(is_linear));
+    const bool isLinear = (info.type == ImageType::Linear)
+    ASSERT(!(isLinear));
     flags &= ~ImageFlagBits::Rescaled;
     current_image = *original_image;
     if (ignore) {
