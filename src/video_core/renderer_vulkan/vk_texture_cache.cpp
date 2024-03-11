@@ -86,7 +86,7 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
 }
 
 [[nodiscard]] VkImageType ConvertImageType(const ImageInfo& info) {
-    const type = info.type;
+    const ImageType type = info.type;
     switch (type) {
     case ImageType::e1D:
         return VK_IMAGE_TYPE_1D;
