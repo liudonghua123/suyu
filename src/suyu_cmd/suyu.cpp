@@ -82,8 +82,11 @@ static void PrintHelp(const char* argv0) {
                  "-p, --program         Pass following string as arguments to executable\n"
                  "-u, --user            Select a specific user profile from 0 to 7\n"
                  "-v, --version         Output version information and exit\n"
-                 "-l, --applet-params=\"program_id,applet_id,applet_type,launch_type,prog_index,prev_prog_index\"\n"
-                 "                      Parameters for launching an applet. If applet_id is not 0, applet will launch.\n";
+                 "-l, "
+                 "--applet-params=\"program_id,applet_id,applet_type,launch_type,prog_index,prev_"
+                 "prog_index\"\n"
+                 "                      Parameters for launching an applet. If applet_id is not 0, "
+                 "applet will launch.\n";
 }
 
 static void PrintVersion() {
@@ -259,19 +262,23 @@ int main(int argc, char** argv) {
                 break;
             }
             case 'l': {
-                std::stringstream str_arg(optarg);
+                std::string str_arg(optarg);
+                str_arg.append(",0"); // FALLBACK: if string is partially completed ("1234,3")
+                                      // this will set all those unset to 0. otherwise we get
+                                      // all 3s.
+                std::stringstream stream(str_arg);
                 std::string sub;
-                std::getline(str_arg, sub, ',');
+                std::getline(stream, sub, ',');
                 load_parameters.program_id = std::stoull(sub);
-                std::getline(str_arg, sub, ',');
+                std::getline(stream, sub, ',');
                 load_parameters.applet_id = static_cast<Service::AM::AppletId>(std::stoul(sub));
-                std::getline(str_arg, sub, ',');
+                std::getline(stream, sub, ',');
                 load_parameters.applet_type = static_cast<Service::AM::AppletType>(std::stoi(sub));
-                std::getline(str_arg, sub, ',');
+                std::getline(stream, sub, ',');
                 load_parameters.launch_type = static_cast<Service::AM::LaunchType>(std::stoi(sub));
-                std::getline(str_arg, sub, ',');
+                std::getline(stream, sub, ',');
                 load_parameters.program_index = std::stoi(sub);
-                std::getline(str_arg, sub, ',');
+                std::getline(stream, sub, ',');
                 load_parameters.previous_program_index = std::stoi(sub);
                 break;
             }
@@ -394,8 +401,6 @@ int main(int argc, char** argv) {
 
     if ((u32)load_parameters.applet_id) {
         // code below based off of suyu/main.cpp : GMainWindow::OnHomeMenu()
-        // constexpr u64 QLaunchID = static_cast<u64>(Service::AM::AppletProgramId::QLaunch);
-        // load_parameters.applet_id = Service::AM::AppletId::QLaunch;
         Service::AM::AppletProgramId applet_prog_id =
             Service::AM::AppletIdToProgramId(load_parameters.applet_id);
         auto sysnand = system.GetFileSystemController().GetSystemNANDContents();
@@ -410,8 +415,8 @@ int main(int argc, char** argv) {
             LOG_CRITICAL(Frontend, "Failed to load applet: applet cannot be found.");
             return -1;
         }
-        filepath = user_applet_nca->GetFullPath();
-
+        if (filepath.empty())
+            filepath = user_applet_nca->GetFullPath();
     } else {
         load_parameters.applet_id = Service::AM::AppletId::Application;
     }
