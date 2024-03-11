@@ -128,8 +128,13 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
         info.size.width == info.size.height && !device.HasBrokenCubeImageCompatibility()) {
         flags |= VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
     }
+
+    // fix moltenVK issues with some 3D games
+    // credit to Jarrod Norwell from Sudachi https://github.com/jarrodnorwell/Sudachi
+    auto usage = ImageUsageFlags(format_info, info.format);
     if (info.type == ImageType::e3D) {
         flags |= VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT;
+        usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     }
     const auto [samples_x, samples_y] = VideoCommon::SamplesLog2(info.num_samples);
     return VkImageCreateInfo{
@@ -147,7 +152,7 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
         .arrayLayers = static_cast<u32>(info.resources.layers),
         .samples = ConvertSampleCount(info.num_samples),
         .tiling = VK_IMAGE_TILING_OPTIMAL,
-        .usage = ImageUsageFlags(format_info, info.format),
+        .usage = usage,
         .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
         .queueFamilyIndexCount = 0,
         .pQueueFamilyIndices = nullptr,
