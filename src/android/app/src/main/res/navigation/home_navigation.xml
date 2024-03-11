@@ -12,11 +12,12 @@
     <fragment
         android:id="@+id/homeSettingsFragment"
         android:name="org.suyu.suyu_emu.fragments.HomeSettingsFragment"
-        android:label="HomeSettingsFragment" >
+        android:label="HomeSettingsFragment">
         <action
             android:id="@+id/action_homeSettingsFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
-       <!-- <action
+        <!-- Temporarily commented out for testing remove the code later. -->
+        <!-- <action
             android:id="@+id/action_homeSettingsFragment_to_earlyAccessFragment"
             app:destination="@id/earlyAccessFragment" /> -->
         <action
@@ -36,7 +37,7 @@
     <fragment
         android:id="@+id/firstTimeSetupFragment"
         android:name="org.suyu.suyu_emu.fragments.SetupFragment"
-        android:label="FirstTimeSetupFragment" >
+        android:label="FirstTimeSetupFragment">
         <action
             android:id="@+id/action_firstTimeSetupFragment_to_gamesFragment"
             app:destination="@id/gamesFragment"
@@ -52,13 +53,14 @@
     <fragment
         android:id="@+id/aboutFragment"
         android:name="org.suyu.suyu_emu.fragments.AboutFragment"
-        android:label="AboutFragment" >
+        android:label="AboutFragment">
         <action
             android:id="@+id/action_aboutFragment_to_licensesFragment"
             app:destination="@id/licensesFragment" />
     </fragment>
 
-   <!-- <fragment
+    <!-- Temporarily commented out for testing remove the code later. -->
+    <!-- <fragment
         android:id="@+id/earlyAccessFragment"
         android:name="org.suyu.suyu_emu.fragments.EarlyAccessFragment"
         android:label="EarlyAccessFragment" /> -->
@@ -74,13 +76,13 @@
         android:label="EmulationActivity">
         <argument
             android:name="game"
+            android:defaultValue="@null"
             app:argType="org.suyu.suyu_emu.model.Game"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="custom"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
     </activity>
 
     <action
@@ -111,17 +113,17 @@
     <fragment
         android:id="@+id/driverManagerFragment"
         android:name="org.suyu.suyu_emu.fragments.DriverManagerFragment"
-        android:label="DriverManagerFragment" >
+        android:label="DriverManagerFragment">
         <argument
             android:name="game"
+            android:defaultValue="@null"
             app:argType="org.suyu.suyu_emu.model.Game"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/appletLauncherFragment"
         android:name="org.suyu.suyu_emu.fragments.AppletLauncherFragment"
-        android:label="AppletLauncherFragment" >
+        android:label="AppletLauncherFragment">
         <action
             android:id="@+id/action_appletLauncherFragment_to_cabinetLauncherDialogFragment"
             app:destination="@id/cabinetLauncherDialogFragment" />
@@ -137,7 +139,7 @@
     <fragment
         android:id="@+id/perGamePropertiesFragment"
         android:name="org.suyu.suyu_emu.fragments.GamePropertiesFragment"
-        android:label="PerGamePropertiesFragment" >
+        android:label="PerGamePropertiesFragment">
         <argument
             android:name="game"
             app:argType="org.suyu.suyu_emu.model.Game" />
@@ -157,7 +159,7 @@
     <fragment
         android:id="@+id/gameInfoFragment"
         android:name="org.suyu.suyu_emu.fragments.GameInfoFragment"
-        android:label="GameInfoFragment" >
+        android:label="GameInfoFragment">
         <argument
             android:name="game"
             app:argType="org.suyu.suyu_emu.model.Game" />
@@ -165,7 +167,7 @@
     <fragment
         android:id="@+id/addonsFragment"
         android:name="org.suyu.suyu_emu.fragments.AddonsFragment"
-        android:label="AddonsFragment" >
+        android:label="AddonsFragment">
         <argument
             android:name="game"
             app:argType="org.suyu.suyu_emu.model.Game" />
