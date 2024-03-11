@@ -33,6 +33,7 @@ struct Patch {
     std::string name;
     std::string version;
     PatchType type;
+    std::optional<std::string> file_path;
     u64 program_id;
     u64 title_id;
 };

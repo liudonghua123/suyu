@@ -565,7 +565,6 @@ void GameList::AddGamePopup(QMenu& context_menu, u64 program_id, const std::stri
     QAction* remove_all_content = remove_menu->addAction(tr("Remove All Installed Contents"));
     QAction* verify_integrity = context_menu.addAction(tr("Verify Integrity"));
     QAction* copy_tid = context_menu.addAction(tr("Copy Title ID to Clipboard"));
-    QAction* cheats = context_menu.addAction(tr("Open Cheats Manager"));
     QAction* navigate_to_gamedb_entry = context_menu.addAction(tr("Navigate to GameDB entry"));
 // TODO: Implement shortcut creation for macOS
 #if !defined(__APPLE__)
@@ -647,7 +646,6 @@ void GameList::AddGamePopup(QMenu& context_menu, u64 program_id, const std::stri
         emit CreateShortcut(program_id, path, GameListShortcutTarget::Applications);
     });
 #endif
-    connect(cheats, &QAction::triggered, [this, path]() { emit OpenPerGameCheats(path); });
     connect(properties, &QAction::triggered,
             [this, path]() { emit OpenPerGameGeneralRequested(path); });
 };

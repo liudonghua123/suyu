@@ -10,7 +10,6 @@
 #include <iostream>
 #include <memory>
 #include <thread>
-#include "cheats_dialog.h"
 #include "core/hle/service/am/applet_manager.h"
 #include "core/loader/nca.h"
 #include "core/tools/renderdoc.h"
@@ -1502,9 +1501,6 @@ void GMainWindow::ConnectWidgetEvents() {
     connect(game_list, &GameList::OpenPerGameGeneralRequested, this,
             &GMainWindow::OnGameListOpenPerGameProperties);
 
-    connect(game_list, &GameList::OpenPerGameCheats, this,
-            &GMainWindow::OnGameListOpenPerGameCheats);
-
     connect(this, &GMainWindow::UpdateInstallProgress, this,
             &GMainWindow::IncrementInstallProgress);
 
@@ -2992,21 +2988,6 @@ void GMainWindow::OnGameListOpenPerGameProperties(const std::string& file) {
     }
 
     OpenPerGameConfiguration(title_id, file);
-}
-
-void GMainWindow::OnGameListOpenPerGameCheats(const std::string& file) {
-    u64 title_id{};
-    const auto v_file = Core::GetGameFileFromPath(vfs, file);
-    const auto loader = Loader::GetLoader(*system, v_file);
-
-    if (loader == nullptr || loader->ReadProgramId(title_id) != Loader::ResultStatus::Success) {
-        QMessageBox::information(this, tr("Cheats Manager"),
-                                 tr("The game cheats could not be loaded."));
-        return;
-    }
-
-    CheatsDialog cheats(this, title_id, *system);
-    cheats.exec();
 }
 
 void GMainWindow::OnMenuLoadFile() {

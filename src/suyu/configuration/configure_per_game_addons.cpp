@@ -11,12 +11,14 @@
 #include <QString>
 #include <QTimer>
 #include <QTreeView>
+#include <qdesktopservices.h>
+#include <qdialog.h>
+#include <qtreewidget.h>
 
 #include "common/fs/fs.h"
 #include "common/fs/path_util.h"
 #include "core/core.h"
 #include "core/file_sys/patch_manager.h"
-#include "core/file_sys/xts_archive.h"
 #include "core/loader/loader.h"
 #include "suyu/configuration/configure_input.h"
 #include "suyu/configuration/configure_per_game_addons.h"
@@ -63,6 +65,12 @@ ConfigurePerGameAddons::ConfigurePerGameAddons(Core::System& system_, QWidget* p
 
     connect(item_model, &QStandardItemModel::itemChanged,
             [] { UISettings::values.is_game_list_reload_pending.exchange(true); });
+
+    connect(tree_view, &QTreeView::clicked, this, &ConfigurePerGameAddons::OnPatchSelected);
+
+    connect(ui->edit_btn, &QPushButton::clicked, this, &ConfigurePerGameAddons::OnPatchEditClick);
+    connect(ui->remove_btn, &QPushButton::clicked, this,
+            &ConfigurePerGameAddons::OnPatchRemoveClick);
 }
 
 ConfigurePerGameAddons::~ConfigurePerGameAddons() = default;
@@ -119,10 +127,11 @@ void ConfigurePerGameAddons::LoadConfiguration() {
 
     FileSys::VirtualFile update_raw;
     loader->ReadUpdateRaw(update_raw);
+    patches = pm.GetPatches(update_raw);
 
     const auto& disabled = Settings::values.disabled_addons[title_id];
 
-    for (const auto& patch : pm.GetPatches(update_raw)) {
+    for (const auto& patch : patches) {
         const auto name = QString::fromStdString(patch.name);
 
         auto* const first_item = new QStandardItem;
@@ -140,4 +149,53 @@ void ConfigurePerGameAddons::LoadConfiguration() {
     }
 
     tree_view->resizeColumnToContents(1);
+}
+
+void ConfigurePerGameAddons::OnPatchSelected(const QModelIndex& selectedIndex) {
+    QModelIndexList indexes = tree_view->selectionModel()->selectedIndexes();
+    if (indexes.size() == 0) {
+        // Nothing selected
+        ui->edit_btn->setEnabled(false);
+        ui->remove_btn->setEnabled(false);
+        return;
+    }
+
+    QStandardItemModel* model = (QStandardItemModel*)tree_view->model();
+    QStandardItem* item = model->itemFromIndex(selectedIndex.siblingAtColumn(0));
+
+    std::string patch_name = item->text().toStdString();
+    selected_patch = std::nullopt;
+
+    for (const auto& patch : patches) {
+        if (patch.name != patch_name)
+            continue;
+        if (patch.version != "IPSwitch")
+            continue;
+
+        selected_patch = patch;
+    }
+
+    if (!selected_patch || !selected_patch->file_path) {
+        // Either patch not found or selected isn't a patch
+        ui->edit_btn->setEnabled(false);
+        ui->remove_btn->setEnabled(false);
+        return;
+    }
+
+    ui->edit_btn->setEnabled(true);
+    ui->remove_btn->setEnabled(true);
+}
+
+void ConfigurePerGameAddons::OnPatchEditClick(bool checked) {
+    if (!selected_patch || !selected_patch->file_path) {
+        // Either no patch selected or selected patch somehow doesn't have a file?
+        return;
+    }
+
+    QDesktopServices::openUrl(
+        QUrl::fromLocalFile(QString::fromStdString(selected_patch->file_path.value())));
+}
+
+void ConfigurePerGameAddons::OnPatchRemoveClick(bool checked) {
+    // B
 }

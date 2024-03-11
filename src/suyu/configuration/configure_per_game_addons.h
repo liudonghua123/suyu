@@ -7,7 +7,9 @@
 #include <vector>
 
 #include <QList>
+#include <qtreewidget.h>
 
+#include "core/file_sys/patch_manager.h"
 #include "core/file_sys/vfs/vfs_types.h"
 
 namespace Core {
@@ -54,5 +56,13 @@ private:
 
     std::vector<QList<QStandardItem*>> list_items;
 
+    std::optional<FileSys::Patch> selected_patch;
+    std::vector<FileSys::Patch> patches;
+
     Core::System& system;
+
+private slots:
+    void OnPatchSelected(const QModelIndex& selectedIndex);
+    void OnPatchEditClick(bool checked = false);
+    void OnPatchRemoveClick(bool checked = false);
 };
