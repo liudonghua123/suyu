@@ -61,6 +61,18 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
     }
 }
 
+[[nodiscard]] bool CheckImageType(const ImageInfo& info, const ImageType type) {
+    return info.type == type;
+}
+
+[[nodiscard]] bool Is2D(const ImageInfo& info) {
+    return CheckImageType(info, ImageType::e2D);
+}
+
+[[nodiscard]] bool Is3D(const ImageInfo& info) {
+    return CheckImageType(info, ImageType::e3D);
+}
+
 [[nodiscard]] VkImageType ConvertImageType(const ImageType type) {
     switch (type) {
     case ImageType::e1D:
@@ -697,7 +709,7 @@ struct RangedBarrierRange {
 void BlitScale(Scheduler& scheduler, VkImage src_image, VkImage dst_image, const ImageInfo& info,
                VkImageAspectFlags aspect_mask, const Settings::ResolutionScalingInfo& resolution,
                bool up_scaling = true) {
-    const bool is_2d = info.type == ImageType::e2D;
+    const bool is_2d = is_2D(info);
     const auto resources = info.resources;
     const VkExtent2D extent{
         .width = info.size.width,
