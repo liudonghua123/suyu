@@ -1,8 +1,6 @@
 # SPDX-FileCopyrightText: 2017 yuzu Emulator Project & 2024 suyu Emulator Project
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-# Modified by AMA25 in 2024/03/08
-
 # This function downloads a binary library package from our external repo.
 # Params:
 #   remote_path: path to the file to download, relative to the remote repository root
@@ -19,9 +17,9 @@ if (WIN32)
 elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     set(package_repo "ext-linux-bin/-/raw/main/")
     set(package_extension ".tar.xz")
-elseif (APPLE)
-    set(package_repo "ext-osx-bin/-/raw/main/")
-    set(package_extension ".dmg")
+# elseif (APPLE)
+#     set(package_repo "ext-osx-bin/-/raw/main/")
+#     set(package_extension ".dmg")
 elseif (ANDROID)    
     set(package_repo "ext-android-bin/-/raw/main/")
     set(package_extension ".tar.xz")

@@ -357,7 +357,7 @@ if (APPLE)
 
     if (NOT USE_SYSTEM_MOLTENVK)
         set(MOLTENVK_PLATFORM "macOS")
-        set(MOLTENVK_VERSION "v1.2.7-rc2")
+        set(MOLTENVK_VERSION "v1.2.7")
         download_moltenvk_external(${MOLTENVK_PLATFORM} ${MOLTENVK_VERSION})
     endif()
     find_library(MOLTENVK_LIBRARY MoltenVK REQUIRED)
