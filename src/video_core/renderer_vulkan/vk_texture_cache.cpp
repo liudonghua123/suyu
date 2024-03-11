@@ -62,7 +62,7 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
 }
 
 [[nodiscard]] bool CheckImageType(const ImageInfo& info, const ImageType type) {
-    return info.type == type;
+    return (info.type == type);
 }
 
 [[nodiscard]] bool Is2D(const ImageInfo& info) {
@@ -1574,7 +1574,7 @@ bool Image::ScaleUp(bool ignore) {
     flags |= ImageFlagBits::Rescaled;
     has_scaled = true;
     if (!scaled_image) {
-        const bool is_2d = info.type == ImageType::e2D;
+        const bool is_2d = is_2D(info);
         const u32 scaled_width = resolution.ScaleUp(info.size.width);
         const u32 scaled_height = is_2d ? resolution.ScaleUp(info.size.height) : info.size.height;
         auto scaled_info = info;
@@ -1632,7 +1632,7 @@ bool Image::BlitScaleHelper(bool scale_up) {
     const auto operation = is_bilinear ? Tegra::Engines::Fermi2D::Filter::Bilinear
                                        : Tegra::Engines::Fermi2D::Filter::Point;
 
-    const bool is_2d = info.type == ImageType::e2D;
+    const bool is_2d = is_2D(info);
     const auto& resolution = runtime->resolution;
     const u32 scaled_width = resolution.ScaleUp(info.size.width);
     const u32 scaled_height = is_2d ? resolution.ScaleUp(info.size.height) : info.size.height;
