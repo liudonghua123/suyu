@@ -3,8 +3,8 @@ variables:
 
 stages:
   - format
-  - build
   - android
+  - build
 
 clang-format:
   stage: format
@@ -31,7 +31,7 @@ build-linux:
 
 android:
   stage: android
-  image: openjdk:17
+  image: ibmjava:latest
   script:
     - apt-get update -y
     - apt-get install -y ccache apksigner glslang-dev glslang-tools
