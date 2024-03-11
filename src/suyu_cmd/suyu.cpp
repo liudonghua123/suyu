@@ -28,6 +28,7 @@
 #include "core/file_sys/registered_cache.h"
 #include "core/file_sys/vfs/vfs_real.h"
 #include "core/hle/service/am/applet_manager.h"
+#include "core/hle/service/am/service/library_applet_creator.h"
 #include "core/hle/service/filesystem/filesystem.h"
 #include "core/loader/loader.h"
 #include "frontend_common/config.h"
@@ -215,7 +216,7 @@ int main(int argc, char** argv) {
 
     bool use_multiplayer = false;
     bool fullscreen = false;
-    bool qlaunch = false;
+    u32 applet_id = static_cast<u32>(Service::AM::AppletId::None);
     std::string nickname{};
     std::string password{};
     std::string address{};
@@ -223,13 +224,13 @@ int main(int argc, char** argv) {
 
     static struct option long_options[] = {
         // clang-format off
+        {"applet", required_argument, 0, 'a'},
         {"config", required_argument, 0, 'c'},
         {"fullscreen", no_argument, 0, 'f'},
         {"help", no_argument, 0, 'h'},
         {"game", required_argument, 0, 'g'},
         {"multiplayer", required_argument, 0, 'm'},
         {"program", optional_argument, 0, 'p'},
-        {"qlaunch", no_argument, 0, 'q'},
         {"user", required_argument, 0, 'u'},
         {"version", no_argument, 0, 'v'},
         {0, 0, 0, 0},
@@ -237,9 +238,14 @@ int main(int argc, char** argv) {
     };
 
     while (optind < argc) {
-        int arg = getopt_long(argc, argv, "g:fhvpq::c:u:", long_options, &option_index);
+        int arg = getopt_long(argc, argv, "g:fhvp::c:u:a:", long_options, &option_index);
         if (arg != -1) {
             switch (static_cast<char>(arg)) {
+            case 'a': {
+                const std::string str_arg(optarg);
+                applet_id = atoi(str_arg.c_str());
+                break;
+            }
             case 'c':
                 config_path = optarg;
                 break;
@@ -292,9 +298,6 @@ int main(int argc, char** argv) {
                 program_args = argv[optind];
                 ++optind;
                 break;
-            case 'q':
-                qlaunch = true;
-                break;
             case 'u':
                 selected_user = atoi(optarg);
                 break;
@@ -339,7 +342,7 @@ int main(int argc, char** argv) {
 
     Common::ConfigureNvidiaEnvironmentFlags();
 
-    if (filepath.empty() && !qlaunch) {
+    if (filepath.empty() && !applet_id) {
         LOG_CRITICAL(Frontend, "Failed to load ROM: No ROM specified");
         return -1;
     }
@@ -376,22 +379,26 @@ int main(int argc, char** argv) {
     system.GetUserChannel().clear();
 
     Service::AM::FrontendAppletParameters load_parameters{};
-    if (qlaunch) {
+    if (applet_id) {
         // code below based off of suyu/main.cpp : GMainWindow::OnHomeMenu()
-        constexpr u64 QLaunchID = static_cast<u64>(Service::AM::AppletProgramId::QLaunch);
-        load_parameters.applet_id = Service::AM::AppletId::QLaunch;
+        // constexpr u64 QLaunchID = static_cast<u64>(Service::AM::AppletProgramId::QLaunch);
+        // load_parameters.applet_id = Service::AM::AppletId::QLaunch;
+        load_parameters.applet_id = static_cast<Service::AM::AppletId>(applet_id);
+        Service::AM::AppletProgramId applet_prog_id =
+            Service::AM::AppletIdToProgramId(load_parameters.applet_id);
         auto sysnand = system.GetFileSystemController().GetSystemNANDContents();
         if (!sysnand) {
-            LOG_CRITICAL(Frontend, "Failed to load QLaunch: Firmware not installed.");
+            LOG_CRITICAL(Frontend, "Failed to load applet: Firmware not installed.");
             return -1;
         }
 
-        auto qlaunch_applet_nca = sysnand->GetEntry(QLaunchID, FileSys::ContentRecordType::Program);
-        if (!qlaunch_applet_nca) {
-            LOG_CRITICAL(Frontend, "Failed to load QLaunch: applet cannot be found.");
+        auto user_applet_nca = sysnand->GetEntry(static_cast<u64>(applet_prog_id),
+                                                 FileSys::ContentRecordType::Program);
+        if (!user_applet_nca) {
+            LOG_CRITICAL(Frontend, "Failed to load applet: applet cannot be found.");
             return -1;
         }
-        filepath = qlaunch_applet_nca->GetFullPath();
+        filepath = user_applet_nca->GetFullPath();
 
     } else {
         load_parameters.applet_id = Service::AM::AppletId::Application;
