@@ -31,7 +31,7 @@ build-linux:
 
 android:
   stage: android
-  image: ibmjava:latest
+  image: suyuemu/cibuild:linux-x64
   script:
     - apt-get update -y
     - apt-get install -y openjdk-17-jdk ccache apksigner glslang-dev glslang-tools
