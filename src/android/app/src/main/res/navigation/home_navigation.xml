@@ -58,9 +58,8 @@
             app:destination="@id/licensesFragment" />
     </fragment>
 
-   <!-- <fragment
     <!-- Temporarily commented out for testing remove the code later. -->
-    <!-- <fragment
+   <!-- <fragment
         android:id="@+id/earlyAccessFragment"
         android:name="org.suyu.suyu_emu.fragments.EarlyAccessFragment"
         android:label="EarlyAccessFragment" /> -->
