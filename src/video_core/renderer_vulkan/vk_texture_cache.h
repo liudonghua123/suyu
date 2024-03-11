@@ -37,6 +37,18 @@ class RenderPassCache;
 class StagingBufferPool;
 class Scheduler;
 
+[[nodiscard]] bool CheckImageType(const ImageInfo& info, const ImageType type);
+
+[[nodiscard]] bool Is1D(const ImageInfo& info) 
+
+[[nodiscard]] bool Is2D(const ImageInfo& info);
+
+[[nodiscard]] bool Is3D(const ImageInfo& info);
+
+[[nodiscard]] bool IsLinear(const ImageInfo& info);
+
+[[nodiscard]] bool IsBuffer(const ImageInfo& info);
+
 class TextureCacheRuntime {
 public:
     explicit TextureCacheRuntime(const Device& device_, Scheduler& scheduler_,
