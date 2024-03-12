@@ -18,7 +18,7 @@ This repo is based on Yuzu EA 4176.
   <br>
 </h1>
 
-<h4 align="center"><b>suyu</b>, pronounced "sue-you" (wink wink) is the continuation of the world's most popular, open-source, Nintendo Switch emulator, suyu.
+<h4 align="center"><b>suyu</b>, pronounced "sue-you" (wink wink) is the continuation of the world's most popular, open-source, Nintendo Switch emulator, yuzu.
 <br>
 It is written in C++ with portability in mind, and we actively maintain builds for Windows, Linux and Android.
 </h4>
@@ -54,7 +54,7 @@ You can also contact any of the developers on Discord to learn more about the cu
 * __Windows__: WIP
 * __Linux__: WIP
 
-We don't have any official builds yet! If any website or person is claiming to have a build for suyu, take that with a grain of salt, because it might contain malware. Until we do have an official build, it might be a better idea to keep using the last version of suyu.
+We don't have any official builds yet! If any website or person is claiming to have a build for suyu, take that with a grain of salt, because it might contain malware. Until we do have an official build, it might be a better idea to keep using the last version of yuzu.
 
 ## Building
 

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: Copyright 2021 suyu Emulator Project & 2024 suyu Emulator Project
+// SPDX-FileCopyrightText: Copyright 2021 yuzu Emulator Project & 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include <version>
@@ -117,7 +117,7 @@ void LogSettings() {
     LOG_INFO(Config, "suyu Configuration:");
     for (auto& [category, settings] : values.linkage.by_category) {
         for (const auto& setting : settings) {
-            if (setting->Id() == values.suyu_token.Id()) {
+            if (setting->Id() == values.yuzu_token.Id()) {
                 // Hide the token secret, for security reasons.
                 continue;
             }

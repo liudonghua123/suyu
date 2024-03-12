@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2018 suyu Emulator Project & 2024 suyu Emulator Project
+# SPDX-FileCopyrightText: 2018 yuzu Emulator Project & 2024 suyu Emulator Project
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 if (DEFINED ENV{AZURECIREPO})
@@ -262,7 +262,7 @@ if (ANDROID)
     target_link_libraries(common PRIVATE android)
 endif()
 
-if (SUYU_USE_PRECOMPILED_HEADERS)
+if (YUZU_USE_PRECOMPILED_HEADERS)
     target_precompile_headers(common PRIVATE precompiled_headers.h)
 endif()
 

@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2019 suyu Emulator Project
+# SPDX-FileCopyrightText: 2019 yuzu Emulator Project
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 # Download all pull requests as patches that match a specific label
@@ -6,8 +6,8 @@
 
 import requests, sys, json, shutil, subprocess, os, traceback
 
-org = os.getenv("PRIVATEMERGEORG", "suyu-emu")
-repo = os.getenv("PRIVATEMERGEREPO", "suyu-private")
+org = os.getenv("PRIVATEMERGEORG", "yuzu-emu")
+repo = os.getenv("PRIVATEMERGEREPO", "yuzu-private")
 tagline = sys.argv[3]
 user = sys.argv[1]
 
