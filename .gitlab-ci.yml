@@ -39,7 +39,7 @@ android:
   script:
     - apt-get update -y
     - git submodule update --init --depth 1 --recursive
-    - cd src/android && ./gradlew :app:assembleMainlineRelease, :app:assembleMainlineReleaseUnitTest
+    - cd src/android && ./gradlew assemblemainlinerelease bundlemainlinerelease
   artifacts:
     name: "android"
     paths:
