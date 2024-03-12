@@ -34,7 +34,7 @@ android:
   image: ubuntu:latest
   before_script:
     - apt-get update
-    - apt-get -y install ccache apksigner glslang-dev glslang-tools git libboost-all-dev sdkmanager android-sdk bash openjdk-21-jdk openjdk-21-jre build-essential g++ python3-dev autotools-dev libicu-dev libbz2-dev
+    - apt-get -y install wget ccache apksigner glslang-dev glslang-tools git libboost-all-dev sdkmanager android-sdk bash openjdk-21-jdk openjdk-21-jre build-essential g++ python3-dev autotools-dev libicu-dev libbz2-dev
     - mkdir -p libboost
     - wget https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
     - tar xvf boost_1_79_0.tar.gz
