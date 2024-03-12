@@ -33,13 +33,13 @@ android:
   image: ubuntu:latest
   before_script:
     - apt-get update
-    - apt-get -y install ccache apksigner glslang-dev glslang-tools git sdkmanager android-sdk bash openjdk-21-jdk openjdk-21-jre
+    - apt-get -y install ccache apksigner glslang-dev glslang-tools git sdkmanager android-sdk bash openjdk-17-jdk openjdk-17-jre
     - export ANDROID_HOME="/usr/lib/android-sdk/"
     - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
   script:
     - apt-get update -y
     - git submodule update --init --depth 1 --recursive
-    - cd src/android && ./gradlew assemblemainlinerelease bundlemainlinerelease
+    - cd src/android && ./gradlew assemblemainlinerelease bundlemainlinerelease --stacktrace
   artifacts:
     name: "android"
     paths:
