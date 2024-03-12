@@ -40,7 +40,7 @@ android:
     - tar xf boost_1_79_0.tar.gz
     - mv boost_1_79_0/* libboost/
     - export PREVIOUSDIR=$(pwd)
-    - cd libboost && bash ./bootstrap.sh --prefix=/usr/ && ./b2 && ./b2 -j 4 --reconfigure target-os=android toolset=clang-android link=static,shared variant=debug,release threading=multi install --prefix=/usr/lib/boost-arm64/ 
+    - cd libboost && bash ./bootstrap.sh --prefix=/usr/ && ./b2 && ./b2 -j 4 --reconfigure target-os=android toolset=gcc-android link=static,shared variant=debug,release threading=multi install --prefix=/usr/lib/boost-arm64/ 
     - cd $PREVIOUSDIR
     - export ANDROID_HOME="/usr/lib/android-sdk/"
     - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
