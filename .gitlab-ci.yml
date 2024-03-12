@@ -40,6 +40,7 @@ android:
     - tar xf boost_1_79_0.tar.gz
     - mv boost_1_79_0/* libboost/
     - cd libboost && bash ./bootstrap.sh --prefix=/usr/ && ./b2 && ./b2 install && cd ..
+    - export BOOST_ROOT="/usr/include/boost/"
     - export ANDROID_HOME="/usr/lib/android-sdk/"
     - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
   script:
