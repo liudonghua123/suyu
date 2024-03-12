@@ -224,11 +224,13 @@ bool DecoderContext::SendPacket(const Packet& packet) {
 
 // Android can randomly crash when calling decode directly, so skip.
 // TODO update ffmpeg and hope that fixes it.
-#ifdef ANDROID
+#ifndef ANDROID
     if (!m_codec_context->hw_device_ctx && m_codec_context->codec_id == AV_CODEC_ID_H264) {
         m_decode_order = true;
-        const int ret = avcodec_send_frame(m_codec_context, m_temp_frame->GetFrame());
-        if (ret < 0) {
+        auto* codec{ffcodec(m_decoder.GetCodec())};
+        if (const int ret = codec->cb.decode(m_codec_context, m_temp_frame->GetFrame(),
+                                             &m_got_frame, packet.GetPacket());
+            ret < 0) {
             LOG_DEBUG(Service_NVDRV, "avcodec_send_packet error {}", AVError(ret));
             return false;
         }
@@ -247,9 +249,10 @@ bool DecoderContext::SendPacket(const Packet& packet) {
 std::shared_ptr<Frame> DecoderContext::ReceiveFrame() {
     // Android can randomly crash when calling decode directly, so skip.
     // TODO update ffmpeg and hope that fixes it.
-#ifdef ANDROID
+#ifndef ANDROID
     if (!m_codec_context->hw_device_ctx && m_codec_context->codec_id == AV_CODEC_ID_H264) {
         m_decode_order = true;
+        auto* codec{ffcodec(m_decoder.GetCodec())};
         int ret{0};
 
         if (m_got_frame == 0) {
@@ -257,7 +260,7 @@ std::shared_ptr<Frame> DecoderContext::ReceiveFrame() {
             auto* pkt = packet.GetPacket();
             pkt->data = nullptr;
             pkt->size = 0;
-            ret = avcodec_receive_packet(m_codec_context, pkt);
+            ret = codec->cb.decode(m_codec_context, m_temp_frame->GetFrame(), &m_got_frame, pkt);
             m_codec_context->has_b_frames = 0;
         }
 
