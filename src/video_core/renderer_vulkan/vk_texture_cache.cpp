@@ -140,12 +140,6 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
         flags |= VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT;
         usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     }
-
-    // MARK: fixes SMBW missing text and crash
-    auto usage = ImageUsageFlags(format_info, info.format);
-    if (info.type == ImageType::e3D)
-        usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-
     const auto [samples_x, samples_y] = VideoCommon::SamplesLog2(info.num_samples);
     return VkImageCreateInfo{
         .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
@@ -169,6 +163,7 @@ constexpr VkBorderColor ConvertBorderColor(const std::array<float, 4>& color) {
         .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
     };
 }
+
 
 [[nodiscard]] vk::Image MakeImage(const Device& device, const MemoryAllocator& allocator,
                                   const ImageInfo& info, std::span<const VkFormat> view_formats) {
