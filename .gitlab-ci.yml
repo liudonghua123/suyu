@@ -1,5 +1,9 @@
+variables:
+  PR_NUMBER: "pr$CI_MERGE_REQUEST_IID"
+
 stages:
   - format
+  - android
   - build
 
 clang-format:
@@ -22,5 +26,22 @@ build-linux:
     - bash .ci/scripts/linux/docker.sh
     - bash .ci/scripts/linux/upload.sh
   artifacts:
+    paths:
+      - artifacts/*
+
+android:
+  stage: android
+  image: ubuntu:latest
+  before_script:
+    - apt-get update
+    - apt-get -y install ccache apksigner glslang-dev glslang-tools git sdkmanager android-sdk bash openjdk-21-jdk openjdk-21-jre
+    - export ANDROID_HOME="/usr/lib/android-sdk/"
+    - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
+  script:
+    - apt-get update -y
+    - git submodule update --init --depth 1 --recursive
+    - bash -c "export PR_NUMBER=$PR_NUMBER; ./.ci/scripts/android/build.sh"
+  artifacts:
+    name: "android"
     paths:
       - artifacts/*
