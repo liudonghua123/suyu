@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include <algorithm>
+#include <filesystem>
 #include <memory>
 #include <utility>
 
@@ -13,6 +14,7 @@
 #include <QTreeView>
 #include <qdesktopservices.h>
 #include <qdialog.h>
+#include <qmessagebox.h>
 #include <qtreewidget.h>
 
 #include "common/fs/fs.h"
@@ -197,5 +199,34 @@ void ConfigurePerGameAddons::OnPatchEditClick(bool checked) {
 }
 
 void ConfigurePerGameAddons::OnPatchRemoveClick(bool checked) {
-    // B
+    if (!selected_patch || !selected_patch->file_path || !selected_patch->root_path) {
+        // Either no patch selected or selected patch somehow doesn't have a file?
+        return;
+    }
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+        this, QString::fromStdString("Remove patch confirmation"),
+        QString::fromStdString(
+            "Are you sure you want to remove the patch '%1'? This action is permanent!")
+            .arg(QString::fromStdString(selected_patch->name)),
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (reply != QMessageBox::Yes) {
+        return;
+    }
+
+    // Remove the patch
+    std::filesystem::remove_all(selected_patch->root_path.value());
+
+    // Notify we should update the game list
+    UISettings::values.is_game_list_reload_pending.exchange(true);
+
+    // Clear all items and selection
+    item_model->setRowCount(0);
+    list_items.clear();
+    selected_patch = std::nullopt;
+
+    // Reload stuff
+    LoadConfiguration();
 }
