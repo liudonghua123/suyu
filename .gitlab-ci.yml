@@ -1,6 +1,7 @@
 stages:
   - format
   - build
+  - android
 
 clang-format:
   stage: format
