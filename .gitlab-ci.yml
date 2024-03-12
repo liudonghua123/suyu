@@ -39,12 +39,11 @@ android:
     - wget -nv https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
     - tar xf boost_1_79_0.tar.gz
     - mv boost_1_79_0/* libboost/
-    - cd libboost && bash ./bootstrap.sh --prefix=/usr/ && ./b2 && ./b2 install && cd ..
+    - cd libboost && bash ./bootstrap.sh --prefix=/usr/ && ./b2 && ./b2 -j 4 --reconfigure target-os=android toolset=clang-android link=static,shared variant=debug,release threading=multi install --prefix=/usr/lib/boost-arm64/ && cd ..
     - export ANDROID_HOME="/usr/lib/android-sdk/"
     - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
   script:
-    - export BOOST_ROOT="/usr/lib/cmake/Boost-1.79.0/"
-    - export Boost_INCLUDE_DIR="/usr/include/boost/"
+    - export BOOST_ROOT="/usr/lib/boost-arm64/"
     - apt-get update -y
     - git submodule update --init --depth 1 --recursive
     - bash -c "export PR_NUMBER=$PR_NUMBER; ./.ci/scripts/android/build.sh"
