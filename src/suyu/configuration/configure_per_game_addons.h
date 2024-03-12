@@ -45,6 +45,7 @@ private:
     void RetranslateUI();
 
     void LoadConfiguration();
+    void ReloadList();
 
     std::unique_ptr<Ui::ConfigurePerGameAddons> ui;
     FileSys::VirtualFile file;
@@ -63,6 +64,8 @@ private:
 
 private slots:
     void OnPatchSelected(const QModelIndex& selectedIndex);
+    void OnPatchCreateClick(bool checked = false);
     void OnPatchEditClick(bool checked = false);
     void OnPatchRemoveClick(bool checked = false);
+    void OnPatchOpenFolder(bool checked = false);
 };

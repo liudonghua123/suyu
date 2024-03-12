@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>482</width>
+    <height>316</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,8 +29,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>378</width>
-          <height>246</height>
+          <width>460</width>
+          <height>262</height>
          </rect>
         </property>
        </widget>
@@ -41,7 +41,7 @@
        <item>
         <widget class="QPushButton" name="new_btn">
          <property name="text">
-          <string>Add New Code...</string>
+          <string>New Patch</string>
          </property>
         </widget>
        </item>
@@ -51,7 +51,7 @@
           <bool>false</bool>
          </property>
          <property name="text">
-          <string>Edit Code</string>
+          <string>Edit Patch</string>
          </property>
         </widget>
        </item>
@@ -61,7 +61,14 @@
           <bool>false</bool>
          </property>
          <property name="text">
-          <string>Remove Code</string>
+          <string>Remove Patch</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="folder_btn">
+         <property name="text">
+          <string>Open Folder</string>
          </property>
         </widget>
        </item>
