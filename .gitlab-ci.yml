@@ -13,19 +13,20 @@ clang-format:
     - git submodule update --init --depth 1 --recursive
     - bash .ci/scripts/format/script.sh
 
-build-linux:
-  stage: build
-  image: suyuemu/cibuild:linux-x64
-  resource_group: linux-ci
-  variables:
-    RELEASE_NAME: mainline
-  script:
-    - git submodule update --init --depth 1 --recursive
-    - bash .ci/scripts/linux/docker.sh
-    - bash .ci/scripts/linux/upload.sh
-  artifacts:
-    paths:
-      - artifacts/*
+# comment out for testiang, as takes to long for building
+#build-linux:
+#  stage: build
+#  image: suyuemu/cibuild:linux-x64
+#  resource_group: linux-ci
+#  variables:
+#    RELEASE_NAME: mainline
+#  script:
+#    - git submodule update --init --depth 1 --recursive
+#    - bash .ci/scripts/linux/docker.sh
+#    - bash .ci/scripts/linux/upload.sh
+#  artifacts:
+#    paths:
+#      - artifacts/*
 
 android:
   stage: android
