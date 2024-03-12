@@ -363,7 +363,7 @@ int main(int argc, char** argv) {
 
     Common::ConfigureNvidiaEnvironmentFlags();
 
-    if (filepath.empty() && !(u32)load_parameters.applet_id) {
+    if (filepath.empty() && !static_cast<u32>(load_parameters.applet_id)) {
         LOG_CRITICAL(Frontend, "Failed to load ROM: No ROM specified");
         return -1;
     }
@@ -399,7 +399,7 @@ int main(int argc, char** argv) {
     system.GetFileSystemController().CreateFactories(*system.GetFilesystem());
     system.GetUserChannel().clear();
 
-    if ((u32)load_parameters.applet_id) {
+    if (static_cast<u32>(load_parameters.applet_id)) {
         // code below based off of suyu/main.cpp : GMainWindow::OnHomeMenu()
         Service::AM::AppletProgramId applet_prog_id =
             Service::AM::AppletIdToProgramId(load_parameters.applet_id);
