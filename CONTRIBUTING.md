@@ -1,6 +1,9 @@
 <!--
-SPDX-FileCopyrightText: 2018 yuzu Emulator Project
+SPDX-FileCopyrightText: 2018 yuzu Emulator Project & 2024 suyu Emulator Project
 SPDX-License-Identifier: GPL-2.0-or-later
 -->
 
-**The Contributor's Guide has moved to [the yuzu wiki](https://github.com/yuzu-emu/yuzu/wiki/Contributing).**
+Please check out the
+
+ * [Conributors's guide](https://gitlab.com/suyu-emu/suyu/-/wikis/Contributing).
+ * [Merge request guidelines](https://gitlab.com/suyu-emu/suyu/-/wikis/Merge-requests)

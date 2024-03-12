@@ -1,47 +1,26 @@
-# This file is a template, and might need editing before it works on your project.
-# This is a sample GitLab CI/CD configuration file that should run without any modifications.
-# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
-# it uses echo commands to simulate the pipeline execution.
-#
-# A pipeline is composed of independent jobs that run scripts, grouped into stages.
-# Stages run in sequential order, but jobs within stages run in parallel.
-#
-# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-#
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
-
-stages:          # List of stages for jobs, and their order of execution
+stages:
+  - format
   - build
 
-build-ubuntu:       # This job runs in the build stage, which runs first.
-  stage: build
-  image: ubuntu:latest  # Maybe replace with image with more required dependencies
-  before_script:
-    - apt update --yes
-    - DEBIAN_FRONTEND=noninteractive apt install --yes autoconf cmake g++-11 gcc-11 git glslang-tools libasound2 libboost-context-dev libglu1-mesa-dev libhidapi-dev libpulse-dev libtool libudev-dev libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 libxext-dev libxkbcommon-x11-0 mesa-common-dev nasm ninja-build qtbase5-dev qtbase5-private-dev qtwebengine5-dev qtmultimedia5-dev libmbedtls-dev catch2 libfmt-dev liblz4-dev nlohmann-json3-dev libzstd-dev libssl-dev libavfilter-dev libavcodec-dev libswscale-dev
+clang-format:
+  stage: format
+  image: suyuemu/cibuild:linux-x64
+  variables:
+    RELEASE_NAME: mainline
   script:
-    - echo "Compiling the code..."
-    - git submodule update --init --recursive
-    - mkdir build && cd build
-    - cmake .. -GNinja -DCMAKE_C_COMPILER=gcc-11 -DCMAKE_CXX_COMPILER=g++-11
-    - ninja
-    - ninja install
-    - echo "Compile complete."
-  
-build-win:
+    - git submodule update --init --depth 1 --recursive
+    - bash .ci/scripts/format/script.sh
+
+build-linux:
   stage: build
-  tags:
-    - shared-windows
-    - windows
-    - windows-1809
+  image: suyuemu/cibuild:linux-x64
+  resource_group: linux-ci
+  variables:
+    RELEASE_NAME: mainline
   script:
-    - echo "Compiling the code..."
-    - dir
-    # TODO: Add build instructions for windows
-    - echo "Compile complete."
+    - git submodule update --init --depth 1 --recursive
+    - bash .ci/scripts/linux/docker.sh
+    - bash .ci/scripts/linux/upload.sh
+  artifacts:
+    paths:
+      - artifacts/*

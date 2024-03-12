@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2014 Citra Emulator Project
+// SPDX-FileCopyrightText: 2014 Citra Emulator Project & 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include <atomic>
@@ -195,7 +195,7 @@ public:
             return;
         }
         using namespace Common::FS;
-        const auto& log_dir = GetYuzuPath(YuzuPath::LogDir);
+        const auto& log_dir = GetSuyuPath(SuyuPath::LogDir);
         void(CreateDir(log_dir));
         Filter filter;
         filter.ParseFilterString(Settings::values.log_filter.GetValue());
@@ -343,7 +343,7 @@ void SetColorConsoleBackendEnabled(bool enabled) {
 }
 
 void FmtLogMessageImpl(Class log_class, Level log_level, const char* filename,
-                       unsigned int line_num, const char* function, const char* format,
+                       unsigned int line_num, const char* function, fmt::string_view format,
                        const fmt::format_args& args) {
     if (!initialization_in_progress_suppress_logging) {
         Impl::Instance().PushEntry(log_class, log_level, filename, line_num, function,
