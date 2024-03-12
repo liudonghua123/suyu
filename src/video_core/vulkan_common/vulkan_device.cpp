@@ -594,13 +594,13 @@ Device::Device(VkInstance instance_, vk::PhysicalDevice physical_, VkSurfaceKHR 
             dynamic_state3_enables = false;
         }
     }
-    if (extensions.extended_dynamic_state3 && is_amd_driver) {
-        LOG_WARNING(Render_Vulkan,
-                    "AMD drivers have broken extendedDynamicState3ColorBlendEquation");
-        features.extended_dynamic_state3.extendedDynamicState3ColorBlendEnable = false;
-        features.extended_dynamic_state3.extendedDynamicState3ColorBlendEquation = false;
-        dynamic_state3_blending = false;
-    }
+    //if (extensions.extended_dynamic_state3 && is_amd_driver) {
+    //    LOG_WARNING(Render_Vulkan,
+    //                "AMD drivers have broken extendedDynamicState3ColorBlendEquation");
+    //    features.extended_dynamic_state3.extendedDynamicState3ColorBlendEnable = false;
+    //    features.extended_dynamic_state3.extendedDynamicState3ColorBlendEquation = false;
+    //    dynamic_state3_blending = false;
+    //}
     if (extensions.vertex_input_dynamic_state && is_radv) {
         // TODO(ameerj): Blacklist only offending driver versions
         // TODO(ameerj): Confirm if RDNA1 is affected
