@@ -13,7 +13,7 @@ clang-format:
     - bash .ci/scripts/format/script.sh
   cache:
     key: "$CI_PIPELINE_ID"
-    paths:
+    path:
       -suyu
 build-linux:
   stage: build
