@@ -1,7 +1,7 @@
-// SPDX-FileCopyrightText: 2023 suyu Emulator Project
+// SPDX-FileCopyrightText: 2023 yuzu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-package org.suyu.suyu_emu.fragments
+package org.yuzu.yuzu_emu.fragments
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -39,25 +39,25 @@ import androidx.window.layout.WindowInfoTracker
 import androidx.window.layout.WindowLayoutInfo
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
-import org.suyu.suyu_emu.HomeNavigationDirections
-import org.suyu.suyu_emu.NativeLibrary
-import org.suyu.suyu_emu.R
-import org.suyu.suyu_emu.activities.EmulationActivity
-import org.suyu.suyu_emu.databinding.DialogOverlayAdjustBinding
-import org.suyu.suyu_emu.databinding.FragmentEmulationBinding
-import org.suyu.suyu_emu.features.settings.model.BooleanSetting
-import org.suyu.suyu_emu.features.settings.model.IntSetting
-import org.suyu.suyu_emu.features.settings.model.Settings
-import org.suyu.suyu_emu.features.settings.model.Settings.EmulationOrientation
-import org.suyu.suyu_emu.features.settings.model.Settings.EmulationVerticalAlignment
-import org.suyu.suyu_emu.features.settings.utils.SettingsFile
-import org.suyu.suyu_emu.model.DriverViewModel
-import org.suyu.suyu_emu.model.Game
-import org.suyu.suyu_emu.model.EmulationViewModel
-import org.suyu.suyu_emu.overlay.model.OverlayControl
-import org.suyu.suyu_emu.overlay.model.OverlayLayout
-import org.suyu.suyu_emu.utils.*
-import org.suyu.suyu_emu.utils.ViewUtils.setVisible
+import org.yuzu.yuzu_emu.HomeNavigationDirections
+import org.yuzu.yuzu_emu.NativeLibrary
+import org.yuzu.yuzu_emu.R
+import org.yuzu.yuzu_emu.activities.EmulationActivity
+import org.yuzu.yuzu_emu.databinding.DialogOverlayAdjustBinding
+import org.yuzu.yuzu_emu.databinding.FragmentEmulationBinding
+import org.yuzu.yuzu_emu.features.settings.model.BooleanSetting
+import org.yuzu.yuzu_emu.features.settings.model.IntSetting
+import org.yuzu.yuzu_emu.features.settings.model.Settings
+import org.yuzu.yuzu_emu.features.settings.model.Settings.EmulationOrientation
+import org.yuzu.yuzu_emu.features.settings.model.Settings.EmulationVerticalAlignment
+import org.yuzu.yuzu_emu.features.settings.utils.SettingsFile
+import org.yuzu.yuzu_emu.model.DriverViewModel
+import org.yuzu.yuzu_emu.model.Game
+import org.yuzu.yuzu_emu.model.EmulationViewModel
+import org.yuzu.yuzu_emu.overlay.model.OverlayControl
+import org.yuzu.yuzu_emu.overlay.model.OverlayLayout
+import org.yuzu.yuzu_emu.utils.*
+import org.yuzu.yuzu_emu.utils.ViewUtils.setVisible
 import java.lang.NullPointerException
 
 class EmulationFragment : Fragment(), SurfaceHolder.Callback {
@@ -517,32 +517,27 @@ class EmulationFragment : Fragment(), SurfaceHolder.Callback {
         val showOverlay = BooleanSetting.SHOW_THERMAL_OVERLAY.getBoolean()
         binding.showThermalsText.setVisible(showOverlay)
         if (showOverlay) {
-            thermalStatsUpdater = {
-                if (emulationViewModel.emulationStarted.value &&
-                    !emulationViewModel.isEmulationStopping.value
-                ) {
-                    val thermalStatus = when (powerManager.currentThermalStatus) {
-                        PowerManager.THERMAL_STATUS_LIGHT -> "😥"
-                        PowerManager.THERMAL_STATUS_MODERATE -> "🥵"
-                        PowerManager.THERMAL_STATUS_SEVERE -> "🔥"
-                        PowerManager.THERMAL_STATUS_CRITICAL,
-                        PowerManager.THERMAL_STATUS_EMERGENCY,
-                        PowerManager.THERMAL_STATUS_SHUTDOWN -> "☢️"
-
-                        else -> "🙂"
-                    }
-                    if (_binding != null) {
-                        binding.showThermalsText.text = thermalStatus
-                    }
-                    thermalStatsUpdateHandler.postDelayed(thermalStatsUpdater!!, 1000)
+            if (emulationViewModel.emulationStarted.value &&
+                !emulationViewModel.isEmulationStopping.value
+            ) {
+                val temperature = getBatteryTemperature(context)
+                if (_binding != null) {
+                    binding.showThermalsText.text = "$temperature°C"
+                    binding.showThermalsText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
                 }
             }
-            thermalStatsUpdateHandler.post(thermalStatsUpdater!!)
         } else {
-            if (thermalStatsUpdater != null) {
-                thermalStatsUpdateHandler.removeCallbacks(thermalStatsUpdater!!)
-            }
+            binding.showThermalsText.setVisible(false)
         }
+    }
+
+    private fun getBatteryTemperature(context: Context): Float {
+        val intent: Intent? = context.registerReceiver(
+            null,
+            IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+        )
+        val temperature = intent?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0
+        return temperature / 10.0f
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
