@@ -23,6 +23,7 @@
 #include <qtreewidget.h>
 
 #include "common/fs/fs.h"
+#include "common/logging/log.h"
 #include "common/fs/path_util.h"
 #include "core/core.h"
 #include "core/file_sys/patch_manager.h"
