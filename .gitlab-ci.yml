@@ -14,7 +14,7 @@ clang-format:
   cache:
     key: "$CI_PIPELINE_ID"
     paths:
-      - suyu/
+      - ./
 build-linux:
   stage: build
   image: suyuemu/cibuild:linux-x64
@@ -26,6 +26,10 @@ build-linux:
   script:
     - bash .ci/scripts/linux/docker.sh
     - bash .ci/scripts/linux/upload.sh
+  cache:
+    key: "$CI_PIPELINE_ID"
+    paths:
+      - ./
   artifacts:
     paths:
       - artifacts/*
