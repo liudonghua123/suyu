@@ -33,7 +33,9 @@ android:
   image: ubuntu:latest
   before_script:
     - apt-get update
-    - apt-get -y install ccache apksigner glslang-dev glslang-tools git sdkmanager android-sdk bash openjdk-17-jdk openjdk-17-jre curl zip unzip tar cmake  ninja-build
+    - apt-get -y install ccache apksigner glslang-dev glslang-tools git sdkmanager android-sdk bash openjdk-17-jdk openjdk-17-jre curl zip unzip tar cmake ninja-build
+    # add clang
+    - apt-get install --no-install-recommends -y clang-14 lld-14 llvm-14 llvm-14-linker-tools && ln -s $(which clang-14) /usr/bin/clang && ln -s $(which clang++-14) /usr/bin/clang++
     - export ANDROID_HOME="/usr/lib/android-sdk/"
     - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
   script:
