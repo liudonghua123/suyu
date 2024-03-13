@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: Copyright 2019 yuzu Emulator Project & 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// Modified by AMA25 on 2024/03/11
-
 #include <algorithm>
 #include <array>
 #include <span>
