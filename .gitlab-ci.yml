@@ -13,8 +13,8 @@ clang-format:
     - bash .ci/scripts/format/script.sh
   cache:
     key: "$CI_PIPELINE_ID"
-    path:
-      -suyu
+    paths:
+      - suyu/
 build-linux:
   stage: build
   image: suyuemu/cibuild:linux-x64
