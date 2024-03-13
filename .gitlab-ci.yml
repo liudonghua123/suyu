@@ -45,7 +45,7 @@ android:
   artifacts:
     name: "android"
     paths:
-      - artifacts/*
+      - /builds/Najenberg/suyu/src/android/app/build/outputs/apk/mainline/release/*
 
 #android:
 #  stage: android
