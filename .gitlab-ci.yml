@@ -1,25 +1,15 @@
 stages:
-  - format
   - build
-
-clang-format:
-  stage: format
-  image: suyuemu/cibuild:linux-x64
-  allow_failure: true
-  variables:
-    RELEASE_NAME: mainline
-  script:
-    - git submodule update --init --depth 1 --recursive
-    - bash .ci/scripts/format/script.sh
 
 build-linux:
   stage: build
-  image: suyuemu/cibuild:linux-x64
+  image: ddutchie/linux:latest
   resource_group: linux-ci
   variables:
-    RELEASE_NAME: mainline
+    GIT_SUBMODULE_STRATEGY: recursive
+    GIT_SUBMODULE_DEPTH: 1
+    RELEASE_NAME: mainline  
   script:
-    - git submodule update --init --depth 1 --recursive
     - bash .ci/scripts/linux/docker.sh
     - bash .ci/scripts/linux/upload.sh
   artifacts:
