@@ -110,20 +110,6 @@
     <string name="website_link">https://suyu-emu.org/</string>
     <string name="github_link">https://github.com/suyu-emu</string>
 
-    <!-- Early access upgrade strings -->
-    <string name="early_access">Tidlig tilgang</string>
-    <string name="get_early_access">Få tidlig tilgang</string>
-    <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
-    <string name="get_early_access_description">Banebrytende funksjoner, tidlig tilgang til oppdateringer og mye mer.</string>
-    <string name="early_access_benefits">Fordeler ved tidlig tilgang</string>
-    <string name="cutting_edge_features">Avanserte funksjoner</string>
-    <string name="early_access_updates">Tidlig tilgang til oppdateringer</string>
-    <string name="no_manual_installation">Ingen manuell installasjon</string>
-    <string name="prioritized_support">Prioritert støtte</string>
-    <string name="helping_game_preservation">Bidra til bevaring av spill</string>
-    <string name="our_eternal_gratitude">Vår evige takknemlighet</string>
-    <string name="are_you_interested">Er du interessert?</string>
-
     <!-- General settings strings -->
     <string name="frame_limit_enable">Begrense hastigheten</string>
     <string name="frame_limit_enable_description">Begrenser emuleringshastigheten til en spesifisert prosentandel av normal hastighet.</string>

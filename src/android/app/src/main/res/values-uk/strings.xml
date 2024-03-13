@@ -95,20 +95,6 @@
     <string name="website_link">https://suyu-emu.org/</string>
     <string name="github_link">https://github.com/suyu-emu</string>
 
-    <!-- Early access upgrade strings -->
-    <string name="early_access">Ранній доступ</string>
-    <string name="get_early_access">Отримати ранній доступ</string>
-    <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
-    <string name="get_early_access_description">Новітні можливості, ранній доступ до оновлень та інше</string>
-    <string name="early_access_benefits">Переваги раннього доступу</string>
-    <string name="cutting_edge_features">Новітні можливості</string>
-    <string name="early_access_updates">Ранній доступ до оновлень</string>
-    <string name="no_manual_installation">Без ручного встановлення</string>
-    <string name="prioritized_support">Пріоритетна підтримка</string>
-    <string name="helping_game_preservation">Допомога в презервації ігор</string>
-    <string name="our_eternal_gratitude">Наша нескінченна вдячність</string>
-    <string name="are_you_interested">Ви зацікавлені?</string>
-
     <string name="frame_limit_slider">Обмеження відсотка швидкості</string>
     <string name="cpu_accuracy">Точність ЦП</string>
     <string name="emulated_region">Емульований регіон</string>

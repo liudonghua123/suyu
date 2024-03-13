@@ -180,20 +180,6 @@
     <string name="website_link">https://suyu-emu.org/</string>
     <string name="github_link">https://github.com/suyu-emu</string>
 
-    <!-- Early access upgrade strings -->
-    <string name="early_access">앞서 해보기</string>
-    <string name="get_early_access">앞서 해보기 신청</string>
-    <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
-    <string name="get_early_access_description">최신 기능, 업데이트 미리 체험 등</string>
-    <string name="early_access_benefits">앞서 해보기 혜택</string>
-    <string name="cutting_edge_features">최신 기능</string>
-    <string name="early_access_updates">업데이트 미리 체험</string>
-    <string name="no_manual_installation">수동 설치 불필요</string>
-    <string name="prioritized_support">우선 지원</string>
-    <string name="helping_game_preservation">게임 보존 지원</string>
-    <string name="our_eternal_gratitude">우리의 영원한 감사의 마음</string>
-    <string name="are_you_interested">관심 있으세요?</string>
-
     <!-- General settings strings -->
     <string name="frame_limit_enable">속도 제한</string>
     <string name="frame_limit_enable_description">에뮬레이션 속도를 정상 속도의 지정된 비율로 제한합니다.</string>

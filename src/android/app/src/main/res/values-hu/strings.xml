@@ -179,19 +179,6 @@
     <string name="website_link">https://suyu-emu.org/</string>
     <string name="github_link">https://github.com/suyu-emu</string>
 
-    <!-- Early access upgrade strings -->
-    <string name="early_access">Korai hozzáférés</string>
-    <string name="get_early_access">Szerezz korai hozzáférést</string>
-    <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
-    <string name="get_early_access_description">Legújabb funkciók, korai hozzáférés a frissítésekhez, és sok más</string>
-    <string name="early_access_benefits">Korai hozzáférés előnyei</string>
-    <string name="cutting_edge_features">Legújabb funkciók</string>
-    <string name="early_access_updates">Korai hozzáférés a frissítésekhez</string>
-    <string name="no_manual_installation">Automatikus telepítések</string>
-    <string name="prioritized_support">Priorizált támogatás</string>
-    <string name="our_eternal_gratitude">Valamint az örök hálánk</string>
-    <string name="are_you_interested">Érdekel a dolog?</string>
-
     <!-- General settings strings -->
     <string name="frame_limit_enable">Sebességkorlát</string>
     <string name="frame_limit_enable_description">Korlátozza az emuláció sebességét a normál sebesség adott százalékára.</string>

@@ -180,20 +180,6 @@
     <string name="website_link">https://suyu-emu.org/</string>
     <string name="github_link">https://github.com/suyu-emu</string>
 
-    <!-- Early access upgrade strings -->
-    <string name="early_access">抢先体验</string>
-    <string name="get_early_access">获取抢先体验！</string>
-    <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
-    <string name="get_early_access_description">最新的功能、抢先更新、以及更多</string>
-    <string name="early_access_benefits">抢先体验的权益</string>
-    <string name="cutting_edge_features">最新功能</string>
-    <string name="early_access_updates">抢先更新</string>
-    <string name="no_manual_installation">无需手动安装</string>
-    <string name="prioritized_support">优先支持</string>
-    <string name="helping_game_preservation">帮助保留游玩历史</string>
-    <string name="our_eternal_gratitude">我们真诚的感激</string>
-    <string name="are_you_interested">您对此感兴趣吗？</string>
-
     <!-- General settings strings -->
     <string name="frame_limit_enable">运行速度限制</string>
     <string name="frame_limit_enable_description">将运行速度限制为正常速度的指定百分比。</string>
