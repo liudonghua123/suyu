@@ -83,10 +83,10 @@ static void PrintHelp(const char* argv0) {
                  "-u, --user            Select a specific user profile from 0 to 7\n"
                  "-v, --version         Output version information and exit\n"
                  "-l, "
-                 "--applet-params=\"program_id,applet_id,applet_type,launch_type,prog_index,prev_"
-                 "prog_index\"\n"
-                 "                      Parameters for launching an applet. If applet_id is not 0, "
-                 "applet will launch.\n";
+                 "--applet-params="
+                 "\"program_id,applet_id,applet_type,launch_type,prog_index,prev_prog_index\"\n"
+                 "                      Numerical parameters for launching an applet. If applet_id\n"
+                 "                      is 0, then the provided game will launch, if any.\n";
 }
 
 static void PrintVersion() {
