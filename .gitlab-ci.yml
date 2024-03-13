@@ -33,7 +33,7 @@ android:
   image: ubuntu:latest
   before_script:
     - apt-get update
-    - apt-get -y install ccache apksigner glslang-dev glslang-tools git sdkmanager android-sdk bash openjdk-17-jdk openjdk-17-jre curl zip unzip tar
+    - apt-get -y install ccache apksigner glslang-dev glslang-tools git sdkmanager android-sdk bash openjdk-17-jdk openjdk-17-jre curl zip unzip tar cmake
     - export ANDROID_HOME="/usr/lib/android-sdk/"
     - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
   script:
