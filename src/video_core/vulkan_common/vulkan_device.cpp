@@ -619,9 +619,9 @@ Device::Device(VkInstance instance_, vk::PhysicalDevice physical_, VkSurfaceKHR 
                 dynamic_state3_blending = false;
             }
             // Test for non-RDNA3, RDNA2 still supports shaderBufferFloat32Atomics.
-            if (shader_atomic_float_feature.shaderBufferFloat32Atomics) {
-                LOG_INFO(Render_Vulkan,
-                         "RDNA2 driver detected, extendedDynamicState3ColorBlendEquation is OK.");
+            else if (shader_atomic_float_feature.shaderBufferFloat32Atomics) {
+                LOG_INFO(Render_Vulkan, "RDNA1 or RDNA2 driver detected, "
+                                        "extendedDynamicState3ColorBlendEquation is OK.");
             }
         }
     }
