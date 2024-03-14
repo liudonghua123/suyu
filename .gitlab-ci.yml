@@ -32,6 +32,7 @@ android:
   script:
     - apt-get update -y
     - git submodule update --init --recursive
+    - export ANDROID_HOME="/usr/lib/android-sdk/"
     - cd src/android && ./gradlew assemblemainlinerelease bundlemainlinerelease --stacktrace
   artifacts:
     name: "android"
