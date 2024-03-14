@@ -1,6 +1,7 @@
 stages:
-  - format
-  - build
+  - check_formatting
+  - build_linux
+  - build_android
 #CACHE SETUP
 variables:
   # https://docs.gitlab.com/ee/ci/runners/configure_runners.html
@@ -17,19 +18,16 @@ variables:
   CCACHE_DIR: $CACHE_DIR
 #CLANG FORMAT - CHECKS CODE FOR FORMATTING ISSUES
 clang-format:
-  stage: format
+  stage: check_formatting
   image: registry.gitlab.com/ddutchie/ci-docker:clangformat
   #TODO: SET THIS TO FALSE!!!
   allow_failure: true
-  variables:
-    RELEASE_NAME: mainline\
-  
   script:
     - git submodule update --init --depth 1 --recursive
     - bash .ci/scripts/format/script.sh
 #LINUX BUILD - BUILDS LINUX APPIMAGE
 build-linux:
-  stage: build
+  stage: build_linux
   image: registry.gitlab.com/ddutchie/ci-docker:linux-x64
   resource_group: linux-ci
   #SETUP CACHE IN LINUX BUILD
@@ -52,11 +50,12 @@ build-linux:
       - artifacts/*
 #ANDROID BUILD - BUILDS APK
 android:
-  stage: build
+  stage: build_android
   image: registry.gitlab.com/ddutchie/ci-docker:android-x64
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   script:
     - apt-get update -y
-    - git submodule update --init --recursive
     - export ANDROID_HOME="/usr/lib/android-sdk/"
     - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
     - cd src/android && ./gradlew assemblemainlinerelease bundlemainlinerelease --stacktrace
