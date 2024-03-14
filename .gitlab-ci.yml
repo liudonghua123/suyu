@@ -1,21 +1,6 @@
 stages:
   - format
   - build
-
-#CACHE SETUP
-variables:
-  # https://docs.gitlab.com/ee/ci/runners/configure_runners.html
-  TRANSFER_METER_FREQUENCY: "2s"
-  ARTIFACT_COMPRESSION_LEVEL: "fast"
-  CACHE_COMPRESSION_LEVEL: "fastest"
-  CACHE_REQUEST_TIMEOUT: 5
-  # Use FASTZIP for faster compression in cache and artifacts 
-  # https://docs.gitlab.com/runner/configuration/feature-flags.html#available-feature-flags
-  FF_USE_FASTZIP: true
-  
-  # Our Variables
-  CACHE_DIR: "$CI_PROJECT_DIR/ccache"
-  CCACHE_DIR: $CACHE_DIR
 #CLANG FORMAT - CHECKS CODE FOR FORMATTING ISSUES
 clang-format:
   stage: format
@@ -30,14 +15,6 @@ build-linux:
   stage: build
   image: registry.gitlab.com/ddutchie/ci-docker:linux-x64
   resource_group: linux-ci
-  #SETUP CACHE IN LINUX BUILD
-  #cache:
-  #  key: "$CI_COMMIT_REF_NAME-ccache"
-  #  paths:
-  #    - $CACHE_DIR
-  #before_script:
-  #  - mkdir -p $CACHE_DIR
-  #  - ls -la $CACHE_DIR
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
     GIT_SUBMODULE_DEPTH: 1
@@ -57,10 +34,8 @@ android:
     - git submodule update --init --recursive
     - export ANDROID_HOME="/usr/lib/android-sdk/"
     - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
-    - cd src/android && ./gradlew assemblemainlinerelease bundlemainlinerelease --stacktrace 
-  after_script:
-    - cd /
-    - cp ./src/android/app/build/outputs/apk/mainline/release/*.apk ./artifacts
+    - bash ./.ci/scripts/android/build.sh
+    - bash ./.ci/scripts/android/upload.sh
   artifacts:
     paths:
       - artifacts/*
