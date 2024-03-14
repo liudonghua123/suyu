@@ -50,10 +50,10 @@ build-linux:
   artifacts:
     paths:
       - artifacts/*
- #ANDROID BUILD - BUILDS APK
- android:
+#ANDROID BUILD - BUILDS APK
+android:
   stage: build
-  image: registry.gitlab.com/ddutchie/ci-docker:cibuild:android-x64
+  image: registry.gitlab.com/ddutchie/ci-docker:android-x64
   script:
     - apt-get update -y
     - git submodule update --init --recursive
