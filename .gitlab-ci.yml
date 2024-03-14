@@ -18,6 +18,13 @@ build-linux:
   resource_group: linux-ci
   variables:
     RELEASE_NAME: mainline
+  cache:
+    paths:
+      - ccache/
+  before_script:
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
   script:
     - git submodule update --init --depth 1 --recursive
     - bash .ci/scripts/linux/docker.sh
