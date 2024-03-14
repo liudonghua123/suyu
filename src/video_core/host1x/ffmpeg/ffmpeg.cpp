@@ -221,6 +221,7 @@ bool DecoderContext::OpenContext(const Decoder& decoder) {
 // Nasty but allows linux builds to pass.
 // Requires double checks when FFMPEG gets updated.
 // Hopefully a future FFMPEG update will all and expose a solution in the public API.
+#ifndef ANDROID
 namespace {
 
 typedef struct FFCodecDefault {
@@ -374,6 +375,7 @@ typedef struct FFCodec {
 static av_always_inline const FFCodec* ffcodec(const AVCodec* codec) {
     return (const FFCodec*)codec;
 }
+#endif
 
 } // namespace
 
