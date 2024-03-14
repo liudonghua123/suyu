@@ -39,3 +39,7 @@ Thumbs.db
 
 # Local Gitlab CI Runner
 .gitlab-ci-local/
+
+# clangd compile_commands.json
+# https://clangd.llvm.org/installation.html#project-setup
+compile_commands.json

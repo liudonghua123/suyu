@@ -1,6 +1,21 @@
 stages:
   - format
   - build
+
+variables:
+  # https://docs.gitlab.com/ee/ci/runners/configure_runners.html
+  TRANSFER_METER_FREQUENCY: "2s"
+  ARTIFACT_COMPRESSION_LEVEL: "fast"
+  CACHE_COMPRESSION_LEVEL: "fastest"
+  CACHE_REQUEST_TIMEOUT: 5
+  # Use FASTZIP for faster compression in cache and artifacts 
+  # https://docs.gitlab.com/runner/configuration/feature-flags.html#available-feature-flags
+  FF_USE_FASTZIP: true
+  
+  # Our Variables
+  CACHE_DIR: "$CI_PROJECT_DIR/ccache"
+  CCACHE_DIR: $CACHE_DIR
+
 #CLANG FORMAT - CHECKS CODE FOR FORMATTING ISSUES
 clang-format:
   stage: format
@@ -10,11 +25,19 @@ clang-format:
   script:
     - git submodule update --init --depth 1 --recursive
     - bash .ci/scripts/format/script.sh
+
 #LINUX BUILD - BUILDS LINUX APPIMAGE
 build-linux:
   stage: build
   image: registry.gitlab.com/ddutchie/ci-docker:linux-x64
   resource_group: linux-ci
+  cache:
+    key: "$CI_COMMIT_REF_NAME-ccache"
+    paths:
+      - $CACHE_DIR
+  before_script:
+    - mkdir -p $CACHE_DIR
+    - ls -la $CACHE_DIR
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
     GIT_SUBMODULE_DEPTH: 1
@@ -25,6 +48,7 @@ build-linux:
   artifacts:
     paths:
       - artifacts/*
+
 #ANDROID BUILD - BUILDS APK
 android:
   stage: build
@@ -39,3 +63,4 @@ android:
   artifacts:
     paths:
       - artifacts/*
+
