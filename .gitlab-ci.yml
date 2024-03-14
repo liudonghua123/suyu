@@ -43,4 +43,4 @@ android:
   artifacts:
     name: "android"
     paths:
-      - app/*.apk
+      - src/android/app/build/outputs/apk/mainline/release/*.apk
