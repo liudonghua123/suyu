@@ -52,10 +52,9 @@ build-linux:
 android:
   stage: build
   image: registry.gitlab.com/ddutchie/ci-docker:android-x64
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   script:
     - apt-get update -y
+    - git submodule update --init --recursive
     - export ANDROID_HOME="/usr/lib/android-sdk/"
     - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
     - cd src/android && ./gradlew assemblemainlinerelease bundlemainlinerelease --stacktrace
