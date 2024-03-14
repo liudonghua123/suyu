@@ -57,8 +57,9 @@ android:
     - git submodule update --init --recursive
     - export ANDROID_HOME="/usr/lib/android-sdk/"
     - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
-    - .src/android/gradlew assemblemainlinerelease bundlemainlinerelease --stacktrace
-    - cp src/android/app/build/outputs/apk/mainline/release/*.apk ./artifacts
+    - cd src/android && .src/android/gradlew assemblemainlinerelease bundlemainlinerelease --stacktrace
+    - cd /
+    - cp ./src/android/app/build/outputs/apk/mainline/release/*.apk ./artifacts
   artifacts:
     paths:
       - artifacts/*
