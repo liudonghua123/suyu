@@ -2,6 +2,20 @@ stages:
   - format
   - build
 
+variables:
+  # https://docs.gitlab.com/ee/ci/runners/configure_runners.html
+  TRANSFER_METER_FREQUENCY: "2s"
+  ARTIFACT_COMPRESSION_LEVEL: "fast"
+  CACHE_COMPRESSION_LEVEL: "fastest"
+  CACHE_REQUEST_TIMEOUT: 5
+  # Use FASTZIP for faster compression in cache and artifacts 
+  # https://docs.gitlab.com/runner/configuration/feature-flags.html#available-feature-flags
+  FF_USE_FASTZIP: true
+  
+  # Our Variables
+  CACHE_DIR: "$CI_PROJECT_DIR/ccache"
+  CCACHE_DIR: $CACHE_DIR
+
 clang-format:
   stage: format
   image: suyuemu/cibuild:linux-x64
@@ -16,6 +30,13 @@ build-linux:
   stage: build
   image: suyuemu/cibuild:linux-x64
   resource_group: linux-ci
+  cache:
+    key: "$CI_COMMIT_REF_NAME-ccache"
+    paths:
+      - $CACHE_DIR
+  before_script:
+    - mkdir -p $CACHE_DIR
+    - ls -la $CACHE_DIR
   variables:
     RELEASE_NAME: mainline
   script:
@@ -25,3 +46,4 @@ build-linux:
   artifacts:
     paths:
       - artifacts/*
+
