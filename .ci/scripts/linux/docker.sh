@@ -16,6 +16,8 @@ cmake .. \
 			-DSUYU_USE_PRECOMPILED_HEADERS=OFF \
 			-DDYNARMIC_USE_PRECOMPILED_HEADERS=OFF \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+			-DCMAKE_CXX_COMPILER=/usr/local/bin/g++ \
+      -DCMAKE_C_COMPILER=/usr/local/bin/gcc \
       -DCMAKE_CXX_FLAGS="-march=x86-64-v2" \
       -DCMAKE_INSTALL_PREFIX="/usr" \
       -DDISPLAY_VERSION=$1 \
