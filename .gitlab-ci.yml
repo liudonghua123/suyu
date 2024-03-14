@@ -33,6 +33,7 @@ android:
     - apt-get update -y
     - git submodule update --init --recursive
     - export ANDROID_HOME="/usr/lib/android-sdk/"
+    - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
     - cd src/android && ./gradlew assemblemainlinerelease bundlemainlinerelease --stacktrace
   artifacts:
     name: "android"
