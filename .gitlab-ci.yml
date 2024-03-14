@@ -25,3 +25,19 @@ build-linux:
   artifacts:
     paths:
       - artifacts/*
+
+android:
+  stage: build
+  image: suyuemu/cibuild:android-x64
+  script:
+    - apt-get update -y
+    - git submodule update --init --recursive
+    - export ANDROID_HOME="/usr/lib/android-sdk/"
+    - echo y | sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
+    - bash ./.ci/scripts/android/build.sh"
+  after_script:
+    - cp src/android/app/build/outputs/apk/mainline/release/*.apk ./artifacts
+  artifacts:
+    name: "android"
+    paths:
+      - artifacts/*.apk
