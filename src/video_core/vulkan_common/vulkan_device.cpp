@@ -613,7 +613,8 @@ Device::Device(VkInstance instance_, vk::PhysicalDevice physical_, VkSurfaceKHR 
             // If AMD RDNA3, disable extendedDynamicState3ColorBlendEquation
             if (shader_atomic_float_feature.shaderBufferFloat32AtomicAdd) {
                 LOG_WARNING(Render_Vulkan,
-                            "AMD drivers have broken extendedDynamicState3ColorBlendEquation");
+                            "Currently, AMD RDNA3 drivers have broken "
+                            "extendedDynamicState3ColorBlendEquation, extension feature disabled.");
                 features.extended_dynamic_state3.extendedDynamicState3ColorBlendEnable = false;
                 features.extended_dynamic_state3.extendedDynamicState3ColorBlendEquation = false;
                 dynamic_state3_blending = false;
