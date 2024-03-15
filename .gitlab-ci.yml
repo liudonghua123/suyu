@@ -11,7 +11,7 @@ clang-format:
   script:
     - git submodule update --init --depth 1 --recursive
     - bash .ci/scripts/format/script.sh
-  #tags:
+  tags:
   #  - Linux
   #  - Windows
     - Parallelized
