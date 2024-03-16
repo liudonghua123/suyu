@@ -11,6 +11,8 @@ ccache -s
 mkdir build || true && cd build
 cmake .. \
       -DBoost_USE_STATIC_LIBS=ON \
+			-DSUYU_USE_PRECOMPILED_HEADERS=OFF \
+			-DDYNARMIC_USE_PRECOMPILED_HEADERS=OFF \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_CXX_FLAGS="-march=x86-64-v2" \
       -DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++ \
