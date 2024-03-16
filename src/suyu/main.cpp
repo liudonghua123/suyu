@@ -1781,11 +1781,10 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
         system->Load(*render_window, filename.toStdString(), params)};
 
     if(result == Core::SystemResultStatus::Success && 
-       !CheckFirmwarePresence() && system->GetAppLoader().GetFileType() != Loader::FileType::NRO)
-       {
+       !CheckFirmwarePresence() && system->GetAppLoader().GetFileType() != Loader::FileType::NRO) {
            QMessageBox::critical(this, tr("Missing Firmware"));
            return false;
-       }
+    }
 
     const auto drd_callout = (UISettings::values.callout_flags.GetValue() &
                               static_cast<u32>(CalloutFlag::DRDDeprecation)) == 0;
