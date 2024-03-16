@@ -1791,7 +1791,7 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
 
     if(result == Core::SystemResultStatus::Success && 
        !CheckFirmwarePresence() && system->GetAppLoader().GetFileType() != Loader::FileType::NRO) {
-           QMessageBox::critical(this, tr("Missing Firmware"));
+           QMessageBox::critical(this, tr("Component Missing"), tr("Missing Firmware"));
            return false;
     }
 
