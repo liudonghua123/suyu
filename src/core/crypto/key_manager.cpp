@@ -638,13 +638,12 @@ KeyManager::KeyManager() {
     ReloadKeys();
 }
 
-bool KeyManager::ReloadKeys() {
+void KeyManager::ReloadKeys() {
     // Initialize keys
     const auto suyu_keys_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::KeysDir);
 
     if (!Common::FS::CreateDir(suyu_keys_dir)) {
         LOG_ERROR(Crypto, "Failed to create the keys directory.");
-        return false;
     }
 
     if (Settings::values.use_dev_keys) {
@@ -657,8 +656,6 @@ bool KeyManager::ReloadKeys() {
 
     LoadFromFile(suyu_keys_dir / "title.keys", true);
     LoadFromFile(suyu_keys_dir / "console.keys", false);
-
-    return true;
 }
 
 static bool ValidCryptoRevisionString(std::string_view base, size_t begin, size_t length) {
