@@ -292,7 +292,7 @@ public:
 
     bool AddTicket(const Ticket& ticket);
 
-    void ReloadKeys();
+    bool ReloadKeys();
     bool AreKeysLoaded() const;
 
 private:
