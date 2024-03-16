@@ -24,6 +24,7 @@ cmake .. \
       -DSUYU_USE_BUNDLED_FFMPEG=ON \
       -DSUYU_ENABLE_LTO=ON \
       -DSUYU_CRASH_DUMPS=ON \
+      -DSUYU_USE_FASTER_LD=ON \
       -GNinja
 
 ninja
