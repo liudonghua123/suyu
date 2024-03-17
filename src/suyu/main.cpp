@@ -1777,8 +1777,7 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
         std::make_unique<QtWebBrowser>(*this),               // Web Browser
     });
 
-    Core::SystemResultStatus result{
-        system->Load(*render_window, filename.toStdString(), params)};
+    Core::SystemResultStatus result{system->Load(*render_window, filename.toStdString(), params)};
 
     if (result == Core::SystemResultStatus::Success &&
         (!CheckFirmwarePresence() || !ContentManager::AreKeysPresent()) &&
