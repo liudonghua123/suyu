@@ -55,8 +55,7 @@ build-linux:
     paths:
       - artifacts/*
   tags:
-    - Linux
-    - Parallelized
+    - linux
 
 #ANDROID BUILD - BUILDS APK
 android:
@@ -76,6 +75,5 @@ android:
     paths:
       - artifacts/*
   tags:
-    - Linux
-    - Parallelized
+    - linux
 
