@@ -1748,15 +1748,6 @@ void GMainWindow::AllowOSSleep() {
 }
 
 bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletParameters params) {
-    if (!ContentManager::AreKeysPresent()) {
-        QMessageBox::warning(this, tr("Derivation Components Missing"),
-                             tr("Encryption keys are missing. "
-                                "You need to provide both your own title.keys "
-                                "and your own prod.keys "
-                                "in order to play games"));
-        return false;
-    }
-
     // Shutdown previous session if the emu thread is still active...
     if (emu_thread != nullptr) {
         ShutdownGame();
@@ -1786,13 +1777,13 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
         std::make_unique<QtWebBrowser>(*this),               // Web Browser
     });
 
-    const Core::SystemResultStatus result{
+    Core::SystemResultStatus result{
         system->Load(*render_window, filename.toStdString(), params)};
 
-    if(result == Core::SystemResultStatus::Success && 
-       !CheckFirmwarePresence() && system->GetAppLoader().GetFileType() != Loader::FileType::NRO) {
-           QMessageBox::critical(this, tr("Component Missing"), tr("Missing Firmware"));
-           return false;
+    if (result == Core::SystemResultStatus::Success &&
+        (!CheckFirmwarePresence() || !ContentManager::AreKeysPresent()) &&
+        system->GetAppLoader().GetFileType() != Loader::FileType::NRO) {
+        result = static_cast<Core::SystemResultStatus>(-1);
     }
 
     const auto drd_callout = (UISettings::values.callout_flags.GetValue() &
@@ -1831,6 +1822,18 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
                    "How to Upload the Log File</a>. "));
             break;
         default:
+            if (!ContentManager::AreKeysPresent()) {
+                QMessageBox::warning(this, tr("Derivation Components Missing"),
+                                     tr("Encryption keys are missing. "
+                                     "You need to provide both your own title.keys "
+                                     "and your own prod.keys "
+                                     "in order to play games"));
+                break;
+            }
+            if (!CheckFirmwarePresence()) {
+                QMessageBox::critical(this, tr("Component Missing"), tr("Missing Firmware."));
+                break;
+            }
             if (result > Core::SystemResultStatus::ErrorLoader) {
                 const u16 loader_id = static_cast<u16>(Core::SystemResultStatus::ErrorLoader);
                 const u16 error_id = static_cast<u16>(result) - loader_id;
