@@ -45,7 +45,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>21</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -124,7 +124,7 @@
     <addaction name="action_Display_Dock_Widget_Headers"/>
     <addaction name="action_Show_Filter_Bar"/>
     <addaction name="action_Show_Status_Bar"/>
-    <addaction name="action_Show_Folders_In_List" />
+    <addaction name="action_Show_Folders_In_List"/>
     <addaction name="separator"/>
     <addaction name="menu_Reset_Window_Size"/>
     <addaction name="menu_View_Debugging"/>
@@ -166,7 +166,8 @@
      <addaction name="separator"/>
      <addaction name="action_Configure_Tas"/>
     </widget>
-    <addaction name="action_Install_Keys"/>
+    <addaction name="action_Install_Product_Keys"/>
+    <addaction name="action_Install_Title_Keys"/>
     <addaction name="action_Install_Firmware"/>
     <addaction name="action_Verify_installed_contents"/>
     <addaction name="separator"/>
@@ -483,14 +484,22 @@
     <string>Install Firmware</string>
    </property>
   </action>
-  <action name="action_Install_Keys">
+  <action name="action_Install_Product_Keys">
    <property name="text">
-    <string>Install Decryption Keys</string>
+    <string>Install Product Keys</string>
    </property>
   </action>
   <action name="action_Load_Home_Menu">
    <property name="text">
     <string>Open Home Menu</string>
+   </property>
+  </action>
+  <action name="action_Install_Title_Keys">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Install Title Keys</string>
    </property>
   </action>
  </widget>
