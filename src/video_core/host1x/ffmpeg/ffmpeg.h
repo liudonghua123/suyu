@@ -106,7 +106,8 @@ public:
     }
 
     bool IsInterlaced() const {
-        return m_frame->interlaced_frame != 0;
+        //Remove depricated functions return m_frame->interlaced_frame != 0;
+        return AV_FRAME_FLAG_KEY != 0;
     }
 
     bool IsHardwareDecoded() const {
