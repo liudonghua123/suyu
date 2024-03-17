@@ -30,6 +30,7 @@ clang-format:
   tags:
   #  - Linux
   #  - Windows
+    - Parallelized
 
 #LINUX BUILD - BUILDS LINUX APPIMAGE
 build-linux:
