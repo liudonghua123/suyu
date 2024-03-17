@@ -36,7 +36,6 @@ clang-format:
 build-linux:
   stage: build
   image: suyuemu/cibuild:linux-x64
-  resource_group: linux-ci
   cache:
     key: "$CI_COMMIT_REF_NAME-ccache"
     paths:
@@ -56,8 +55,7 @@ build-linux:
     paths:
       - artifacts/*
   tags:
-    - Linux
-    - Parallelized
+    - linux
 
 #ANDROID BUILD - BUILDS APK
 android:
@@ -77,5 +75,4 @@ android:
     paths:
       - artifacts/*
   tags:
-    - Linux
-    - Parallelized
+    - linux
