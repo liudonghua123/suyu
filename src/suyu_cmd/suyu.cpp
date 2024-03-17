@@ -71,22 +71,23 @@ __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 #endif
 
 static void PrintHelp(const char* argv0) {
-    std::cout << "Usage: " << argv0
-              << " [options] <filename>\n"
-                 "-c, --config          Load the specified configuration file\n"
-                 "-f, --fullscreen      Start in fullscreen mode\n"
-                 "-g, --game            File path of the game to load\n"
-                 "-h, --help            Display this help and exit\n"
-                 "-m, --multiplayer=nick:password@address:port"
-                 " Nickname, password, address and port for multiplayer\n"
-                 "-p, --program         Pass following string as arguments to executable\n"
-                 "-u, --user            Select a specific user profile from 0 to 7\n"
-                 "-v, --version         Output version information and exit\n"
-                 "-l, "
-                 "--applet-params="
-                 "\"program_id,applet_id,applet_type,launch_type,prog_index,prev_prog_index\"\n"
-                 "                      Numerical parameters for launching an applet. If applet_id\n"
-                 "                      is 0, then the provided game will launch, if any.\n";
+    std::cout
+        << "Usage: " << argv0
+        << " [options] <filename>\n"
+           "-c, --config          Load the specified configuration file\n"
+           "-f, --fullscreen      Start in fullscreen mode\n"
+           "-g, --game            File path of the game to load\n"
+           "-h, --help            Display this help and exit\n"
+           "-m, --multiplayer=nick:password@address:port"
+           " Nickname, password, address and port for multiplayer\n"
+           "-p, --program         Pass following string as arguments to executable\n"
+           "-u, --user            Select a specific user profile from 0 to 7\n"
+           "-v, --version         Output version information and exit\n"
+           "-l, "
+           "--applet-params="
+           "\"program_id,applet_id,applet_type,launch_type,prog_index,prev_prog_index\"\n"
+           "                      Numerical parameters for launching an applet. If applet_id\n"
+           "                      is 0, then the provided game will launch, if any.\n";
 }
 
 static void PrintVersion() {
