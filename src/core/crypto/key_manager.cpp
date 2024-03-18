@@ -672,9 +672,11 @@ void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_ty
         case 1:
             LOG_ERROR(Crypto, "Issue with Development key file at '{}': File not found",
                       file_path.generic_string());
+            return;
         case 2:
             LOG_ERROR(Crypto, "Issue with Production key file at '{}': File not found",
                       file_path.generic_string());
+            return;
         case 3:
             LOG_INFO(Crypto, "Issue with Title key file at '{}': File not found",
                      file_path.generic_string());
@@ -684,7 +686,6 @@ void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_ty
         default:
             LOG_ERROR(Crypto, "Unknown Key Type");
         }
-        return;
     }
 
     std::ifstream file;
