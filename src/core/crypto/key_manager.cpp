@@ -667,7 +667,6 @@ static bool ValidCryptoRevisionString(std::string_view base, size_t begin, size_
 }
 
 void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_type) {
-    bool is_title_keys = false;
     if (!Common::FS::Exists(file_path)) {
         switch (key_type) {
         case 1:
@@ -681,14 +680,11 @@ void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_ty
         case 3:
             LOG_INFO(Crypto, "Issue with Title key file at '{}': File not found",
                      file_path.generic_string());
-            is_title_keys = true;
         case 4:
             LOG_INFO(Crypto, "Issue with Console key file at '{}': File not found",
                      file_path.generic_string());
-            is_title_keys = true;
         default:
             LOG_ERROR(Crypto, "Unknown Key Type");
-            is_title_keys = true;
         }
     }
 
