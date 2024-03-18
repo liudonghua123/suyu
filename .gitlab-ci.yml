@@ -1,16 +1,6 @@
 stages:
   - format
   - build
-
-variables:
-  # https://docs.gitlab.com/ee/ci/runners/configure_runners.html
-  TRANSFER_METER_FREQUENCY: "2s"
-  ARTIFACT_COMPRESSION_LEVEL: "fast"
-  # Use FASTZIP for faster compression in cache and artifacts 
-  # https://docs.gitlab.com/runner/configuration/feature-flags.html#available-feature-flags
-  FF_USE_FASTZIP: true
-  
-
 #CLANG FORMAT - CHECKS CODE FOR FORMATTING ISSUES
 clang-format:
   stage: format

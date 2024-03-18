@@ -14,7 +14,6 @@ dist/english_plurals/generated_en.ts
 .idea/
 .vs/
 .vscode/
-.cache/
 CMakeLists.txt.user*
 
 # *nix related
