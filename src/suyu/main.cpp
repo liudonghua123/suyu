@@ -1755,10 +1755,9 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
     if (!ContentManager::AreKeysPresent()) {
         QMessageBox::warning(this, tr("Derivation Components Missing"),
                              tr("Encryption keys are missing. "
-                                "In order to use this emulator"
-                                "you need to provide your own prod.keys"
-                                "Some games might also require your own title.keys as well"
-                                "in order to play them."));
+                                "You need to provide both your own title.keys "
+                                "and your own prod.keys "
+                                "in order to play games"));
         return false;
     }
 
