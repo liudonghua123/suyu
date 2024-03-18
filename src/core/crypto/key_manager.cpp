@@ -667,7 +667,7 @@ static bool ValidCryptoRevisionString(std::string_view base, size_t begin, size_
 }
 
 void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_type) {
-    if (!Common::FS::Exists(file_path) && key_type == 1) {
+    if (!Common::FS::Exists(file_path)) {
         switch (key_type) {
         case 1:
             LOG_ERROR(Crypto, "Issue with Development key file at '{}': File not found",
