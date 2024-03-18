@@ -671,11 +671,11 @@ void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_ty
         switch (key_type) {
             case 1: LOG_ERROR(Crypto, "Issue with Development key file at '{}': File not found",
             file_path.generic_string());
-            case 2: LOG_ERROR(Crypto, "Issue with Production key file at '{}': File not found", 
+            case 2: LOG_ERROR(Crypto, "Issue with Production key file at '{}': File not found",
             file_path.generic_string());
-            case 3: LOG_INFO(Crypto, "Issue with Title key file at '{}': File not found", 
+            case 3: LOG_INFO(Crypto, "Issue with Title key file at '{}': File not found",
             file_path.generic_string());
-            case 4: LOG_INFO(Crypto, "Issue with Console key file at '{}': File not found", 
+            case 4: LOG_INFO(Crypto, "Issue with Console key file at '{}': File not found",
             file_path.generic_string());
             default: LOG_ERROR(Crypto, "Unknown Key Type");
         }
