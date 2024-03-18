@@ -718,7 +718,7 @@ void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_ty
             continue;
         }
 
-        if (key_type == 3) {
+        if (is_title_keys) {
             auto rights_id_raw = Common::HexStringToArray<16>(out[0]);
             u128 rights_id{};
             std::memcpy(rights_id.data(), rights_id_raw.data(), rights_id_raw.size());
