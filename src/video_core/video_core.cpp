@@ -27,11 +27,13 @@ std::unique_ptr<VideoCore::RendererBase> CreateRenderer(
 #else
         // openGL, not supported on Apple so not bothering to include if macos
     case Settings::RendererBackend::OpenGL:
-        return std::make_unique<OpenGL::RendererOpenGL>(emu_window, device_memory, gpu, std::move(context));
- #endif
+        return std::make_unique<OpenGL::RendererOpenGL>(emu_window, device_memory, gpu,
+                                                        std::move(context));
+#endif
         // common renderers
     case Settings::RendererBackend::Vulkan:
-        return std::make_unique<Vulkan::RendererVulkan>(emu_window, device_memory, gpu, std::move(context));
+        return std::make_unique<Vulkan::RendererVulkan>(emu_window, device_memory, gpu,
+                                                        std::move(context));
     case Settings::RendererBackend::Null:
         return std::make_unique<Null::RendererNull>(emu_window, gpu, std::move(context));
     default:
