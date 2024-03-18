@@ -13,7 +13,6 @@
 #include "video_core/renderer_vulkan/renderer_vulkan.h"
 #include "video_core/video_core.h"
 
-
 namespace {
 
 std::unique_ptr<VideoCore::RendererBase> CreateRenderer(
