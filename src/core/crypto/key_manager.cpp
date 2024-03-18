@@ -682,6 +682,15 @@ void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_ty
         return;
     }
 
+    std::ifstream file;
+    Common::FS::OpenFileStream(file, file_path, std::ios_base::in);
+
+    if (!file.is_open()) {
+        LOG_ERROR(Crypto, "Failed to load key file at '{}': Can't open file",
+                  file_path.generic_string());
+        return;
+    }
+
     LOG_INFO(Crypto, "Loading key file at '{}'", file_path.generic_string());
     std::string line;
     while (std::getline(file, line)) {
