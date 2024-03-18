@@ -51,7 +51,9 @@ build-linux:
     GIT_SUBMODULE_DEPTH: 1
     RELEASE_NAME: mainline  
   script:
+    - chmod -R 1027 ./
     - bash .ci/scripts/linux/docker.sh
+    - chmod -R $UID ./
     - bash .ci/scripts/linux/upload.sh
   artifacts:
     paths:
