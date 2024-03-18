@@ -792,21 +792,6 @@ bool KeyManager::BaseDeriveNecessary() const {
         return !HasKey(key_type, index1, index2);
     };
 
-    // Ensure the files exists
-    const auto suyu_keys_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::KeysDir);
-
-    if (!Common::FS::Exists(suyu_keys_dir /
-                            (Settings::values.use_dev_keys ? "dev.keys" : "prod.keys"))) {
-        LOG_ERROR(Core, "No {} found",
-                  (Settings::values.use_dev_keys ? "dev.keys" : "prod.keys"));
-        return true;
-    }
-
-    if (!Common::FS::Exists(suyu_keys_dir / "title.keys")) {
-        LOG_ERROR(Core, "No title.keys found");
-        return true;
-    }
-
     if (check_key_existence(S256KeyType::Header)) {
         return true;
     }
