@@ -678,8 +678,7 @@ void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_ty
             case 4: LOG_INFO(Crypto, "Issue with Console key file at '{}': File not found",
             file_path.generic_string());
             default: LOG_ERROR(Crypto, "Unknown Key Type");
-        }
-        return;
+        }return;
     }
 
     LOG_INFO(Crypto, "Loading key file at '{}'", file_path.generic_string());
