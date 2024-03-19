@@ -669,12 +669,22 @@ static bool ValidCryptoRevisionString(std::string_view base, size_t begin, size_
 void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_type) {
     if (!Common::FS::Exists(file_path)) {
         switch (key_type) {
-        case 1: LOG_ERROR(Crypto, "Issue with Development key file. File not found.");
+        case 1:
+            LOG_ERROR(Crypto, "Issue with Development key file at '{}': File not found",
+                      file_path.generic_string());
             return;
-        case 2: LOG_ERROR(Crypto, "Issue with Production key file. File not found.");
+        case 2:
+            LOG_ERROR(Crypto, "Issue with Production key file at '{}': File not found",
+                      file_path.generic_string());
             return;
-        case 3: LOG_INFO(Crypto, "Issue with Title key file. File not found.");
-        case 4: LOG_INFO(Crypto, "Issue with Console key file. File not found.");
+        case 3:
+            LOG_INFO(Crypto, "Issue with Title key file at '{}': File not found",
+                     file_path.generic_string());
+        case 4:
+            LOG_INFO(Crypto, "Issue with Console key file at '{}': File not found",
+                     file_path.generic_string());
+        default:
+            LOG_ERROR(Crypto, "Unknown Key Type");
         }
     }
 
@@ -708,7 +718,7 @@ void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_ty
             continue;
         }
 
-        if (key_type == 3) {
+        if (is_title_keys) {
             auto rights_id_raw = Common::HexStringToArray<16>(out[0]);
             u128 rights_id{};
             std::memcpy(rights_id.data(), rights_id_raw.data(), rights_id_raw.size());
