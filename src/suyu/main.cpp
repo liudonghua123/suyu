@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 // Modified by palfaiate on <2024/03/07>
+// Modified by nullequal on <2024/03/19>
 
 #include <cinttypes>
 #include <clocale>
