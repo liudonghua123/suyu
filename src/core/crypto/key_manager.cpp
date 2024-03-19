@@ -669,20 +669,12 @@ static bool ValidCryptoRevisionString(std::string_view base, size_t begin, size_
 void KeyManager::LoadFromFile(const std::filesystem::path& file_path, int key_type) {
     if (!Common::FS::Exists(file_path)) {
         switch (key_type) {
-        case 1:
-            LOG_ERROR(Crypto, "Issue with Development key file at '{}': File not found",
-                      file_path.generic_string());
+        case 1: LOG_ERROR(Crypto, "Issue with Development key file. File not found.");
             return;
-        case 2:
-            LOG_ERROR(Crypto, "Issue with Production key file at '{}': File not found",
-                      file_path.generic_string());
+        case 2: LOG_ERROR(Crypto, "Issue with Production key file. File not found.");
             return;
-        case 3:
-            LOG_INFO(Crypto, "Issue with Title key file at '{}': File not found",
-                     file_path.generic_string());
-        case 4:
-            LOG_INFO(Crypto, "Issue with Console key file at '{}': File not found",
-                     file_path.generic_string());
+        case 3: LOG_INFO(Crypto, "Issue with Title key file. File not found.");
+        case 4: LOG_INFO(Crypto, "Issue with Console key file. File not found.");
         }
     }
 
