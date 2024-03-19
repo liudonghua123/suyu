@@ -1747,7 +1747,8 @@ void GMainWindow::AllowOSSleep() {
 }
 
 bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletParameters params) {
-    if (Loader::IdentifyFile(Core::GetGameFileFromPath(vfs, filename.toStdString())) != Loader::FileType::NRO) {
+    if (Loader::IdentifyFile(Core::GetGameFileFromPath(vfs, filename.toStdString())) !=
+        Loader::FileType::NRO) {
         if (!CheckFirmwarePresence()) {
             QMessageBox::critical(this, tr("Component Missing"), tr("Missing Firmware."));
             return false;
