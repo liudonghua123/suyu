@@ -63,7 +63,7 @@ option(SUYU_USE_BUNDLED_VCPKG "Use vcpkg for suyu dependencies" "${MSVC}")
 
 option(SUYU_CHECK_SUBMODULES "Check if submodules are present" ON)
 
-option(SUYU_ENABLE_LTO "Enable link-time optimization" OFF)
+option(SUYU_ENABLE_LTO "Enable link-time optimization" ON)
 
 option(SUYU_DOWNLOAD_TIME_ZONE_DATA "Always download time zone binaries" OFF)
 
