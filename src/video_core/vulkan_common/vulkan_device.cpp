@@ -596,13 +596,35 @@ Device::Device(VkInstance instance_, vk::PhysicalDevice physical_, VkSurfaceKHR 
         }
     }
     // AMD still has broken extendedDynamicState3ColorBlendEquation on RDNA3.
-    // TODO: distinguis RDNA3 from other uArchs.
+    // TODO: check in future drivers past 24.2.1 if AMD finally fix this.
     if (extensions.extended_dynamic_state3 && is_amd_driver) {
-        LOG_WARNING(Render_Vulkan,
-                    "AMD drivers have broken extendedDynamicState3ColorBlendEquation");
-        features.extended_dynamic_state3.extendedDynamicState3ColorBlendEnable = false;
-        features.extended_dynamic_state3.extendedDynamicState3ColorBlendEquation = false;
-        dynamic_state3_blending = false;
+        // RDNA3 supports shaderBufferFloat32AtomicAdd of VK_EXT_shader_atomic_float
+        VkPhysicalDeviceShaderAtomicFloatFeaturesEXT shader_atomic_float_feature{};
+        shader_atomic_float_feature.sType =
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_FLOAT_FEATURES_EXT;
+        bool found = std::find_if(supported_extensions.begin(), supported_extensions.end(),
+                                  [=](const std::string& str) {
+                                      return strcmp(VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME,
+                                                    str.data()) == 0;
+                                  }) != supported_extensions.end();
+        if (found) {
+            features2.pNext = &shader_atomic_float_feature;
+            physical.GetFeatures2(features2);
+            // If AMD RDNA3, disable extendedDynamicState3ColorBlendEquation
+            if (shader_atomic_float_feature.shaderBufferFloat32AtomicAdd) {
+                LOG_WARNING(Render_Vulkan,
+                            "Currently, AMD RDNA3 drivers have broken "
+                            "extendedDynamicState3ColorBlendEquation, extension feature disabled.");
+                features.extended_dynamic_state3.extendedDynamicState3ColorBlendEnable = false;
+                features.extended_dynamic_state3.extendedDynamicState3ColorBlendEquation = false;
+                dynamic_state3_blending = false;
+            }
+            // Test for non-RDNA3, RDNA1 and RDNA2 still support shaderBufferFloat32Atomics.
+            else if (shader_atomic_float_feature.shaderBufferFloat32Atomics) {
+                LOG_INFO(Render_Vulkan, "RDNA1 or RDNA2 driver detected, "
+                                        "extendedDynamicState3ColorBlendEquation is OK.");
+            }
+        }
     }
     if (extensions.vertex_input_dynamic_state && is_radv) {
         // TODO(ameerj): Blacklist only offending driver versions
