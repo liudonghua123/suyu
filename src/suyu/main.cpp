@@ -1579,7 +1579,8 @@ void GMainWindow::ConnectMenuEvents() {
     connect_menu(ui->action_Open_suyu_Folder, &GMainWindow::OnOpenSuyuFolder);
     connect_menu(ui->action_Verify_installed_contents, &GMainWindow::OnVerifyInstalledContents);
     connect_menu(ui->action_Install_Firmware, &GMainWindow::OnInstallFirmware);
-    connect_menu(ui->action_Install_Keys, &GMainWindow::OnInstallDecryptionKeys);
+    connect_menu(ui->action_Install_Product_Keys, &GMainWindow::OnInstallProductKeys);
+    connect_menu(ui->action_Install_Title_Keys, &GMainWindow::OnInstallTitleKeys);
     connect_menu(ui->action_About, &GMainWindow::OnAbout);
 }
 
@@ -1609,7 +1610,8 @@ void GMainWindow::UpdateMenuState() {
     }
 
     ui->action_Install_Firmware->setEnabled(!emulation_running);
-    ui->action_Install_Keys->setEnabled(!emulation_running);
+    ui->action_Install_Product_Keys->setEnabled(!emulation_running);
+    ui->action_Install_Title_Keys->setEnabled(!emulation_running);
 
     for (QAction* action : applet_actions) {
         action->setEnabled(is_firmware_available && !emulation_running);
@@ -4100,7 +4102,7 @@ void GMainWindow::OnInstallFirmware() {
     OnCheckFirmwareDecryption();
 }
 
-void GMainWindow::OnInstallDecryptionKeys() {
+void GMainWindow::OnInstallProductKeys() {
     // Don't do this while emulation is running.
     if (emu_thread != nullptr && emu_thread->IsRunning()) {
         return;
@@ -4123,6 +4125,8 @@ void GMainWindow::OnInstallDecryptionKeys() {
     }
 
     bool prod_keys_found = false;
+    bool title_keys_found = false;
+
     std::vector<std::filesystem::path> source_key_files;
 
     if (Common::FS::Exists(prod_key_path)) {
@@ -4130,29 +4134,29 @@ void GMainWindow::OnInstallDecryptionKeys() {
         source_key_files.emplace_back(prod_key_path);
     }
 
-    if (Common::FS::Exists(key_source_path / "title.keys")) {
-        source_key_files.emplace_back(key_source_path / "title.keys");
-    }
-
     if (Common::FS::Exists(key_source_path / "key_retail.bin")) {
         source_key_files.emplace_back(key_source_path / "key_retail.bin");
     }
 
-    // There should be at least prod.keys.
     if (source_key_files.empty() || !prod_keys_found) {
-        QMessageBox::warning(this, tr("Decryption Keys install failed"),
-                             tr("prod.keys is a required decryption key file."));
+        QMessageBox::warning(this, tr("Product Keys install failed"),
+                             tr("prod.keys is a required."));
         return;
     }
 
     const auto suyu_keys_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::KeysDir);
+
+    if (Common::FS::Exists(suyu_keys_dir / "title.keys")) {
+        title_keys_found = true;
+    }
+
     for (auto key_file : source_key_files) {
         std::filesystem::path destination_key_file = suyu_keys_dir / key_file.filename();
         if (!std::filesystem::copy_file(key_file, destination_key_file,
                                         std::filesystem::copy_options::overwrite_existing)) {
             LOG_ERROR(Frontend, "Failed to copy file {} to {}", key_file.string(),
                       destination_key_file.string());
-            QMessageBox::critical(this, tr("Decryption Keys install failed"),
+            QMessageBox::critical(this, tr("Product Keys install failed"),
                                   tr("One or more keys failed to copy."));
             return;
         }
@@ -4166,13 +4170,95 @@ void GMainWindow::OnInstallDecryptionKeys() {
     game_list->PopulateAsync(UISettings::values.game_dirs);
 
     if (ContentManager::AreKeysPresent()) {
-        QMessageBox::information(this, tr("Decryption Keys install succeeded"),
-                                 tr("Decryption Keys were successfully installed"));
+        QMessageBox::information(this, tr("Product Keys install succeeded"),
+                                 tr("Product Keys were successfully installed"));
+    } else if (!title_keys_found) {
+        QMessageBox::critical(this, tr("No Title Keys Found"), tr("Install Title Keys"));
     } else {
         QMessageBox::critical(
-            this, tr("Decryption Keys install failed"),
-            tr("Decryption Keys failed to initialize. Check that your dumping tools are "
+            this, tr("Keys install failed"),
+            tr("Product Keys or Title Keys failed to initialize. Check that your dumping tools are "
                "up to date and re-dump keys."));
+    }
+
+    OnCheckFirmwareDecryption();
+}
+
+void GMainWindow::OnInstallTitleKeys() {
+    // Don't do this while emulation is running.
+    if (emu_thread != nullptr && emu_thread->IsRunning()) {
+        return;
+    }
+
+    const QString key_source_location = QFileDialog::getOpenFileName(
+        this, tr("Select Dumped Keys Location"), {}, QStringLiteral("title.keys (title.keys)"), {},
+        QFileDialog::ReadOnly);
+    if (key_source_location.isEmpty()) {
+        return;
+    }
+
+    // Verify that it contains prod.keys, title.keys and optionally, key_retail.bin
+    LOG_INFO(Frontend, "Installing key files from {}", key_source_location.toStdString());
+
+    const std::filesystem::path title_key_path = key_source_location.toStdString();
+    const std::filesystem::path key_source_path = title_key_path.parent_path();
+    if (!Common::FS::IsDir(key_source_path)) {
+        return;
+    }
+
+    bool title_keys_found = false;
+    bool product_keys_found = false;
+    std::vector<std::filesystem::path> source_key_files;
+
+    if (Common::FS::Exists(title_key_path)) {
+        title_keys_found = true;
+        source_key_files.emplace_back(title_key_path);
+    }
+
+    if (Common::FS::Exists(key_source_path / "key_retail.bin")) {
+        source_key_files.emplace_back(key_source_path / "key_retail.bin");
+    }
+
+    if (source_key_files.empty() || !title_keys_found) {
+        QMessageBox::warning(this, tr("Title Keys install failed"), tr("title.keys is a required"));
+        return;
+    }
+
+    const auto suyu_keys_dir = Common::FS::GetSuyuPath(Common::FS::SuyuPath::KeysDir);
+
+    if (Common::FS::Exists(suyu_keys_dir / "product.keys")) {
+        product_keys_found = true;
+    }
+
+    for (auto key_file : source_key_files) {
+        std::filesystem::path destination_key_file = suyu_keys_dir / key_file.filename();
+        if (!std::filesystem::copy_file(key_file, destination_key_file,
+                                        std::filesystem::copy_options::overwrite_existing)) {
+            LOG_ERROR(Frontend, "Failed to copy file {} to {}", key_file.string(),
+                      destination_key_file.string());
+            QMessageBox::critical(this, tr("Title Keys install failed"),
+                                  tr("One or more keys failed to copy."));
+            return;
+        }
+    }
+
+    // Reinitialize the key manager, re-read the vfs (for update/dlc files),
+    // and re-populate the game list in the UI if the user has already added
+    // game folders.
+    Core::Crypto::KeyManager::Instance().ReloadKeys();
+    system->GetFileSystemController().CreateFactories(*vfs);
+    game_list->PopulateAsync(UISettings::values.game_dirs);
+
+    if (ContentManager::AreKeysPresent()) {
+        QMessageBox::information(this, tr("Title Keys install succeeded"),
+                                 tr("Title Keys were successfully installed"));
+    } else if (!product_keys_found) {
+        QMessageBox::critical(this, tr("No Product Keys Found"), tr("Install Product Keys"));
+    } else {
+        QMessageBox::critical(this, tr("Keys install failed"),
+                              tr("Title Keys or Product Keys  failed to initialize. Check that "
+                                 "your dumping tools are "
+                                 "up to date and re-dump keys."));
     }
 
     OnCheckFirmwareDecryption();

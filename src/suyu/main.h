@@ -379,7 +379,8 @@ private slots:
     void OnOpenSuyuFolder();
     void OnVerifyInstalledContents();
     void OnInstallFirmware();
-    void OnInstallDecryptionKeys();
+    void OnInstallProductKeys();
+    void OnInstallTitleKeys();
     void OnAbout();
     void OnToggleFilterBar();
     void OnToggleStatusBar();
