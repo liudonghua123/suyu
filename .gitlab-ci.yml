@@ -10,7 +10,7 @@ variables:
   CACHE_REQUEST_TIMEOUT: 5
   # Use FASTZIP for faster compression in cache and artifacts 
   # https://docs.gitlab.com/runner/configuration/feature-flags.html#available-feature-flags
-  FF_USE_FASTZIP: true
+  FF_USE_FASTZIP: "true"
   
   # Our Variables
   CACHE_DIR: "$CI_PROJECT_DIR/ccache"
