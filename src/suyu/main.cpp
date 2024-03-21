@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 // Modified by palfaiate on <2024/03/07>
+// Modified by nullequal on <2024/03/19>
 
 #include <cinttypes>
 #include <clocale>
@@ -1747,18 +1748,21 @@ void GMainWindow::AllowOSSleep() {
 }
 
 bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletParameters params) {
-    if (!CheckFirmwarePresence()) {
-        QMessageBox::critical(this, tr("Component Missing"), tr("Missing Firmware."));
-        return false;
-    }
+    if (Loader::IdentifyFile(Core::GetGameFileFromPath(vfs, filename.toStdString())) !=
+        Loader::FileType::NRO) {
+        if (!CheckFirmwarePresence()) {
+            QMessageBox::critical(this, tr("Component Missing"), tr("Missing Firmware."));
+            return false;
+        }
 
-    if (!ContentManager::AreKeysPresent()) {
-        QMessageBox::warning(this, tr("Derivation Components Missing"),
-                             tr("Encryption keys are missing. "
-                                "In order to use this emulator"
-                                "you need to provide your own encryption keys"
-                                "in order to play them."));
-        return false;
+        if (!ContentManager::AreKeysPresent()) {
+            QMessageBox::warning(this, tr("Derivation Components Missing"),
+                                tr("Encryption keys are missing. "
+                                    "In order to use this emulator"
+                                    "you need to provide your own encryption keys"
+                                    "in order to play them."));
+            return false;
+        }
     }
 
     // Shutdown previous session if the emu thread is still active...
