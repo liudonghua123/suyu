@@ -169,20 +169,6 @@
     <string name="website_link">https://suyu-emu.org/</string>
     <string name="github_link">https://github.com/suyu-emu</string>
 
-    <!-- Early access upgrade strings -->
-    <string name="early_access">גישה מוקדמת</string>
-    <string name="get_early_access">קבל גישה מוקדמת</string>
-    <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
-    <string name="get_early_access_description">תכונות חותכות קצה, גישה מוקדמת לעדכונים, ועוד</string>
-    <string name="early_access_benefits">יתרונות של גישה מקודמת</string>
-    <string name="cutting_edge_features">תכונות חותכות קצה</string>
-    <string name="early_access_updates">גישה מוקדמת לעדכונים</string>
-    <string name="no_manual_installation">ללא התקנה ידנית</string>
-    <string name="prioritized_support">תמיכה בעדיפות</string>
-    <string name="helping_game_preservation">עוזר בשמירת משחקים</string>
-    <string name="our_eternal_gratitude">התודה האינסופית שלנו</string>
-    <string name="are_you_interested">אתה מעוניין?</string>
-
     <!-- General settings strings -->
     <string name="frame_limit_enable">הגבל מהירות</string>
     <string name="frame_limit_enable_description">מגביל את מהירות האמולציה לאחוז מהירות המבוקש מהמהירות הרגילה.</string>

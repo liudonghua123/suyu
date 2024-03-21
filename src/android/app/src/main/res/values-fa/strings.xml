@@ -182,20 +182,6 @@
     <string name="website_link">https://suyu-emu.org/</string>
     <string name="github_link">https://github.com/suyu-emu</string>
 
-    <!-- Early access upgrade strings -->
-    <string name="early_access">دسترسی زودهنگام</string>
-    <string name="get_early_access">دسترسی زودهنگام را دریافت کنید</string>
-    <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
-    <string name="get_early_access_description">ویژگی‌های پیشرفته، دسترسی زودهنگام به بروزرسانی‌ها و موارد دیگر</string>
-    <string name="early_access_benefits">مزایای دسترسی زودهنگام</string>
-    <string name="cutting_edge_features">ویژگی‌های پیشرفته</string>
-    <string name="early_access_updates">دسترسی زودهنگام به بروزرسانی‌ها</string>
-    <string name="no_manual_installation">بدون نصب دستی</string>
-    <string name="prioritized_support">پشتیبانی اولویت بندی شده</string>
-    <string name="helping_game_preservation">کمک به حفظ بازی</string>
-    <string name="our_eternal_gratitude">سپاس ابدی ما</string>
-    <string name="are_you_interested">مشتاق هستید؟</string>
-
     <!-- General settings strings -->
     <string name="frame_limit_enable">محدودیت سرعت</string>
     <string name="frame_limit_enable_description">سرعت شبیه‌سازی را به درصد مشخصی از سرعت عادی محدود می‌کند.</string>

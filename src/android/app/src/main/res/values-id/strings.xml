@@ -180,20 +180,6 @@
     <string name="website_link">https://suyu-emu.org/</string>
     <string name="github_link">https://github.com/suyu-emu</string>
 
-    <!-- Early access upgrade strings -->
-    <string name="early_access">Akses lebih awal</string>
-    <string name="get_early_access">Dapatkan akses lebih awal</string>
-    <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
-    <string name="get_early_access_description">Fitur-fitur yang paling baru, akses lebih awal untuk perbaruan, dan lain-lain.</string>
-    <string name="early_access_benefits">Manfaat Akses Awal</string>
-    <string name="cutting_edge_features">Fitur-fitur yang paling baru</string>
-    <string name="early_access_updates">Akses lebih awal untuk pembaruan</string>
-    <string name="no_manual_installation">Tidak ada instalasi manual</string>
-    <string name="prioritized_support">Dukungan yang diprioritaskan</string>
-    <string name="helping_game_preservation">Membantu pemeliharaan game</string>
-    <string name="our_eternal_gratitude">Ucapan terima kasih kami yang tak terhingga</string>
-    <string name="are_you_interested">Apa kamu tertarik?</string>
-
     <!-- General settings strings -->
     <string name="frame_limit_enable">Batas kecepatan</string>
     <string name="frame_limit_enable_description">Membatasi kecepatan emulasi ke persentase tertentu dari kecepatan normal</string>

@@ -184,20 +184,6 @@
     <string name="website_link">https://suyu-emu.org/</string>
     <string name="github_link">https://github.com/suyu-emu</string>
 
-    <!-- Early access upgrade strings -->
-    <string name="early_access">Acesso antecipado</string>
-    <string name="get_early_access">Obtém Acesso Antecipado</string>
-    <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
-    <string name="get_early_access_description">Recursos de ponta, acesso antecipado a atualizações e muito mais</string>
-    <string name="early_access_benefits">Benefícios do Acesso Antecipado</string>
-    <string name="cutting_edge_features">Recursos de ponta</string>
-    <string name="early_access_updates">Acesso antecipado a atualizações</string>
-    <string name="no_manual_installation">Sem instalação manual</string>
-    <string name="prioritized_support">Suporte prioritário</string>
-    <string name="helping_game_preservation">Ajuda na preservação dos jogos</string>
-    <string name="our_eternal_gratitude">A nossa eterna gratidão</string>
-    <string name="are_you_interested">Estás interessado?</string>
-
     <!-- General settings strings -->
     <string name="frame_limit_enable">Limite de velocidade</string>
     <string name="frame_limit_enable_description">Limita a velocidade da emulação a uma porcentagem específica da velocidade normal.</string>

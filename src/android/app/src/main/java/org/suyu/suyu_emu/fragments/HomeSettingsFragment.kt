@@ -236,22 +236,6 @@ class HomeSettingsFragment : Fragment() {
                 )
             )
         }
-//  Temporarily commented out for testing remove the code later.
-//        if (!BuildConfig.PREMIUM) {
-//            optionsList.add(
-//                0,
-//                HomeSetting(
-//                    R.string.get_early_access,
-//                    R.string.get_early_access_description,
-//                    R.drawable.ic_diamond,
-//                    {
-//                        exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
-//                        parentFragmentManager.primaryNavigationFragment?.findNavController()
-//                            ?.navigate(R.id.action_homeSettingsFragment_to_earlyAccessFragment)
-//                    }
-//                )
-//            )
-//        }
 
         binding.homeSettingsList.apply {
             layoutManager =

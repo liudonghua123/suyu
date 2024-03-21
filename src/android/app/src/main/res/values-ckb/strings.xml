@@ -110,20 +110,6 @@
     <string name="website_link">https://suyu-emu.org/</string>
     <string name="github_link">https://github.com/suyu-emu</string>
 
-    <!-- Early access upgrade strings -->
-    <string name="early_access">بەزوویی دەسپێگەشتن</string>
-    <string name="get_early_access">بەدەستهێنانی بەزوویی دەسپێگەشتن</string>
-    <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
-    <string name="get_early_access_description">تایبەتمەندییە پێشکەوتووەکان، بەزوویی دەستگەیشتن بە نوێکارییەکان و زۆر شتی تر</string>
-    <string name="early_access_benefits">سوودەکانی بەزوویی دەسپێگەشتن</string>
-    <string name="cutting_edge_features">تایبەتمەندییە پێشکەوتووەکان</string>
-    <string name="early_access_updates">زوو دەستگەیشتن بە نوێکارییەکان</string>
-    <string name="no_manual_installation">چیتر دامەزراندنی دەستی نییە</string>
-    <string name="prioritized_support">پشتگیری لە پێشینە</string>
-    <string name="helping_game_preservation">یارمەتیدانی پاراستنی یارییەکان</string>
-    <string name="our_eternal_gratitude">سوپاس و پێزانینی هەمیشەییمان</string>
-    <string name="are_you_interested">ئایا تۆ خوازیاریت؟</string>
-
     <!-- General settings strings -->
     <string name="frame_limit_enable">سنووردارکردنی خێرایی</string>
     <string name="frame_limit_enable_description">خێرایی ئیمولەیشن سنووردار دەکات بۆ ڕێژەیەکی دیاریکراو لە خێرایی ئاسایی.</string>
