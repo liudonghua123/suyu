@@ -8,10 +8,10 @@ name: suyu-ci
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "forgejo-ci-testing" ]
     tags: [ "*" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "forgejo-ci-testing" ]
 
 jobs:
 #   transifex:
