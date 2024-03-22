@@ -8,7 +8,9 @@ name: 'suyu verify'
 
 on:
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "forgejo-ci-testing" ]
+  push:
+    branches: [ "forgejo-ci-testing" ]
 env:
   PR_NUMBER: pr${{ github.event.number }}
 
@@ -16,6 +18,8 @@ jobs:
   format:
     name: 'verify format'
     runs-on: ubuntu-latest
+    container:
+      image: fijxu/build-environments:linux-clang-format
     steps:
       - uses: https://code.forgejo.org/actions/checkout@v3
         with:
@@ -26,6 +30,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: 'Verify Formatting'
+        container: 
         run: bash -ex ./.ci/scripts/format/script.sh
   build-linux:
     name: 'test build'
@@ -193,3 +198,4 @@ jobs:
         with:
           name: android
           path: artifacts/
+
