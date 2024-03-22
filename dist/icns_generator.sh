@@ -1,5 +1,9 @@
 #!/bin/bash
-# icns_generator.sh    GNU GPLv3 License
+
+# SPDX-FileCopyrightText: 2024 suyu Emulator Project
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# icns_generator.sh
 # Run this script when a new logo is made and the svg file inside.
 # You should install Imagemagick to make the conversions: $brew install imagemagick
 

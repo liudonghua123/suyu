@@ -1,6 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2024 suyu emulator project
-SPDX-License-Identifier: GPL v3
+SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
 **Note**: We do not support or condone piracy in any form. In order to use suyu, you'll need keys from your real Switch system, and games which you have legally obtained and paid for. We do not intend to make money or profit from this project.
