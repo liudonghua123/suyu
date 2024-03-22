@@ -8,7 +8,7 @@ name: 'suyu verify'
 
 on:
   pull_request:
-    branches: [ dev ]
+    branches: [ "dev" ]
 env:
   PR_NUMBER: pr${{ github.event.number }}
 
@@ -42,7 +42,7 @@ jobs:
           - type: windows
             image: linux-mingw
     container:
-      image: yuzuemu/build-environments:${{ matrix.image }}
+      image: fijxu/build-environments:${{ matrix.image }}
       options: -u 1001
     steps:
       - uses: https://code.forgejo.org/actions/checkout@v3

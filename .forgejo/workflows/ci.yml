@@ -8,25 +8,25 @@ name: suyu-ci
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ "dev" ]
     tags: [ "*" ]
   pull_request:
-    branches: [ dev ]
+    branches: [ "dev" ]
 
 jobs:
-  transifex:
-    runs-on: ubuntu-latest
-    container: yuzuemu/build-environments:linux-transifex
-    if: ${{ GITHUB_REPOSITORY == 'yuzu-emu/yuzu' && !GITHUB_HEAD_REF }}
-    steps:
-      - uses: https://code.forgejo.org/actions/checkout@v3
-        with:
-          submodules: recursive
-          fetch-depth: 0
-      # - name: Update Translation
-      #   run: ./.ci/scripts/transifex/docker.sh
-      #   env:
-      #     TX_TOKEN: ${{ secrets.TRANSIFEX_API_TOKEN }}
+#   transifex:
+#     runs-on: ubuntu-latest
+#     container: fijxu/build-environments:linux-transifex
+#     if: ${{ GITHUB_REPOSITORY == 'suyu/suyu' && !GITHUB_HEAD_REF }}
+#     steps:
+#       - uses: https://code.forgejo.org/actions/checkout@v3
+#         with:
+#           submodules: recursive
+#           fetch-depth: 0
+#       - name: Update Translation
+#         run: ./.ci/scripts/transifex/docker.sh
+#         env:
+#           TX_TOKEN: ${{ secrets.TRANSIFEX_API_TOKEN }}
 
   reuse:
     runs-on: ubuntu-latest
