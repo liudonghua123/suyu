@@ -16,7 +16,7 @@ env:
 
 jobs:
   format:
-    name: 'verify format'
+    name: 'Verify Format'
     runs-on: ubuntu-latest
     container:
       image: fijxu/build-environments:linux-clang-format
@@ -24,13 +24,12 @@ jobs:
       - uses: https://code.forgejo.org/actions/checkout@v3
         with:
           submodules: false
-      - name: set up JDK 17
-        uses: https://github.com/actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+      # - name: set up JDK 17
+      #   uses: https://github.com/actions/setup-java@v3
+      #   with:
+      #     java-version: '17'
+      #     distribution: 'temurin'
       - name: 'Verify Formatting'
-        container: 
         run: bash -ex ./.ci/scripts/format/script.sh
   build-linux:
     name: 'test build'
