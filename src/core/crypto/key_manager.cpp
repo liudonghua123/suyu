@@ -1299,11 +1299,11 @@ bool KeyManager::AddTicket(const Ticket& ticket) {
         return true;
     }
 
-    const auto key = ParseTicketTitleKey(ticket);
-    if (!key) {
-        return false;
-    }
-    SetKey(S128KeyType::Titlekey, key.value(), rights_id[1], rights_id[0]);
+    // const auto key = ParseTicketTitleKey(ticket);
+    // if (!key) {
+    //     return false;
+    // }
+    // SetKey(S128KeyType::Titlekey, key.value(), rights_id[1], rights_id[0]);
     return true;
 }
 } // namespace Core::Crypto
