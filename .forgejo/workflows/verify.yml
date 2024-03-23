@@ -13,6 +13,8 @@ on:
     branches: [ "forgejo-ci-testing" ]
 env:
   PR_NUMBER: pr${{ github.event.number }}
+  CCACHE_DIR: '.ccache'
+
 
 jobs:
   format:
