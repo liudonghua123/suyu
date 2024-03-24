@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2024 suyu emulator project
+SPDX-FileCopyrightText: 2023 yuzu emulator project
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
