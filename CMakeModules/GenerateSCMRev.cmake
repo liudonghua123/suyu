@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2019 yuzu Emulator Project & 2024 suyu Emulator Project
+# SPDX-FileCopyrightText: 2019 yuzu Emulator Project
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 # Gets a UTC timestamp and sets the provided variable to it
