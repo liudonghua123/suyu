@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: Copyright 2024 yuzu Emulator Project
+// SPDX-FileCopyrightText: Copyright 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "common/settings.h"
@@ -333,6 +334,14 @@ void AppletManager::SetWindowSystem(WindowSystem* window_system) {
     }
 
     applet->process->Run();
+}
+
+void AppletManager::RequestApplicationToForeground() {
+    m_window_system->RequestApplicationToGetForeground();
+}
+
+void AppletManager::TrackApplet(std::shared_ptr<Applet> applet, bool is_application) {
+    m_window_system->TrackApplet(applet, is_application);
 }
 
 } // namespace Service::AM

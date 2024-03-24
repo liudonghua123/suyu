@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: Copyright 2024 yuzu Emulator Project
+// SPDX-FileCopyrightText: Copyright 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #pragma once
@@ -44,8 +45,11 @@ public:
     void RequestExit();
     void OperationModeChanged();
 
+    void TrackApplet(std::shared_ptr<Applet> applet, bool is_application);
+
 public:
     void SetWindowSystem(WindowSystem* window_system);
+    void RequestApplicationToForeground();
 
 private:
     Core::System& m_system;
@@ -57,6 +61,7 @@ private:
 
     FrontendAppletParameters m_pending_parameters{};
     std::unique_ptr<Process> m_pending_process{};
+
 };
 
 } // namespace Service::AM

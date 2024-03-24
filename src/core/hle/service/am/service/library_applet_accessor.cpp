@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: Copyright 2024 yuzu Emulator Project
+// SPDX-FileCopyrightText: Copyright 2024 suyu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "core/hle/service/am/applet_data_broker.h"
@@ -101,6 +102,23 @@ Result ILibraryAppletAccessor::PushInData(SharedPointer<IStorage> storage) {
 
 Result ILibraryAppletAccessor::PopOutData(Out<SharedPointer<IStorage>> out_storage) {
     LOG_DEBUG(Service_AM, "called");
+    if(auto caller = m_applet->caller_applet.lock(); caller != nullptr) {
+        LOG_DEBUG(Service_AM, "resuming caller");
+        LOG_DEBUG(Service_AM, "{}", caller->applet_id);
+        LOG_DEBUG(Service_AM, "{}", caller->program_id);
+        system.GetAppletManager().RequestApplicationToForeground();
+        // todo: is_appliaction is false because TrackApplet will not accept replacing the currently tracked applet
+        system.GetAppletManager().TrackApplet(caller, false);
+        caller->lifecycle_manager.SetResumeNotificationEnabled(true);
+        caller->lifecycle_manager.SetFocusState(FocusState::InFocus);
+        caller->lifecycle_manager.RequestResumeNotification();
+        caller->lifecycle_manager.RequestResumeNotification();
+        bool result = caller->lifecycle_manager.UpdateRequestedFocusState();
+        LOG_DEBUG(Service_AM, "result: {}, exit: {}", result, caller->lifecycle_manager.GetExitRequested());
+    } else {
+        LOG_CRITICAL(Service_AM, "Caller applet pointer is invalid.");
+        LOG_CRITICAL(Service_AM, "The emulator will freeze!");
+    }
     R_RETURN(m_broker->GetOutData().Pop(out_storage.Get()));
 }
 
