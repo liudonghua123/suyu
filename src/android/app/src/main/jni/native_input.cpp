@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 yuzu emulator project & 2024 suyu Emulator Project
+// SPDX-FileCopyrightText: 2023 yuzu emulator project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include <common/fs/fs.h>
