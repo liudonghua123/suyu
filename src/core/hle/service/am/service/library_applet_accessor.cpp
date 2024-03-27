@@ -109,11 +109,15 @@ Result ILibraryAppletAccessor::PopOutData(Out<SharedPointer<IStorage>> out_stora
         system.GetAppletManager().RequestApplicationToForeground();
         // todo: is_appliaction is false because TrackApplet will not accept replacing the currently tracked applet
         system.GetAppletManager().TrackApplet(caller, false);
+        caller->SetInteractibleLocked(false);
+        caller->SetInteractibleLocked(true);
         caller->lifecycle_manager.SetResumeNotificationEnabled(true);
         caller->lifecycle_manager.SetFocusState(FocusState::InFocus);
         caller->lifecycle_manager.RequestResumeNotification();
         caller->lifecycle_manager.RequestResumeNotification();
+        caller->UpdateSuspensionStateLocked(true);
         bool result = caller->lifecycle_manager.UpdateRequestedFocusState();
+        caller->lifecycle_manager.SignalSystemEventIfNeeded();
         LOG_DEBUG(Service_AM, "result: {}, exit: {}", result, caller->lifecycle_manager.GetExitRequested());
     } else {
         LOG_CRITICAL(Service_AM, "Caller applet pointer is invalid.");
