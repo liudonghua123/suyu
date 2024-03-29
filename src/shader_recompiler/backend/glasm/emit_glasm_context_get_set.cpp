@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: Copyright 2021 yuzu Emulator Project
+// SPDX-FileCopyrightText: 2024 sudachi Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include <string_view>
@@ -7,6 +8,7 @@
 #include "shader_recompiler/backend/glasm/glasm_emit_context.h"
 #include "shader_recompiler/frontend/ir/value.h"
 #include "shader_recompiler/profile.h"
+#include "shader_recompiler/runtime_info.h"
 #include "shader_recompiler/shader_info.h"
 
 namespace Shader::Backend::GLASM {
@@ -405,6 +407,10 @@ void EmitInvocationInfo(EmitContext& ctx, IR::Inst& inst) {
     case Stage::TessellationControl:
     case Stage::TessellationEval:
         ctx.Add("SHL.U {}.x,primitive.vertexcount,16;", inst);
+        break;
+    case Stage::Geometry:
+        ctx.Add("SHL.U {}.x,{},16;", inst,
+                InputTopologyVertices::vertices(ctx.runtime_info.input_topology));
         break;
     default:
         LOG_WARNING(Shader, "(STUBBED) called");
