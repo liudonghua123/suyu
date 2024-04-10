@@ -140,6 +140,7 @@ private:
         LOG_DEBUG(Service_Friend, "called");
 
         IPC::ResponseBuilder rb{ctx, 2, 1};
+        completion_event->GetReadableEvent().Signal();
         rb.Push(ResultSuccess);
         rb.PushCopyObjects(completion_event->GetReadableEvent());
     }
