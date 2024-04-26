@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: Copyright 2020 yuzu Emulator Project
+// SPDX-FileCopyrightText: Copyright 2024 Torzu Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include <atomic>
