@@ -67,3 +67,6 @@
 [submodule "Vulkan-Utility-Libraries"]
 	path = externals/Vulkan-Utility-Libraries
 	url = https://github.com/KhronosGroup/Vulkan-Utility-Libraries.git
+[submodule "externals/boost-headers"]
+	path = externals/boost-headers
+	url = https://github.com/boostorg/headers.git
