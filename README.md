@@ -76,6 +76,9 @@ We have official builds [here.](https://git.suyu.dev/suyu/suyu/releases)<br>If a
 * __Android__: [Android Build](https://git.suyu.dev/suyu/suyu/wiki/Building-For-Android)
 * __macOS__: [macOS Build](https://git.suyu.dev/suyu/suyu/wiki/Building-for-macOS)
 
+## Migrating from yuzu
+
+See [MIGRATION.md](MIGRATION.md).
 
 
 ## Support
